@@ -13,17 +13,21 @@ MOVING_AVERAGE_DECAY = 0.999
 
 
 def train(total_loss, global_step):
-    """Train CIFAR-10 model.
+    """
+    Train a neural network model.
 
     Create an optimizer and apply to all trainable variables. Add moving
     average for all trainable variables.
 
-    Args:
-      total_loss: Total loss from loss().
-      global_step: Integer Variable counting the number of training steps
+    Parameters
+    ----------
+    total_loss: Total loss from loss().
+    global_step: Integer Variable counting the number of training steps
         processed.
-    Returns:
-      train_op: op for training.
+
+    Returns
+    -------
+    train_op: op for training.
     """
     # Variables that affect learning rate.
     num_batches_per_epoch = NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN / batch_size
@@ -42,7 +46,7 @@ def train(total_loss, global_step):
 
     # Compute gradients.
     with tf.control_dependencies([loss_averages_op]):
-        opt = tf.train.GradientDescentOptimizer(lr)
+        opt = tf.train.AdamOptimizer(lr)
         grads = opt.compute_gradients(total_loss)
 
     # Apply gradients.
