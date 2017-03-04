@@ -7,12 +7,9 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-import sys
-import tarfile
 
 from six.moves import xrange
 import tensorflow as tf
-from six.moves import urllib
 
 from utils import maybe_download_and_extract
 
@@ -27,10 +24,10 @@ meta = {'n_classes': 10,
 IMAGE_SIZE = 24
 
 # Global constants describing the CIFAR-10 data set.
-NUM_CLASSES = 10
 NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN = 50000
 NUM_EXAMPLES_PER_EPOCH_FOR_EVAL = 10000
 DATA_URL = 'http://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz'
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'cifar10')
 
 
 def read_cifar10(filename_queue):
@@ -42,10 +39,12 @@ def read_cifar10(filename_queue):
     files & positions within those files, which will give better mixing of
     examples.
 
-    Args:
-        filename_queue: A queue of strings with the filenames to read from.
+    Parameters
+    ----------
+    filename_queue: A queue of strings with the filenames to read from.
 
-    Returns:
+    Returns
+    -------
         An object representing a single example, with the following fields:
             height: number of rows in the result (32)
             width: number of columns in the result (32)
@@ -136,7 +135,7 @@ def _generate_image_and_label_batch(image, label, min_queue_examples,
     return images, tf.reshape(label_batch, [batch_size])
 
 
-def distorted_inputs(data_dir='.', batch_size=128):
+def distorted_inputs(data_dir=DATA_DIR, batch_size=128):
     """Construct distorted input for CIFAR training using the Reader ops.
 
     Parameters
@@ -261,4 +260,4 @@ def inputs(eval_data, data_dir, batch_size):
                                            min_queue_examples, batch_size,
                                            shuffle=False)
 
-maybe_download_and_extract(dest_directory='cifar10', data_url=DATA_URL)
+maybe_download_and_extract(dest_directory=DATA_DIR, data_url=DATA_URL)

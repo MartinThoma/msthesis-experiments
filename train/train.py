@@ -14,7 +14,7 @@ import sys
 sys.path.insert(1, '/home/moose/GitHub/msthesis-experiments/models')
 import mlp as model
 sys.path.insert(1, '/home/moose/GitHub/msthesis-experiments/datasets')
-import cifar10_input as data
+import cifar10 as data
 sys.path.insert(1, '/home/moose/GitHub/msthesis-experiments/optimizers')
 import adamdef as optimizer
 
