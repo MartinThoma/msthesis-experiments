@@ -15,9 +15,11 @@ sys.path.insert(1, '/home/moose/GitHub/msthesis-experiments/models')
 import mlp as model
 sys.path.insert(1, '/home/moose/GitHub/msthesis-experiments/datasets')
 import cifar10_input as data
+sys.path.insert(1, '/home/moose/GitHub/msthesis-experiments/optimizers')
+import adamdef as optimizer
 
 
-def loss(logits, labels):
+def loss_function(logits, labels):
     """
     Add L2Loss to all the trainable variables.
 
@@ -55,14 +57,14 @@ def train(batch_size=16, train_dir='.', max_steps=1000,
 
         # Build a Graph that computes the logits predictions from the
         # inference model.
-        logits = model.inference(images)
+        logits = model.inference(images, data.meta)
 
         # Calculate loss.
-        loss = cifar10.loss(logits, labels)
+        loss = loss_function(logits, labels)
 
         # Build a Graph that trains the model with one batch of examples and
         # updates the model parameters.
-        train_op = cifar10.train(loss, global_step)
+        train_op = optimizer.train(loss, global_step)
 
         class _LoggerHook(tf.train.SessionRunHook):
             """Logs loss and runtime."""
@@ -100,6 +102,7 @@ def train(batch_size=16, train_dir='.', max_steps=1000,
 
 
 def main(train_dir='traindir'):
+    """Orchestrate."""
     data.maybe_download_and_extract()
     if tf.gfile.Exists(train_dir):
         tf.gfile.DeleteRecursively(train_dir)

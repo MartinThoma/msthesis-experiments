@@ -1,19 +1,6 @@
-# Copyright 2015 The TensorFlow Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#         http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ==============================================================================
+#!/usr/bin/env python
 
-"""Routine for decoding the CIFAR-10 binary file format."""
+"""Dataset file for the CIFAR 10 dataset."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -23,9 +10,14 @@ import os
 import sys
 import tarfile
 
-from six.moves import xrange    # pylint: disable=redefined-builtin
+from six.moves import xrange
 import tensorflow as tf
 from six.moves import urllib
+
+meta = {'n_classes': 10,
+        'image_width': 32,
+        'image_height': 32,
+        'image_depth': 3}
 
 # Process images of this size. Note that this differs from the original CIFAR
 # image size of 32 x 32. If one alters this number, then the entire model
@@ -163,7 +155,7 @@ def _generate_image_and_label_batch(image, label, min_queue_examples,
     return images, tf.reshape(label_batch, [batch_size])
 
 
-def distorted_inputs(data_dir, batch_size):
+def distorted_inputs(data_dir='.', batch_size=128):
     """Construct distorted input for CIFAR training using the Reader ops.
 
     Parameters
@@ -176,8 +168,10 @@ def distorted_inputs(data_dir, batch_size):
     images: 4D tensor of [batch_size, IMAGE_SIZE, IMAGE_SIZE, 3] size.
     labels: 1D tensor of [batch_size] size.
     """
-    filenames = [os.path.join(data_dir, 'data_batch_%d.bin' % i)
+    filenames = [os.path.join(data_dir,
+                              'cifar-10-batches-bin/data_batch_%d.bin' % i)
                  for i in xrange(1, 6)]
+    filenames = [os.path.abspath(f) for f in filenames]
     for f in filenames:
         if not tf.gfile.Exists(f):
             raise ValueError('Failed to find file: ' + f)
