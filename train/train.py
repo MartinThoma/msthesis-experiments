@@ -103,7 +103,6 @@ def train(batch_size=16, train_dir='.', max_steps=1000,
 
 def main(train_dir='traindir'):
     """Orchestrate."""
-    data.maybe_download_and_extract()
     if tf.gfile.Exists(train_dir):
         tf.gfile.DeleteRecursively(train_dir)
     tf.gfile.MakeDirs(train_dir)

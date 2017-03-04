@@ -14,6 +14,8 @@ from six.moves import xrange
 import tensorflow as tf
 from six.moves import urllib
 
+from utils import maybe_download_and_extract
+
 meta = {'n_classes': 10,
         'image_width': 32,
         'image_height': 32,
@@ -28,28 +30,7 @@ IMAGE_SIZE = 24
 NUM_CLASSES = 10
 NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN = 50000
 NUM_EXAMPLES_PER_EPOCH_FOR_EVAL = 10000
-
-
-def maybe_download_and_extract(data_dir='.'):
-    """Download and extract the tarball from Alex's website."""
-    DATA_URL = 'http://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz'
-    dest_directory = data_dir
-    if not os.path.exists(dest_directory):
-        os.makedirs(dest_directory)
-    filename = DATA_URL.split('/')[-1]
-    filepath = os.path.join(dest_directory, filename)
-    if not os.path.exists(filepath):
-        def _progress(count, block_size, total_size):
-            sys.stdout.write('\r>> Downloading %s %.1f%%' % (filename,
-                             float(count * block_size) /
-                             float(total_size) * 100.0))
-            sys.stdout.flush()
-        filepath, _ = urllib.request.urlretrieve(DATA_URL, filepath, _progress)
-        print()
-        statinfo = os.stat(filepath)
-        print('Successfully downloaded', filename, statinfo.st_size, 'bytes.')
-
-    tarfile.open(filepath, 'r:gz').extractall(dest_directory)
+DATA_URL = 'http://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz'
 
 
 def read_cifar10(filename_queue):
@@ -279,3 +260,5 @@ def inputs(eval_data, data_dir, batch_size):
     return _generate_image_and_label_batch(float_image, read_input.label,
                                            min_queue_examples, batch_size,
                                            shuffle=False)
+
+maybe_download_and_extract(dest_directory='cifar10', data_url=DATA_URL)
