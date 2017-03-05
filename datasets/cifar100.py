@@ -26,25 +26,24 @@ def _unpickle(file):
 
 def prepare(data_dir):
     maybe_download_and_extract(dest_directory=DATA_DIR, data_url=DATA_URL)
-    directory = os.path.join(DATA_DIR, 'cifar-100-batches-py')
-    files = ['batches.meta',
-             'data_batch_1', 'data_batch_2', 'data_batch_3', 'data_batch_4',
-             'data_batch_5', 'test_batch']
+    directory = os.path.join(DATA_DIR, 'cifar-100-python')
+    files = ['meta', 'test', 'train']
     files = [os.path.abspath(os.path.join(directory, f))
              for f in files]
     for f in files:
         print(f)
         if f.endswith("meta"):
             unpickled = _unpickle(f)
-            # unpickled['num_vis'] = 3 * 32**2
-            meta['num_cases_per_batch'] = unpickled['num_cases_per_batch']
-            meta['label_names'] = unpickled['label_names']
+            # unpickled['coarse_label_names']  -- 20 labels
+            meta['label_names'] = unpickled['fine_label_names']
             meta['labelname2index'] = {}
             for index, labelname in enumerate(meta['label_names']):
                 meta['labelname2index'][labelname] = index
-        elif f.endswith("test_batch"):
+        elif f.endswith("test"):
             unpickled = _unpickle(f)
-            tu = unpickled['data'], unpickled['labels'], unpickled['filenames']
+            tu = (unpickled['data'],
+                  unpickled['fine_labels'],
+                  unpickled['filenames'])
             for img, label, filename in zip(tu[0], tu[1], tu[2]):
                 img = img.reshape((3, 32, 32)).transpose((1, 2, 0)).reshape(-1)
                 test_data.append({'img': img,
@@ -53,8 +52,9 @@ def prepare(data_dir):
         else:
             # ['data', 'labels', 'batch_label', 'filenames']
             unpickled = _unpickle(f)
-            print(unpickled['batch_label'])
-            tu = unpickled['data'], unpickled['labels'], unpickled['filenames']
+            tu = (unpickled['data'],
+                  unpickled['fine_labels'],
+                  unpickled['filenames'])
             for img, label, filename in zip(tu[0], tu[1], tu[2]):
                 img = img.reshape((3, 32, 32)).transpose((1, 2, 0)).reshape(-1)
                 train_data.append({'img': img,
