@@ -1,0 +1,4 @@
+dataset_path: datasets/cifar10.py
+model_path: models/i-c3-f.py
+train_path: train/train.py
+optimizer_path: optimizers/adamdef.py
