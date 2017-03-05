@@ -6,6 +6,7 @@ import logging
 import sys
 import os
 import yaml
+import imp
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -59,3 +60,9 @@ if __name__ == "__main__":
                 logging.error("%s does not exist.", experiment_meta[key])
                 sys.exit(-1)
     print(experiment_meta)
+    sys.path.insert(1, os.path.dirname(experiment_meta['dataset_path']))
+    data = imp.load_source('data', experiment_meta['dataset_path'])
+    model = imp.load_source('model', experiment_meta['model_path'])
+    optimizer = imp.load_source('optimizer', experiment_meta['optimizer_path'])
+    train = imp.load_source('train', experiment_meta['train_path'])
+    train.main(data, model, optimizer, os.path.abspath(args.filename))

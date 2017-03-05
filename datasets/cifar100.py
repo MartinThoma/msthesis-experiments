@@ -7,10 +7,10 @@ import scipy.misc
 import numpy as np
 from tensorflow.contrib.learn.python.learn.datasets import base
 
-DATA_URL = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
-DATA_DIR = os.path.join(os.path.dirname(__file__), 'cifar10')
+DATA_URL = 'https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz'
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'cifar100')
 IMAGE_SIZE = 32
-meta = {'n_classes': 10,
+meta = {'n_classes': 100,
         'image_width': 32,
         'image_height': 32,
         'image_depth': 3}
@@ -26,7 +26,7 @@ def _unpickle(file):
 
 def prepare(data_dir):
     maybe_download_and_extract(dest_directory=DATA_DIR, data_url=DATA_URL)
-    directory = os.path.join(DATA_DIR, 'cifar-10-batches-py')
+    directory = os.path.join(DATA_DIR, 'cifar-100-batches-py')
     files = ['batches.meta',
              'data_batch_1', 'data_batch_2', 'data_batch_3', 'data_batch_4',
              'data_batch_5', 'test_batch']
@@ -69,7 +69,7 @@ def inputs(eval_data, batch_size):
     Parameters
     ----------
     eval_data: bool, indicating if one should use the train or eval data set.
-    data_dir: Path to the CIFAR-10 data directory.
+    data_dir: Path to the CIFAR-100 data directory.
     batch_size: Number of images per batch.
 
     Returns

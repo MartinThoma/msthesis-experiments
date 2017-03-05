@@ -1,3 +1,4 @@
 dataset_path: datasets/cifar10.py
-optimizer_path: optimizers/adamdef.py
 model_path: models/mlp.py
+optimizer_path: optimizers/adamdef.py
+train_path: train/train.py
