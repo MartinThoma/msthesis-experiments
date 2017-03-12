@@ -1,4 +1,11 @@
-dataset_path: datasets/cifar10.py
-model_path: models/i-c3-f.py
-train_path: train/train.py
-optimizer_path: optimizers/adamdef.py
+dataset:
+  script_path: datasets/cifar10.py
+model:
+  script_path: models/i-c3-f.py
+optimizer:
+  script_path: optimizers/adamdef.py
+  initial_lr: 0.01
+train:
+  script_path: train/train.py
+  batch_size: 32
+  epochs: 100
