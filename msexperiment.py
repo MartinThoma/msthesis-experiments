@@ -47,22 +47,32 @@ def get_parser():
     return parser
 
 
-if __name__ == "__main__":
-    args = get_parser().parse_args()
-    # Read YAML experiment definition file
-    with open(args.filename, 'r') as stream:
-        experiment_meta = yaml.load(stream)
-    # Make paths absolute
+def make_paths_absolute(experiment_meta):
     for key in experiment_meta.keys():
         if key.endswith("_path"):
             experiment_meta[key] = os.path.abspath(experiment_meta[key])
             if not os.path.isfile(experiment_meta[key]):
                 logging.error("%s does not exist.", experiment_meta[key])
                 sys.exit(-1)
+        if type(experiment_meta[key]) is dict:
+            experiment_meta[key] = make_paths_absolute(experiment_meta[key])
+    return experiment_meta
+
+
+if __name__ == "__main__":
+    args = get_parser().parse_args()
+    # Read YAML experiment definition file
+    with open(args.filename, 'r') as stream:
+        experiment_meta = yaml.load(stream)
+    # Make paths absolute
+    experiment_meta = make_paths_absolute(experiment_meta)
     print(experiment_meta)
-    sys.path.insert(1, os.path.dirname(experiment_meta['dataset_path']))
-    data = imp.load_source('data', experiment_meta['dataset_path'])
-    model = imp.load_source('model', experiment_meta['model_path'])
-    optimizer = imp.load_source('optimizer', experiment_meta['optimizer_path'])
-    train = imp.load_source('train', experiment_meta['train_path'])
-    train.main(data, model, optimizer, os.path.abspath(args.filename))
+    dpath = experiment_meta['dataset']['script_path']
+    sys.path.insert(1, os.path.dirname(dpath))
+    data = imp.load_source('data', experiment_meta['dataset']['script_path'])
+    model = imp.load_source('model', experiment_meta['model']['script_path'])
+    optimizer = imp.load_source('optimizer',
+                                experiment_meta['optimizer']['script_path'])
+    train = imp.load_source('train', experiment_meta['train']['script_path'])
+    train.main(data, model, optimizer, os.path.abspath(args.filename),
+               config=experiment_meta)

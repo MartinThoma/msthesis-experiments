@@ -4,15 +4,12 @@
 
 import tensorflow as tf
 
-NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN = 10000
-batch_size = 1000
 NUM_EPOCHS_PER_DECAY = 2
-INITIAL_LEARNING_RATE = 1e-2
 LEARNING_RATE_DECAY_FACTOR = 0.999
 MOVING_AVERAGE_DECAY = 0.999
 
 
-def train(total_loss, global_step):
+def train(total_loss, global_step, config):
     """
     Train a neural network model.
 
@@ -29,12 +26,15 @@ def train(total_loss, global_step):
     -------
     train_op: op for training.
     """
+    examples_per_epoch = config['dataset']['meta']['examples_per_epoch']
+    batch_size = config['train']['batch_size']
+
     # Variables that affect learning rate.
-    num_batches_per_epoch = NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN / batch_size
+    num_batches_per_epoch = examples_per_epoch / batch_size
     decay_steps = int(num_batches_per_epoch * NUM_EPOCHS_PER_DECAY)
 
     # Decay the learning rate exponentially based on the number of steps.
-    lr = tf.train.exponential_decay(INITIAL_LEARNING_RATE,
+    lr = tf.train.exponential_decay(config['optimizer']['initial_lr'],
                                     global_step,
                                     decay_steps,
                                     LEARNING_RATE_DECAY_FACTOR,

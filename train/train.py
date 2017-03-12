@@ -13,7 +13,6 @@ import os
 
 import tensorflow as tf
 
-epochs = 10000
 MODEL_NAME = 'test'
 
 
@@ -88,9 +87,11 @@ def get_nonexisting_path(model_checkpoint_path):
 def train(data,
           model,
           optimizer,
-          batch_size=32, train_dir='.', max_steps=10**6,
-          log_device_placement=True):
-    """Train CIFAR-10 for a number of steps."""
+          train_dir='.',
+          log_device_placement=True,
+          config={}):
+    """Train for a number of steps."""
+    train_params = config['train']
     with tf.Session() as sess:
         global_step = tf.contrib.framework.get_or_create_global_step()
 
@@ -99,10 +100,11 @@ def train(data,
                            'validation-curve-accuracy-%s.csv' % MODEL_NAME)
         validation_curve_path = get_nonexisting_path(val)
 
-        # Get images and labels for CIFAR-10.
+        # Get images and labels
         data.prepare(data.DATA_DIR)
         # data.visualize(42)
         dataset = data.read_data_sets()
+        config['dataset']['meta'] = data.meta
 
         # Build a Graph that computes the logits predictions from the
         # inference model.
@@ -120,14 +122,17 @@ def train(data,
 
         # Build a Graph that trains the model with one batch of examples and
         # updates the model parameters.
-        train_step = optimizer.train(loss, global_step)
+        train_step = optimizer.train(loss, global_step, config)
 
         sess.run(tf.global_variables_initializer())
 
         t0 = time.time()
-        for i in range(epochs):
-            batch = dataset.train.next_batch(batch_size)
-            if i % 500 == 0:
+        examples_per_epoch = config['dataset']['meta']['examples_per_epoch']
+        num_batches_per_epoch = int(examples_per_epoch /
+                                    train_params['batch_size'])
+        for i in range(int(train_params['epochs']) * num_batches_per_epoch):
+            batch = dataset.train.next_batch(train_params['batch_size'])
+            if i % num_batches_per_epoch == 0:
                 log_score(sess, summary_writer,
                           validation_curve_path,
                           dataset, correct_prediction, i, x, y_)
@@ -138,7 +143,7 @@ def train(data,
         print("Time: %0.4fs" % (t1 - t0))
 
 
-def main(data, model, optimizer, experiment_file):
+def main(data, model, optimizer, experiment_file, config):
     """Orchestrate."""
     train_dir = experiment_file[:-5]
     print("train_dir: %s" % train_dir)
@@ -147,7 +152,8 @@ def main(data, model, optimizer, experiment_file):
     if tf.gfile.Exists(train_dir):
         tf.gfile.DeleteRecursively(train_dir)
     tf.gfile.MakeDirs(train_dir)
-    train(data, model, optimizer, train_dir=train_dir)
+    train(data, model, optimizer, train_dir=train_dir,
+          config=config)
 
 
 if __name__ == '__main__':
