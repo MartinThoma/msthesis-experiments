@@ -13,7 +13,8 @@ IMAGE_SIZE = 32
 meta = {'n_classes': 100,
         'image_width': 32,
         'image_height': 32,
-        'image_depth': 3}
+        'image_depth': 3,
+        'examples_per_epoch': -1}
 train_data = []
 test_data = []
 
@@ -31,7 +32,6 @@ def prepare(data_dir):
     files = [os.path.abspath(os.path.join(directory, f))
              for f in files]
     for f in files:
-        print(f)
         if f.endswith("meta"):
             unpickled = _unpickle(f)
             # unpickled['coarse_label_names']  -- 20 labels
@@ -60,6 +60,7 @@ def prepare(data_dir):
                 train_data.append({'img': img,
                                    'label': label,
                                    'filename': filename})
+    meta['examples_per_epoch'] = len(train_data)
 
 
 def inputs(eval_data, batch_size):
@@ -115,7 +116,6 @@ def read_data_sets(validation_size=0.1):
     np.random.shuffle(perm)
     train_images = train_images[perm]
     train_labels = train_labels[perm]
-    print(train_labels.shape)
 
     # Split training set in training and validation set
     validation_images = train_images[:validation_size]
