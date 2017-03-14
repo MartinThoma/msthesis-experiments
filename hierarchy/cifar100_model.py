@@ -12,19 +12,21 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint
-# from keras.models import Sequential
-# from keras.layers import Dense, Dropout, Flatten
-# from keras.layers import Convolution2D, MaxPooling2D
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Convolution2D, MaxPooling2D
 from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
 import numpy as np
 import csv
 import densenet
 
-batch_size = 64
+batch_size = 128
 nb_classes = 100
-nb_epoch = 200
+nb_epoch = 50
 data_augmentation = True
+load_smoothed_labels = False
+use_sequential_model = True
 
 # input image dimensions
 img_rows, img_cols = 32, 32
@@ -40,51 +42,54 @@ X_train, X_val, y_train, y_val = train_test_split(X, y,
 
 # Convert class vectors to binary class matrices.
 Y_train = np_utils.to_categorical(y_train, nb_classes)
+
+if load_smoothed_labels:
+    Y_train = np.load('smoothed_lables.npy')
 Y_val = np_utils.to_categorical(y_val, nb_classes)
 Y_test = np_utils.to_categorical(y_test, nb_classes)
 
-# model = Sequential()
-# print("input_shape: %s" % str(X_train.shape[1:]))
-# model.add(Convolution2D(32, 3, 3, border_mode='same', activation='relu',
-#                         input_shape=X_train.shape[1:]))
-# model.add(Convolution2D(32, 3, 3, border_mode='same', activation='relu'))
-# model.add(MaxPooling2D(pool_size=(2, 2)))
-# model.add(Dropout(0.25))
+if use_sequential_model:
+    model = Sequential()
+    print("input_shape: %s" % str(X_train.shape[1:]))
+    model.add(Convolution2D(32, 3, 3, border_mode='same', activation='relu',
+                            input_shape=X_train.shape[1:]))
+    model.add(Convolution2D(32, 3, 3, border_mode='same', activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
 
-# model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
-# model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
-# model.add(MaxPooling2D(pool_size=(2, 2)))
-# model.add(Dropout(0.25))
+    model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
+    model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
 
-# model.add(Flatten())
-# model.add(Dense(2048, activation='relu'))
-# model.add(Dropout(0.5))
-# model.add(Dense(2048, activation='relu'))
-# model.add(Dropout(0.5))
-# model.add(Dense(nb_classes, activation='softmax'))
+    model.add(Flatten())
+    model.add(Dense(2048, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(2048, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(nb_classes, activation='softmax'))
 
-# model.compile(loss='categorical_crossentropy',
-#               optimizer='adam',
-#               metrics=['accuracy'])
-
-if K.image_dim_ordering() == "th":
-    img_dim = (img_channels, img_rows, img_cols)
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='adam',
+                  metrics=['accuracy'])
 else:
-    img_dim = (img_rows, img_cols, img_channels)
+    if K.image_dim_ordering() == "th":
+        img_dim = (img_channels, img_rows, img_cols)
+    else:
+        img_dim = (img_rows, img_cols, img_channels)
 
-depth = 100
-nb_dense_block = 3
-growth_rate = 12
-nb_filter = -1
-bottleneck = True
-reduction = 0.5
-dropout_rate = 0.0  # 0.0 for data augmentation
+    depth = 100
+    nb_dense_block = 3
+    growth_rate = 12
+    nb_filter = -1
+    bottleneck = True
+    reduction = 0.5
+    dropout_rate = 0.0  # 0.0 for data augmentation
 
-
-model = densenet.create_dense_net(nb_classes, img_dim, depth, nb_dense_block,
-                                  growth_rate, nb_filter,
-                                  bottleneck=bottleneck, reduction=reduction,
-                                  dropout_rate=dropout_rate)
+    model = densenet.create_dense_net(nb_classes, img_dim, depth, nb_dense_block,
+                                      growth_rate, nb_filter,
+                                      bottleneck=bottleneck, reduction=reduction,
+                                      dropout_rate=dropout_rate)
 print("Model created")
 
 model.summary()
@@ -118,9 +123,9 @@ else:
         featurewise_std_normalization=False,  # divide inputs by std of the dataset
         samplewise_std_normalization=False,  # divide each input by its std
         zca_whitening=False,  # apply ZCA whitening
-        rotation_range=0,  # randomly rotate images in the range (degrees, 0 to 180) - dense 15
-        width_shift_range=0.1,  # randomly shift images horizontally (fraction of total width) - dense 5./32
-        height_shift_range=0.1,  # randomly shift images vertically (fraction of total height) - dense 5./32
+        rotation_range=15,  # randomly rotate images in the range (degrees, 0 to 180)
+        width_shift_range=5. / 32,  # randomly shift images horizontally (fraction of total width)
+        height_shift_range=5. / 32,  # randomly shift images vertically (fraction of total height)
         horizontal_flip=True,  # randomly flip images
         vertical_flip=False)  # randomly flip images
 
@@ -132,7 +137,7 @@ else:
     cb = ModelCheckpoint("weights/DenseNet-BC-100-12-CIFAR100.h5",
                          monitor="val_acc",
                          save_best_only=True,
-                         save_weights_only=True)
+                         save_weights_only=False)
     history_callback = model.fit_generator(datagen.flow(X_train, Y_train,
                                            batch_size=batch_size),
                                            samples_per_epoch=X_train.shape[0],
