@@ -39,7 +39,7 @@ def load_data():
     (X, y), (X_test, y_test) = cifar100.load_data()
 
     X_train, X_val, y_train, y_val = train_test_split(X, y,
-                                                      test_size=0.20,
+                                                      test_size=0.10,
                                                       random_state=42)
     X_train = X_train.astype('float32')
     X_val = X_val.astype('float32')

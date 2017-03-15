@@ -37,7 +37,7 @@ models = [load_model(model_path) for model_path in model_names]
 (X, y), (X_test, y_test) = cifar100.load_data()
 
 X_train, X_val, y_train, y_val = train_test_split(X, y,
-                                                  test_size=0.20,
+                                                  test_size=0.10,
                                                   random_state=42)
 X_train = X_train.astype('float32')
 X_val = X_val.astype('float32')
@@ -46,25 +46,52 @@ X_train /= 255
 X_val /= 255
 X_test /= 255
 
+X_eval = X_test
+y_eval = y_test
 
 # Calculate confusion matrix
 y_val_i = y_val.flatten()
-y_preds = [model.predict(X_train) for model in models]
+y_preds = [model.predict(X_eval) for model in models]
 
 for model_index, y_val_pred in enumerate(y_preds):
-    cm = calculate_cm(y_train, y_val_pred)
+    cm = calculate_cm(y_eval, y_val_pred)
     acc = sum([cm[i][i] for i in range(100)]) / float(cm.sum())
     print("Cl #{} ({}): accuracy: {:0.2f}".format(model_index + 1,
                                                   model_names[model_index],
                                                   acc * 100))
 
-y_val_pred = sum(y_preds) / len(model_names)
-cm = calculate_cm(y_train, y_val_pred)
-acc = sum([cm[i][i] for i in range(100)]) / float(cm.sum())
-print("Ensemble Accuracy: %0.2f" % (acc * 100))
 
-Y_train = np_utils.to_categorical(y_train, n_classes)
-smoothed_lables = (y_val_pred + Y_train) / 2
+def get_bin(x, n=0):
+    """
+    Get the binary representation of x.
+
+    Parameters
+    ----------
+    x : int
+    n : int
+        Minimum number of digits. If x needs less digits in binary, the rest
+        is filled with zeros.
+
+    Returns
+    -------
+    str
+    """
+    return format(x, 'b').zfill(n)
+
+max_acc = 0.0
+for x in range(1, 2**len(y_preds) - 1):
+    bitstring = get_bin(x, len(y_preds))
+    y_preds_take = [p for p, i in zip(y_preds, bitstring) if i == "1"]
+    y_val_pred = sum(y_preds_take) / bitstring.count("1")
+    cm = calculate_cm(y_eval, y_val_pred)
+    acc = sum([cm[i][i] for i in range(100)]) / float(cm.sum())
+    if acc >= max_acc:
+        print("Ensemble Accuracy: {:0.2f}% ({})".format(acc * 100,
+                                                        bitstring))
+        max_acc = acc
+
+Y_eval = np_utils.to_categorical(y_eval, n_classes)
+smoothed_lables = (y_val_pred + Y_eval) / 2
 np.save("smoothed_lables", smoothed_lables)
 
 # Create plot
