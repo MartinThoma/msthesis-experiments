@@ -20,13 +20,14 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import csv
 import densenet
+import rflearn
 
 batch_size = 128
 nb_classes = 100
 nb_epoch = 50
 data_augmentation = True
 load_smoothed_labels = False
-use_sequential_model = True
+model_type = 'rl-learned'
 
 # input image dimensions
 img_rows, img_cols = 32, 32
@@ -40,6 +41,21 @@ X_train, X_val, y_train, y_val = train_test_split(X, y,
                                                   random_state=42)
 
 
+def adjust_labels(y, perm="exp-15.23.json"):
+    import json
+    with open(perm) as data_file:
+        perm = json.load(data_file)
+    y_new = np.zeros((len(y), 1), dtype=np.int64)
+    splitpoint = 100 / 2  # TODO: 100 is old number of classes
+    for i, el in enumerate(y):
+        y_new[i] = el < splitpoint
+    return y_new
+# nb_classes = 2
+# y_train = adjust_labels(y_train)
+# y_test = adjust_labels(y_test)
+# y_val = adjust_labels(y_val)
+
+
 # Convert class vectors to binary class matrices.
 Y_train = np_utils.to_categorical(y_train, nb_classes)
 
@@ -48,7 +64,7 @@ if load_smoothed_labels:
 Y_val = np_utils.to_categorical(y_val, nb_classes)
 Y_test = np_utils.to_categorical(y_test, nb_classes)
 
-if use_sequential_model:
+if model_type == 'sequential':
     model = Sequential()
     print("input_shape: %s" % str(X_train.shape[1:]))
     model.add(Convolution2D(32, 3, 3, border_mode='same', activation='relu',
@@ -72,7 +88,7 @@ if use_sequential_model:
     model.compile(loss='categorical_crossentropy',
                   optimizer='adam',
                   metrics=['accuracy'])
-else:
+elif model_type == 'dense':
     if K.image_dim_ordering() == "th":
         img_dim = (img_channels, img_rows, img_cols)
     else:
@@ -90,6 +106,15 @@ else:
                                       growth_rate, nb_filter,
                                       bottleneck=bottleneck, reduction=reduction,
                                       dropout_rate=dropout_rate)
+elif model_type == 'rl-learned':
+    if K.image_dim_ordering() == "th":
+        img_dim = (img_channels, img_rows, img_cols)
+    else:
+        img_dim = (img_rows, img_cols, img_channels)
+
+    model = rflearn.create_rflearn_net(nb_classes, img_dim)
+else:
+    print("Not implemented model '{}'".format(model_type))
 print("Model created")
 
 model.summary()
