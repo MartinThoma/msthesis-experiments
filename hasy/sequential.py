@@ -15,17 +15,17 @@ from keras import backend as K
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Dense, Dropout, Flatten, Activation
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
 import csv
 import densenet
 
-batch_size = 64
+batch_size = 256
 nb_classes = hasy.n_classes
-nb_epoch = 400
-data_augmentation = True
+nb_epoch = 80
+data_augmentation = False
 load_smoothed_labels = False
 model_type = 'sequential'
 
@@ -43,21 +43,6 @@ X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
                                                   random_state=42)
 
 
-def adjust_labels(y, perm="exp-15.23.json"):
-    import json
-    with open(perm) as data_file:
-        perm = json.load(data_file)
-    y_new = np.zeros((len(y), 1), dtype=np.int64)
-    splitpoint = 100 / 2  # TODO: 100 is old number of classes
-    for i, el in enumerate(y):
-        y_new[i] = el < splitpoint
-    return y_new
-# nb_classes = 2
-# y_train = adjust_labels(y_train)
-# y_test = adjust_labels(y_test)
-# y_val = adjust_labels(y_val)
-
-
 # Convert class vectors to binary class matrices.
 Y_train = np_utils.to_categorical(y_train, nb_classes)
 
@@ -73,12 +58,12 @@ if model_type == 'sequential':
                             input_shape=X_train.shape[1:]))
     model.add(Convolution2D(32, 3, 3, border_mode='same', activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+    # model.add(Dropout(0.25))
 
     model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
     model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+    # model.add(Dropout(0.25))
 
     model.add(Convolution2D(2048, 8, 8,
                             border_mode='valid', activation='relu'))
@@ -87,8 +72,9 @@ if model_type == 'sequential':
     model.add(Convolution2D(2048, 1, 1, border_mode='same', activation='relu'))
     # model.add(Dense(2048, activation='relu'))
     model.add(Dropout(0.5))
+    model.add(Convolution2D(nb_classes, 1, 1, border_mode='same'))
     model.add(Flatten())
-    model.add(Dense(nb_classes, activation='softmax'))
+    model.add(Activation('softmax'))
 
     model.compile(loss='categorical_crossentropy',
                   optimizer='adam',
@@ -146,9 +132,9 @@ else:
         featurewise_std_normalization=False,  # divide inputs by std of the dataset
         samplewise_std_normalization=False,  # divide each input by its std
         zca_whitening=False,  # apply ZCA whitening
-        rotation_range=15,  # randomly rotate images in the range (degrees, 0 to 180)
-        width_shift_range=5. / 32,  # randomly shift images horizontally (fraction of total width)
-        height_shift_range=5. / 32,  # randomly shift images vertically (fraction of total height)
+        rotation_range=0,  # randomly rotate images in the range (degrees, 0 to 180)
+        width_shift_range=0,  # randomly shift images horizontally (fraction of total width)
+        height_shift_range=0,  # randomly shift images vertically (fraction of total height)
         horizontal_flip=True,  # randomly flip images
         vertical_flip=False)  # randomly flip images
 
