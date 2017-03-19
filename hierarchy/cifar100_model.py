@@ -7,6 +7,8 @@ Takes about 100 minutes.
 """
 
 from __future__ import print_function
+import numpy as np
+np.random.seed(0)
 from keras.datasets import cifar100
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
@@ -17,7 +19,6 @@ from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
-import numpy as np
 import csv
 import densenet
 import rflearn
