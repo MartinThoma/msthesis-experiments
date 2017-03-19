@@ -17,3 +17,15 @@ train_path: train/train.py
 * **model** contains `inference(images, dataset_meta)`
 * **optimizer** contains `train(total_loss, global_step)`
 * **train** contains `train(data, model, optimizer)`
+
+## Plan
+
+* GTSBM
+* MNIST / SVHN
+* HASY
+* How do humans group classes?
+* Which groups form -> Image in thesis!
+* Why do I use such an approach:
+    - Faster evaluation of ideas due to faster training due to less data
+    - Easier to estimate the benefit of more data (and which kind of data)
+    - Lower labeling cost
