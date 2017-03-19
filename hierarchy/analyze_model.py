@@ -47,7 +47,7 @@ def load_data():
     X_train /= 255
     X_val /= 255
     X_test /= 255
-    return X_train, X_val, X_test, y_test, y_val, y_test
+    return X_train, X_val, X_test, y_train, y_val, y_test
 
 
 def main(model_path):
@@ -63,7 +63,7 @@ def main(model_path):
     for i, j in zip(y_val_i, y_val_pred_i):
         cm[i][j] += 1
 
-    acc = sum([cm[i][i] for i in range(100)]) / float(cm.sum())
+    acc = sum([cm[i][i] for i in range(n_classes)]) / float(cm.sum())
     print("Accuracy: %0.4f" % acc)
 
     # Create plot
