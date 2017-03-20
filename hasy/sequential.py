@@ -50,27 +50,28 @@ Y_val = np_utils.to_categorical(y_val, nb_classes)
 Y_test = np_utils.to_categorical(y_test, nb_classes)
 
 if model_type == 'sequential':
-    # keras.initializers.TruncatedNormal(mean=0.0, stddev=0.05, seed=None)
     model = Sequential()
     print("input_shape: %s" % str(X_train.shape[1:]))
     model.add(Convolution2D(32, (3, 3), padding='same', activation='relu',
                             input_shape=X_train.shape[1:]))
+    model.add(Convolution2D(32, (3, 3), padding='same', activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    # model.add(Dense(1024, activation='tanh'))
-    model.add(Convolution2D(1024, (16, 16), padding='valid',
-                            activation='tanh',
-                            kernel_initializer='Orthogonal'))
+    model.add(Dropout(0.25))
+
+    model.add(Convolution2D(64, (3, 3), padding='same', activation='relu'))
+    model.add(Convolution2D(64, (3, 3), padding='same', activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+
+    model.add(Convolution2D(2048, (8, 8),
+                            padding='valid', activation='relu'))
+    # model.add(Dense(2048, activation='relu'))
     model.add(Dropout(0.5))
-    # model.add(Dense(1024, activation='tanh'))
-    model.add(Convolution2D(1024, (1, 1), padding='valid',
-                            activation='tanh',
-                            kernel_initializer='Orthogonal'))
+    model.add(Convolution2D(2048, (1, 1), padding='same', activation='relu'))
+    # model.add(Dense(2048, activation='relu'))
     model.add(Dropout(0.5))
-    # model.add(Dense(nb_classes))
-    model.add(Convolution2D(nb_classes, (1, 1), padding='same',
-                            kernel_initializer='Orthogonal'))
     model.add(Flatten())
-    model.add(Activation('softmax'))
+    model.add(Dense(nb_classes, activation='softmax'))
 elif model_type == 'dense':
     if K.image_dim_ordering() == "th":
         img_dim = (img_channels, img_rows, img_cols)
