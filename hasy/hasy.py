@@ -144,9 +144,9 @@ def load_data():
         for i, data_item in enumerate(test_csv):
             fname = os.path.join(untar_fpath, data_item['path'])
             s_test.append(fname)
-            x_train[i, 0, :, :] = scipy.ndimage.imread(fname,
-                                                       flatten=False,
-                                                       mode='L')
+            x_test[i, 0, :, :] = scipy.ndimage.imread(fname,
+                                                      flatten=False,
+                                                      mode='L')
             label = symbol_id2index[data_item['symbol_id']]
             y_test.append(label)
         y_test = np.array(y_test, dtype=np.int64)
