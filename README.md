@@ -29,3 +29,6 @@ train_path: train/train.py
     - Faster evaluation of ideas due to faster training due to less data
     - Easier to estimate the benefit of more data (and which kind of data)
     - Lower labeling cost
+
+
+* CIFAR: https://cambridgespark.com/content/tutorials/convolutional-neural-networks-with-keras/index.html
