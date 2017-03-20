@@ -40,24 +40,11 @@ X_val, y_val = X_train, y_train
 #                                                   test_size=0.10,
 #                                                   random_state=42)
 
-
-def adjust_labels(y, perm="exp-15.23.json"):
-    import json
-    with open(perm) as data_file:
-        perm = json.load(data_file)
-    y_new = np.zeros((len(y), 1), dtype=np.int64)
-    splitpoint = 100 / 2  # TODO: 100 is old number of classes
-    for i, el in enumerate(y):
-        y_new[i] = el < splitpoint
-    return y_new
-# nb_classes = 2
-# y_train = adjust_labels(y_train)
-# y_test = adjust_labels(y_test)
-# y_val = adjust_labels(y_val)
-
-
 # Convert class vectors to binary class matrices.
 Y_train = np_utils.to_categorical(y_train, nb_classes)
+print(Y_train.shape)
+Y_train = Y_train.reshape((-1, 1, 1, nb_classes))
+print(Y_train.shape)
 
 if load_smoothed_labels:
     Y_train = np.load('smoothed_lables.npy')
