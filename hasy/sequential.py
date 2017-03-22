@@ -32,7 +32,7 @@ model_type = 'sequential'
 # input image dimensions
 img_rows, img_cols = 32, 32
 # The CIFAR10 images are RGB.
-img_channels = 3
+img_channels = 1
 
 # The data, shuffled and split between train and test sets:
 data = hasy.load_data()
@@ -78,13 +78,14 @@ elif model_type == 'dense':
     else:
         img_dim = (img_rows, img_cols, img_channels)
 
-    depth = 100
     nb_dense_block = 3
     growth_rate = 12
+    N = 12
     nb_filter = -1
     bottleneck = True
     reduction = 0.5
     dropout_rate = 0.0  # 0.0 for data augmentation
+    depth = 3 * N + 4
 
     model = densenet.create_dense_net(nb_classes, img_dim, depth, nb_dense_block,
                                       growth_rate, nb_filter,
