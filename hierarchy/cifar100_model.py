@@ -28,7 +28,7 @@ nb_classes = 100
 nb_epoch = 50
 data_augmentation = True
 load_smoothed_labels = False
-model_type = 'rl-learned'
+model_type = 'sequential'
 
 # input image dimensions
 img_rows, img_cols = 32, 32
@@ -68,14 +68,14 @@ Y_test = np_utils.to_categorical(y_test, nb_classes)
 if model_type == 'sequential':
     model = Sequential()
     print("input_shape: %s" % str(X_train.shape[1:]))
-    model.add(Convolution2D(32, 3, 3, border_mode='same', activation='relu',
+    model.add(Convolution2D(32, (3, 3), padding='same', activation='relu',
                             input_shape=X_train.shape[1:]))
-    model.add(Convolution2D(32, 3, 3, border_mode='same', activation='relu'))
+    model.add(Convolution2D(32, (3, 3), padding='same', activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
 
-    model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
-    model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
+    model.add(Convolution2D(64, (3, 3), padding='same', activation='relu'))
+    model.add(Convolution2D(64, (3, 3), padding='same', activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
 
@@ -166,8 +166,8 @@ else:
                          save_weights_only=False)
     history_callback = model.fit_generator(datagen.flow(X_train, Y_train,
                                            batch_size=batch_size),
-                                           samples_per_epoch=X_train.shape[0],
-                                           nb_epoch=nb_epoch,
+                                           steps_per_epoch=X_train.shape[0],
+                                           epochs=nb_epoch,
                                            validation_data=(X_val, Y_val),
                                            callbacks=[cb])
     loss_history = history_callback.history["loss"]
