@@ -31,8 +31,10 @@ n_classes = 100
 # models = ['cifar100-%i.h5' % i for i in range(1, 5)]
 model_names = natsorted(glob.glob("cifar100-*.h5"))
 print("Ensemble of {} models ({})".format(len(model_names), model_names))
-models = [load_model(model_path) for model_path in model_names]
-
+models = []
+for model_path in model_names:
+    print("Load model {}...".format(model_path))
+    models.append(load_model(model_path))
 # Load data
 (X, y), (X_test, y_test) = cifar100.load_data()
 
