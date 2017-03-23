@@ -15,7 +15,7 @@ from keras import backend as K
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Dense, Dropout, Flatten, Activation
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
@@ -25,7 +25,7 @@ import rflearn
 
 batch_size = 128
 nb_classes = 100
-nb_epoch = 50
+nb_epoch = 3
 data_augmentation = True
 load_smoothed_labels = False
 model_type = 'sequential'
@@ -80,11 +80,15 @@ if model_type == 'sequential':
     model.add(Dropout(0.25))
 
     model.add(Flatten())
+    # model.add(Convolution2D(2048, (8, 8), padding='valid', activation='relu'))
     model.add(Dense(2048, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(2048, activation='relu'))
+    # model.add(Convolution2D(2048, (1, 1), activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(nb_classes, activation='softmax'))
+    # model.add(Convolution2D(nb_classes, (1, 1)))
+    model.add(Dense(nb_classes))
+    model.add(Activation('softmax'))
 
     model.compile(loss='categorical_crossentropy',
                   optimizer='adam',
