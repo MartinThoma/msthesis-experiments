@@ -22,10 +22,10 @@ import sequential_model
 
 batch_size = 64
 nb_classes = gtsdb.n_classes
-nb_epoch = 20
+nb_epoch = 200
 data_augmentation = True
 load_smoothed_labels = False
-model_type = 'sequential'
+model_type = 'dense'
 
 # input image dimensions
 img_rows, img_cols = 32, 32
@@ -43,7 +43,7 @@ X_val, y_val = X_train, y_train
 # Convert class vectors to binary class matrices.
 Y_train = np_utils.to_categorical(y_train, nb_classes)
 print(Y_train.shape)
-Y_train = Y_train.reshape((-1, 1, 1, nb_classes))
+# Y_train = Y_train.reshape((-1, 1, 1, nb_classes))  - fully convolutional
 print(Y_train.shape)
 
 if load_smoothed_labels:
@@ -77,7 +77,7 @@ else:
 print("Model created")
 
 model.summary()
-optimizer = Adam(lr=1e-3)  # Using Adam instead of SGD to speed up training
+optimizer = Adam(lr=1e-4)  # Using Adam instead of SGD to speed up training
 model.compile(loss='categorical_crossentropy',
               optimizer=optimizer,
               metrics=["accuracy"])
