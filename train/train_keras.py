@@ -119,8 +119,8 @@ def main(data_module, model_module, optimizer_module, filename, config):
                              save_weights_only=False)
         history_cb = model.fit_generator(datagen.flow(X_train, Y_train,
                                          batch_size=batch_size),
-                                         samples_per_epoch=X_train.shape[0],
-                                         nb_epoch=nb_epoch,
+                                         steps_per_epoch=X_train.shape[0],
+                                         epochs=nb_epoch,
                                          validation_data=(X_test, Y_test),
                                          callbacks=[cb])
         loss_history = history_cb.history["loss"]
