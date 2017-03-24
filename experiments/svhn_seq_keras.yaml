@@ -1,0 +1,15 @@
+dataset:
+  script_path: ../datasets/svhn.py
+model:
+  script_path: ../models/sequential_keras.py
+optimizer:
+  script_path: ../optimizers/adam_keras.py
+  initial_lr: 0.0001
+train:
+  script_path: ../train/train_keras.py
+  batch_size: 128
+  epochs: 100
+  artifacts_path: ../artifacts/svhn_seq_keras/
+  model_output_fname: svhn_seq.h5
+  history_fname: svhn_seq_history.csv
+  checkpoint_fname: svhn_seq_chk.h5
