@@ -42,21 +42,23 @@ def get_parser():
     parser.add_argument("-f", "--file",
                         dest="filename",
                         type=lambda x: is_valid_file(parser, x),
-                        help="write report to FILE",
-                        metavar="FILE",
+                        help="experiment definition file",
+                        metavar="FILE.yaml",
                         required=True)
     return parser
 
 
-def make_paths_absolute(experiment_meta):
+def make_paths_absolute(dir_, experiment_meta):
     for key in experiment_meta.keys():
         if key.endswith("_path"):
+            experiment_meta[key] = os.path.join(dir_, experiment_meta[key])
             experiment_meta[key] = os.path.abspath(experiment_meta[key])
             # if not os.path.isfile(experiment_meta[key]):
             #     logging.error("%s does not exist.", experiment_meta[key])
             #     sys.exit(-1)
         if type(experiment_meta[key]) is dict:
-            experiment_meta[key] = make_paths_absolute(experiment_meta[key])
+            experiment_meta[key] = make_paths_absolute(dir_,
+                                                       experiment_meta[key])
     return experiment_meta
 
 
@@ -66,7 +68,8 @@ if __name__ == "__main__":
     with open(args.filename, 'r') as stream:
         experiment_meta = yaml.load(stream)
     # Make paths absolute
-    experiment_meta = make_paths_absolute(experiment_meta)
+    experiment_meta = make_paths_absolute(os.path.dirname(args.filename),
+                                          experiment_meta)
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(experiment_meta)
     dpath = experiment_meta['dataset']['script_path']
