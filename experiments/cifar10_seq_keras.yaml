@@ -4,7 +4,7 @@ model:
   script_path: models/sequential_keras.py
 optimizer:
   script_path: optimizers/adam_keras.py
-  initial_lr: 0.01
+  initial_lr: 0.001
 train:
   script_path: train/train_keras.py
   batch_size: 64
