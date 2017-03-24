@@ -139,4 +139,6 @@ def main(data_module, model_module, optimizer_module, filename, config):
             writer = csv.writer(fp, delimiter=',')
             writer.writerows([("loss", "acc", "val_acc")])
             writer.writerows(data)
-    model.save(config['train']['model_output_fname'])
+    model_fn = os.path.join(config['train']['artifacts_path'],
+                            config['train']['model_output_fname'])
+    model.save(model_fn)
