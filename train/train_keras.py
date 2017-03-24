@@ -45,6 +45,7 @@ def main(data_module, model_module, optimizer_module, filename, config):
 
     # The data, shuffled and split between train and test sets:
     data = data_module.load_data()
+    print("Data loaded.")
     X_train, y_train = data['x_train'], data['y_train']
     X_train = data_module.preprocess(X_train)
     X_test, y_test = data['x_test'], data['y_test']
@@ -135,4 +136,4 @@ def main(data_module, model_module, optimizer_module, filename, config):
             writer = csv.writer(fp, delimiter=',')
             writer.writerows([("loss", "acc", "val_acc")])
             writer.writerows(data)
-    model.save(config['train']['model_output_path'])
+    model.save(config['train']['model_output_fname'])
