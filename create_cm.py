@@ -43,7 +43,7 @@ def _write_cm(cm, path):
         outfile.write(to_unicode(str_))
 
 
-def create_cm(model_path, data_module):
+def create_cm(model_path, data_module, artifacts_path):
     """Create confusion matrices."""
     # Load model
     model = load_model(model_path)
@@ -54,22 +54,20 @@ def create_cm(model_path, data_module):
     y_test = data['y_test']
     n_classes = data_module.n_classes
 
-    X_train = X_train.astype('float32')
-    X_test = X_test.astype('float32')
-    X_train /= 255.0
-    X_test /= 255.0
+    X_train = data_module.preprocess(X_train)
+    X_test = data_module.preprocess(X_test)
 
     # Calculate confusion matrix for training set
     cm = _calculate_cm(model, X_train, y_train, n_classes)
     acc = sum([cm[i][i] for i in range(n_classes)]) / float(cm.sum())
-    print("Accuracy (Train): {:0.2f}%".format(acc * 100))
-    _write_cm(cm, path='cm-train.json')
+    print("Accuracy (Train): {:0.2f}%".format(acc))
+    _write_cm(cm, path=os.path.join(artifacts_path, 'cm-train.json'))
 
     # Calculate confusion matrix for test set
     cm = _calculate_cm(model, X_test, y_test, n_classes)
     acc = sum([cm[i][i] for i in range(n_classes)]) / float(cm.sum())
     print("Accuracy (Test): {:0.2f}%".format(acc * 100))
-    _write_cm(cm, path='cm-test.json')
+    _write_cm(cm, path=os.path.join(artifacts_path, 'cm-test.json'))
 
 
 def get_parser():
@@ -97,4 +95,7 @@ if __name__ == '__main__':
     dpath = experiment_meta['dataset']['script_path']
     sys.path.insert(1, os.path.dirname(dpath))
     data = imp.load_source('data', experiment_meta['dataset']['script_path'])
-    create_cm(experiment_meta['train']['model_output_path'], data)
+    artifacts_path = experiment_meta['train']['artifacts_path']
+    model_path = os.path.join(artifacts_path,
+                              experiment_meta['train']['model_output_fname'])
+    create_cm(model_path, data, artifacts_path)

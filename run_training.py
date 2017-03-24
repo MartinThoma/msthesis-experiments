@@ -72,6 +72,10 @@ if __name__ == "__main__":
                                           experiment_meta)
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(experiment_meta)
+
+    if not os.path.exists(experiment_meta['train']['artifacts_path']):
+        os.makedirs(experiment_meta['train']['artifacts_path'])
+
     dpath = experiment_meta['dataset']['script_path']
     sys.path.insert(1, os.path.dirname(dpath))
     data = imp.load_source('data', experiment_meta['dataset']['script_path'])

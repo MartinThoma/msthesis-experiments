@@ -9,6 +9,7 @@ train:
   script_path: ../train/train_keras.py
   batch_size: 64
   epochs: 10
-  model_output_path: ../artifacts/cifar100_seq_keras/cifar100_seq.h5
-  history_path: ../artifacts/cifar100_seq_keras/cifar100_seq_history.csv
-  checkpoint_path: ../artifacts/cifar100_seq_keras/cifar100_seq_chk.h5
+  artifacts_path: ../artifacts/cifar100_seq_keras/
+  model_output_fname: cifar100_seq.h5
+  history_fname: cifar100_seq_history.csv
+  checkpoint_fname: cifar100_seq_chk.h5

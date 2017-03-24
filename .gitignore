@@ -96,7 +96,7 @@ traindir/
 cifar10/
 cifar100/
 
-experiments/
+artifacts/
 *.h5
 *.png
 *.npy
