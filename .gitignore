@@ -95,3 +95,8 @@ traindir/
 # Datasets
 cifar10/
 cifar100/
+
+experiments/
+*.h5
+*.png
+*.npy
