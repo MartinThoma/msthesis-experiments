@@ -41,7 +41,10 @@ def main(data_module, model_module, optimizer_module, filename, config):
     else:
         img_channels = data_module.img_channels
 
-    data_augmentation = True
+    if 'data_augmentation' in config['train']:
+        data_augmentation = config['train']['data_augmentation']
+    else:
+        data_augmentation = True
 
     # The data, shuffled and split between train and test sets:
     data = data_module.load_data()
