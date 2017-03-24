@@ -268,3 +268,10 @@ def load_data():
         data['x_test'] = data['x_test'].transpose(0, 2, 3, 1)
 
     return data
+
+
+def preprocess(x):
+    """Preprocess features."""
+    x = x.astype('float32')
+    x /= 255.0
+    return x

@@ -45,7 +45,9 @@ def main(data_module, model_module, optimizer_module, filename, config):
     # The data, shuffled and split between train and test sets:
     data = data_module.load_data()
     X_train, y_train = data['x_train'], data['y_train']
+    X_train = data_module.preprocess(X_train)
     X_test, y_test = data['x_test'], data['y_test']
+    X_test = data_module.preprocess(X_test)
     # X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
     #                                                   test_size=0.10,
     #                                                   random_state=42)
@@ -74,13 +76,6 @@ def main(data_module, model_module, optimizer_module, filename, config):
                   metrics=["accuracy"])
     print("Finished compiling")
     print("Building model...")
-
-    X_train = X_train.astype('float32')
-    # X_test = X_val.astype('float32')
-    X_test = X_test.astype('float32')
-    X_train /= 255
-    X_test /= 255
-    # X_test /= 255
 
     if not data_augmentation:
         print('Not using data augmentation.')

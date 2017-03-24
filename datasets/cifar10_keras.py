@@ -45,3 +45,10 @@ def load_data():
 
     return {'x_train': x_train, 'y_train': y_train,
             'x_test': x_test, 'y_test': y_test}
+
+
+def preprocess(x):
+    """Preprocess features."""
+    x = x.astype('float32')
+    x /= 255.0
+    return x
