@@ -7,6 +7,7 @@ import sys
 import os
 import yaml
 import imp
+import pprint
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -66,7 +67,8 @@ if __name__ == "__main__":
         experiment_meta = yaml.load(stream)
     # Make paths absolute
     experiment_meta = make_paths_absolute(experiment_meta)
-    print(experiment_meta)
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(experiment_meta)
     dpath = experiment_meta['dataset']['script_path']
     sys.path.insert(1, os.path.dirname(dpath))
     data = imp.load_source('data', experiment_meta['dataset']['script_path'])
