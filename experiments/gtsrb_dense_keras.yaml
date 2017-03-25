@@ -1,14 +1,16 @@
 dataset:
-  script_path: ../datasets/cifar100_keras.py
+  script_path: ../datasets/gtsrb.py
 model:
-  script_path: ../models/sequential_keras.py
+  script_path: ../models/densenet.py
 optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.001
 train:
   script_path: ../train/train_keras.py
   batch_size: 64
-  epochs: 10
-  model_output_path: gtsrb_dense_keras/cifar100_seq.h5
-  history_path: gtsrb_dense_keras/cifar100_seq_history.csv
-  checkpoint_path: gtsrb_dense_keras/cifar100_seq_chk.h5
+  epochs: 50
+  data_augmentation: False
+  artifacts_path: ../artifacts/gtsrb_seq_keras/
+  model_output_fname: gtsrb_dense.h5
+  history_fname: gtsrb_dense_history.csv
+  checkpoint_fname: gtsrb_dense_chk.h5

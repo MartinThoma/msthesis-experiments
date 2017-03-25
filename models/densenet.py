@@ -24,25 +24,25 @@ def conv_block(ip, nb_filter, bottleneck=False, dropout_rate=None, weight_decay=
 
     concat_axis = 1 if K.image_dim_ordering() == "th" else -1
 
-    x = BatchNormalization(mode=0, axis=concat_axis, gamma_regularizer=l2(weight_decay),
+    x = BatchNormalization(axis=concat_axis, gamma_regularizer=l2(weight_decay),
                            beta_regularizer=l2(weight_decay))(ip)
     x = Activation('relu')(x)
 
     if bottleneck:
         inter_channel = nb_filter * 4 # Obtained from https://github.com/liuzhuang13/DenseNet/blob/master/densenet.lua
 
-        x = Convolution2D(inter_channel, 1, 1, init='he_uniform', border_mode='same', bias=False,
-                          W_regularizer=l2(weight_decay))(x)
+        x = Convolution2D(inter_channel, (1, 1), kernel_initializer='he_uniform', padding='same', use_bias=False,
+                          kernel_regularizer=l2(weight_decay))(x)
 
         if dropout_rate:
             x = Dropout(dropout_rate)(x)
 
-        x = BatchNormalization(mode=0, axis=concat_axis, gamma_regularizer=l2(weight_decay),
+        x = BatchNormalization(axis=concat_axis, gamma_regularizer=l2(weight_decay),
                            beta_regularizer=l2(weight_decay))(x)
         x = Activation('relu')(x)
 
-    x = Convolution2D(nb_filter, 3, 3, init="he_uniform", border_mode="same", bias=False,
-                      W_regularizer=l2(weight_decay))(x)
+    x = Convolution2D(nb_filter, (3, 3), kernel_initializer="he_uniform", padding="same", use_bias=False,
+                      kernel_regularizer=l2(weight_decay))(x)
     if dropout_rate:
         x = Dropout(dropout_rate)(x)
 
@@ -64,11 +64,11 @@ def transition_block(ip, nb_filter, compression=1.0, dropout_rate=None, weight_d
 
     concat_axis = 1 if K.image_dim_ordering() == "th" else -1
 
-    x = BatchNormalization(mode=0, axis=concat_axis, gamma_regularizer=l2(weight_decay),
+    x = BatchNormalization(axis=concat_axis, gamma_regularizer=l2(weight_decay),
                            beta_regularizer=l2(weight_decay))(ip)
     x = Activation('relu')(x)
-    x = Convolution2D(int(nb_filter * compression), 1, 1, init="he_uniform", border_mode="same", bias=False,
-                      W_regularizer=l2(weight_decay))(x)
+    x = Convolution2D(int(nb_filter * compression), (1, 1), kernel_initializer="he_uniform", padding="same", use_bias=False,
+                      kernel_regularizer=l2(weight_decay))(x)
     if dropout_rate:
         x = Dropout(dropout_rate)(x)
     x = AveragePooling2D((2, 2), strides=(2, 2))(x)
@@ -105,8 +105,8 @@ def dense_block(x, nb_layers, nb_filter, growth_rate, bottleneck=False, dropout_
     return x, nb_filter
 
 
-def create_dense_net(nb_classes, img_dim, depth=40, nb_dense_block=3, growth_rate=12, nb_filter=-1,
-                     bottleneck=False, reduction=0.0, dropout_rate=None, weight_decay=1E-4, verbose=True):
+def create_model(nb_classes, img_dim, depth=40, nb_dense_block=3, growth_rate=12, nb_filter=-1,
+                 bottleneck=False, reduction=0.0, dropout_rate=None, weight_decay=1E-4, verbose=True):
     ''' Build the create_dense_net model
 
     Args:
@@ -148,8 +148,8 @@ def create_dense_net(nb_classes, img_dim, depth=40, nb_dense_block=3, growth_rat
     compression = 1.0 - reduction
 
     # Initial convolution
-    x = Convolution2D(nb_filter, 3, 3, init="he_uniform", border_mode="same", name="initial_conv2D", bias=False,
-                      W_regularizer=l2(weight_decay))(model_input)
+    x = Convolution2D(nb_filter, (3, 3), kernel_initializer="he_uniform", padding="same", name="initial_conv2D", use_bias=False,
+                      kernel_regularizer=l2(weight_decay))(model_input)
 
     # Add dense blocks
     for block_idx in range(nb_dense_block - 1):
@@ -164,13 +164,13 @@ def create_dense_net(nb_classes, img_dim, depth=40, nb_dense_block=3, growth_rat
     x, nb_filter = dense_block(x, nb_layers, nb_filter, growth_rate, bottleneck=bottleneck,
                                dropout_rate=dropout_rate, weight_decay=weight_decay)
 
-    x = BatchNormalization(mode=0, axis=concat_axis, gamma_regularizer=l2(weight_decay),
+    x = BatchNormalization(axis=concat_axis, gamma_regularizer=l2(weight_decay),
                            beta_regularizer=l2(weight_decay))(x)
     x = Activation('relu')(x)
     x = GlobalAveragePooling2D()(x)
-    x = Dense(nb_classes, activation='softmax', W_regularizer=l2(weight_decay), b_regularizer=l2(weight_decay))(x)
+    x = Dense(nb_classes, activation='softmax', kernel_regularizer=l2(weight_decay), bias_regularizer=l2(weight_decay))(x)
 
-    densenet = Model(input=model_input, output=x, name="create_dense_net")
+    densenet = Model(inputs=model_input, outputs=x, name="create_dense_net")
 
     if verbose:
         if bottleneck and not reduction:

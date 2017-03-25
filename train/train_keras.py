@@ -86,7 +86,7 @@ def main(data_module, model_module, optimizer_module, filename, config):
         print('Not using data augmentation.')
         model.fit(X_train, Y_train,
                   batch_size=batch_size,
-                  nb_epoch=nb_epoch,
+                  epochs=nb_epoch,
                   validation_data=(X_test, Y_test),
                   shuffle=True)
     else:
