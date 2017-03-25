@@ -255,7 +255,10 @@ def plot_cm(cm, zero_diagonal=False, labels=None):
     if zero_diagonal:
         for i in range(n):
             cm[i][i] = 0
-    size = int(n / 4.)
+    if n > 20:
+        size = int(n / 4.)
+    else:
+        size = 5
     fig = plt.figure(figsize=(size, size), dpi=80, )
     plt.clf()
     ax = fig.add_subplot(111)
@@ -273,6 +276,7 @@ def plot_cm(cm, zero_diagonal=False, labels=None):
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.5)
     plt.colorbar(res, cax=cax)
+    plt.tight_layout()
 
     plt.savefig('confusion_matrix.png', format='png')
 
