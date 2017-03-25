@@ -4,7 +4,7 @@ model:
   script_path: ../models/densenet.py
 optimizer:
   script_path: ../optimizers/adam_keras.py
-  initial_lr: 0.001
+  initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
   batch_size: 64

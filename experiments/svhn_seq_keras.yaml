@@ -7,8 +7,8 @@ optimizer:
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
-  batch_size: 128
-  epochs: 20
+  batch_size: 64
+  epochs: 50
   data_augmentation: False
   artifacts_path: ../artifacts/svhn_seq_keras/
   model_output_fname: svhn_seq.h5

@@ -186,6 +186,8 @@ def create_model(nb_classes, img_dim, depth=40, nb_dense_block=3, growth_rate=12
 
 
 if __name__ == '__main__':
-    model = create_dense_net(nb_classes=10, img_dim=(3, 32, 32), depth=40, growth_rate=12, bottleneck=True, reduction=0.5)
-
+    model = create_dense_net(nb_classes=10,
+                             img_dim=(3, 32, 32),
+                             depth=40, growth_rate=12, bottleneck=True,
+                             reduction=0.5)
     model.summary()

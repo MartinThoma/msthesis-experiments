@@ -24,4 +24,5 @@ def create_model(nb_classes, input_shape):
     return model
 
 if __name__ == '__main__':
-    create_model(100, (32, 32, 3))
+    model = create_model(100, (32, 32, 3))
+    model.summary()
