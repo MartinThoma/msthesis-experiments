@@ -10,7 +10,6 @@ from keras.models import load_model
 from keras.datasets import cifar100
 from sklearn.model_selection import train_test_split
 import numpy as np
-from analyze_model import plot_cm
 import glob
 from keras.utils import np_utils
 from natsort import natsorted
@@ -29,7 +28,8 @@ n_classes = 100
 
 # Load models
 # models = ['cifar100-%i.h5' % i for i in range(1, 5)]
-model_names = natsorted(glob.glob("cifar100-*.h5"))
+cifar100models_path = "../artifacts/cifar100-models/cifar100-*.h5"
+model_names = natsorted(glob.glob(cifar100models_path))
 print("Ensemble of {} models ({})".format(len(model_names), model_names))
 models = []
 for model_path in model_names:
@@ -95,6 +95,3 @@ for x in range(1, 2**len(y_preds) - 1):
 Y_eval = np_utils.to_categorical(y_eval, n_classes)
 smoothed_lables = (y_val_pred + Y_eval) / 2
 np.save("smoothed_lables", smoothed_lables)
-
-# Create plot
-plot_cm(cm)

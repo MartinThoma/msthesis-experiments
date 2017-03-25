@@ -10,7 +10,7 @@ from keras.regularizers import l2
 import keras.backend as K
 
 
-def create_rflearn_net(nb_classes, img_dim):
+def create_model(nb_classes, img_dim):
     """
     Build the CIFAR model described in the Zoph and Le paper.
 
@@ -110,5 +110,5 @@ def create_rflearn_net(nb_classes, img_dim):
 
 
 if __name__ == '__main__':
-    model = create_rflearn_net(nb_classes=10, img_dim=(32, 32, 3))
+    model = create_model(nb_classes=10, img_dim=(32, 32, 3))
     model.summary()
