@@ -15,7 +15,53 @@ from keras.callbacks import ModelCheckpoint
 from keras.utils import np_utils
 # from sklearn.model_selection import train_test_split
 import csv
+import json
+import logging
 import os
+import sys
+import collections
+
+logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
+                    level=logging.DEBUG,
+                    stream=sys.stdout)
+
+
+def flatten_completely(iterable):
+    """Make a flat list out of an interable of iterables of iterables ..."""
+    flattened = []
+    queue = [iterable]
+    while len(queue) > 0:
+        el = queue.pop(0)
+        if isinstance(el, collections.Iterable):
+            for subel in el:
+                queue.append(subel)
+        else:
+            flattened.append(el)
+    return flattened
+
+
+def get_oldi2newi(hierarchy):
+    """Get a dict mapping from the old class idx to the new class indices."""
+    oldi2newi = {}
+    n = len(flatten_completely(hierarchy))
+    for i in range(n):
+        if i in hierarchy:  # is it in the first level?
+            oldi2newi[i] = hierarchy.index(i)
+        else:
+            for j, group in enumerate(hierarchy):
+                if isinstance(group, (int, long)):
+                    continue
+                if i in group:
+                    oldi2newi[i] = j
+    return oldi2newi
+
+
+def apply_hierarchy(hierarchy, y):
+    """Apply a hierarchy to a label vector."""
+    oldi2newi = get_oldi2newi(hierarchy)
+    for i in range(len(y)):
+        y[i] = oldi2newi[y[i]]
+    return y
 
 
 def main(data_module, model_module, optimizer_module, filename, config):
@@ -23,36 +69,30 @@ def main(data_module, model_module, optimizer_module, filename, config):
     batch_size = config['train']['batch_size']
     nb_epoch = config['train']['epochs']
 
-    if 'nb_classes' in config['dataset']:
-        nb_classes = config['dataset']['nb_classes']
-    else:
-        nb_classes = data_module.n_classes
-    # input image dimensions
-    if 'img_rows' in config['dataset']:
-        img_rows = config['dataset']['img_rows']
-    else:
-        img_rows = data_module.img_rows
-    if 'img_cols' in config['dataset']:
-        img_cols = config['dataset']['img_cols']
-    else:
-        img_cols = data_module.img_cols
-    if 'img_channels' in config['dataset']:
-        img_channels = config['dataset']['img_channels']
-    else:
-        img_channels = data_module.img_channels
-
-    if 'data_augmentation' in config['train']:
-        data_augmentation = config['train']['data_augmentation']
-    else:
-        data_augmentation = True
-
     # The data, shuffled and split between train and test sets:
     data = data_module.load_data()
     print("Data loaded.")
+
     X_train, y_train = data['x_train'], data['y_train']
     X_train = data_module.preprocess(X_train)
     X_test, y_test = data['x_test'], data['y_test']
     X_test = data_module.preprocess(X_test)
+
+    # apply hierarchy, if present
+    if 'hierarchy_path' in config['dataset']:
+        with open(config['dataset']['hierarchy_path']) as data_file:
+            hierarchy = json.load(data_file)
+        logging.info("Loaded hierarchy: {}".format(hierarchy))
+        data_module.n_classes = len(hierarchy)
+        logging.info("New model has {} classes".format(data_module.n_classes))
+        y_train = apply_hierarchy(hierarchy, y_train)
+        y_test = apply_hierarchy(hierarchy, y_test)
+    nb_classes = data_module.n_classes
+    img_rows = data_module.img_rows
+    img_cols = data_module.img_cols
+    img_channels = data_module.img_channels
+    data_augmentation = config['train']['data_augmentation']
+
     # X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
     #                                                   test_size=0.10,
     #                                                   random_state=42)
