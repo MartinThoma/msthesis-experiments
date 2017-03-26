@@ -1,11 +1,12 @@
 dataset:
-  script_path: datasets/cifar10.py
+  script_path: ../datasets/cifar10.py
 model:
-  script_path: models/mlp.py
+  script_path: ../models/mlp.py
 optimizer:
-  script_path: optimizers/adamdef.py
+  script_path: ../optimizers/adamdef.py
   initial_lr: 0.01
 train:
-  script_path: train/train.py
+  script_path: ../train/train.py
+  artifacts_path: ../artifacts/e1/
   batch_size: 32
   epochs: 100
