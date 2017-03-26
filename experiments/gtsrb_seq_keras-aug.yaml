@@ -1,0 +1,16 @@
+dataset:
+  script_path: ../datasets/gtsrb.py
+model:
+  script_path: ../models/sequential_keras.py
+optimizer:
+  script_path: ../optimizers/adam_keras.py
+  initial_lr: 0.0001
+train:
+  script_path: ../train/train_keras.py
+  batch_size: 64
+  epochs: 50
+  data_augmentation: True
+  artifacts_path: ../artifacts/gtsrb_seq_keras/
+  model_output_fname: gtsrb_seq.h5
+  history_fname: gtsrb_seq_history.csv
+  checkpoint_fname: gtsrb_seq_chk.h5
