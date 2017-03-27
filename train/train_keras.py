@@ -145,8 +145,9 @@ def main(data_module, model_module, optimizer_module, filename, config):
             width_shift_range=5. / 32,
             # randomly shift images vertically (fraction of total height)
             height_shift_range=5. / 32,
-            horizontal_flip=True,  # randomly flip images
-            vertical_flip=False)  # randomly flip images
+            horizontal_flip=False,  # randomly flip images
+            vertical_flip=False,  # randomly flip images
+            hsv_augmentation=(0.2, 0.5, 0.2, 0.5, 0.2))
 
         # Compute quantities required for featurewise normalization
         # (std, mean, and principal components if ZCA whitening is applied).
@@ -161,7 +162,7 @@ def main(data_module, model_module, optimizer_module, filename, config):
                              save_weights_only=False)
         history_cb = model.fit_generator(datagen.flow(X_train, Y_train,
                                          batch_size=batch_size),
-                                         steps_per_epoch=X_train.shape[0],
+                                         steps_per_epoch=X_train.shape[0]  // batch_size,
                                          epochs=nb_epoch,
                                          validation_data=(X_test, Y_test),
                                          callbacks=[cb])
