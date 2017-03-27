@@ -1,0 +1,16 @@
+dataset:
+  script_path: ../datasets/cifar10_keras.py
+model:
+  script_path: ../models/sequential_keras.py
+optimizer:
+  script_path: ../optimizers/adam_keras.py
+  initial_lr: 0.0001
+train:
+  script_path: ../train/train_keras.py
+  batch_size: 64
+  epochs: 100
+  data_augmentation: True
+  artifacts_path: ../artifacts/cifar10_seq/
+  model_output_fname: cifar10_seq.h5
+  history_fname: cifar10_seq_history.csv
+  checkpoint_fname: cifar10_seq_chk.h5
