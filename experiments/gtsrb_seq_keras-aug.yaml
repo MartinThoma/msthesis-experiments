@@ -10,7 +10,7 @@ train:
   batch_size: 64
   epochs: 50
   data_augmentation: True
-  artifacts_path: ../artifacts/gtsrb_seq_keras/
+  artifacts_path: ../artifacts/gtsrb_seq_keras-aug/
   model_output_fname: gtsrb_seq.h5
   history_fname: gtsrb_seq_history.csv
   checkpoint_fname: gtsrb_seq_chk.h5
