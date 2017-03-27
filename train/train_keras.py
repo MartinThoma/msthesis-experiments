@@ -140,14 +140,21 @@ def main(data_module, model_module, optimizer_module, filename, config):
             samplewise_std_normalization=False,  # divide each input by its std
             zca_whitening=False,  # apply ZCA whitening
             # randomly rotate images in the range (degrees, 0 to 180)
-            rotation_range=15,
+            rotation_range=data_augmentation['rotation_range'],
             # randomly shift images horizontally (fraction of total width)
-            width_shift_range=5. / 32,
+            width_shift_range=data_augmentation['width_shift_range'],
             # randomly shift images vertically (fraction of total height)
-            height_shift_range=5. / 32,
-            horizontal_flip=False,  # randomly flip images
-            vertical_flip=False,  # randomly flip images
-            hsv_augmentation=(0.2, 0.5, 0.2, 0.5, 0.2))
+            height_shift_range=data_augmentation['height_shift_range'],
+            horizontal_flip=data_augmentation['horizontal_flip'],  # randomly flip images
+            vertical_flip=data_augmentation['vertical_flip'],  # randomly flip images
+            hsv_augmentation=(data_augmentation['hue_shift'],
+                              data_augmentation['saturation_scale'],
+                              data_augmentation['saturation_shift'],
+                              data_augmentation['value_scale'],
+                              data_augmentation['value_shift']),
+            zoom_range=data_augmentation['zoom_range'],
+            shear_range=data_augmentation['shear_range'],
+            channel_shift_range=data_augmentation['channel_shift_range'])
 
         # Compute quantities required for featurewise normalization
         # (std, mean, and principal components if ZCA whitening is applied).

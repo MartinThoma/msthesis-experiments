@@ -9,7 +9,20 @@ train:
   script_path: ../train/train_keras.py
   batch_size: 64
   epochs: 50
-  data_augmentation: True
+  data_augmentation:
+    rotation_range: 15
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    hue_shift: 0.2
+    saturation_scale: 0.5
+    saturation_shift: 0.2
+    value_scale: 0.5
+    value_shift: 0.2
+    zoom_range: 0.5
+    shear_range: 0.1
+    channel_shift_range: 0.1
   artifacts_path: ../artifacts/gtsrb_seq_keras-aug/
   model_output_fname: gtsrb_seq.h5
   history_fname: gtsrb_seq_history.csv
