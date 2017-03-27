@@ -8,7 +8,7 @@ optimizer:
 train:
   script_path: ../train/train_keras.py
   batch_size: 64
-  epochs: 50
+  epochs: 100
   data_augmentation:
     rotation_range: 15
     width_shift_range: 0.15
