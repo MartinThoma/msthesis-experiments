@@ -1,5 +1,5 @@
 dataset:
-  script_path: ../datasets/cifar10_keras.py
+  script_path: ../datasets/cifar100_keras.py
 model:
   script_path: ../models/sequential_keras.py
 optimizer:
@@ -16,14 +16,14 @@ train:
     horizontal_flip: False
     vertical_flip: True
     hue_shift: 0.2
-    saturation_scale: 0.5
-    saturation_shift: 0.2
-    value_scale: 0.5
-    value_shift: 0.2
-    zoom_range: 0.5
+    saturation_scale: 0.2
+    saturation_shift: 0.1
+    value_scale: 0.2
+    value_shift: 0.1
+    zoom_range: 0.2
     shear_range: 0.1
     channel_shift_range: 0.1
-  artifacts_path: ../artifacts/cifar10_seq-aug/
-  model_output_fname: cifar10_seq.h5
-  history_fname: cifar10_seq_history.csv
-  checkpoint_fname: cifar10_seq_chk.h5
+  artifacts_path: ../artifacts/cifar100_seq_keras/
+  model_output_fname: cifar100_seq.h5
+  history_fname: cifar100_seq_history.csv
+  checkpoint_fname: cifar100_seq_chk.h5
