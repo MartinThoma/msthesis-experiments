@@ -23,7 +23,7 @@ train:
     zoom_range: 0.2
     shear_range: 0
     channel_shift_range: 0
-    featurewise_center: True
+    featurewise_center: False
     zca_whitening: True
   artifacts_path: ../artifacts/cifar10_baseline_jeon/
   model_output_fname: cifar10_baseline_jeon.h5
