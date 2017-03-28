@@ -1,0 +1,31 @@
+dataset:
+  script_path: ../datasets/cifar10_keras.py
+model:
+  script_path: ../models/fractalnet.py
+optimizer:
+  script_path: ../optimizers/adam_keras.py
+  initial_lr: 0.0001
+train:
+  script_path: ../train/train_keras.py
+  batch_size: 64
+  epochs: 300
+  data_augmentation:
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: True
+    hue_shift: 0
+    saturation_scale: 0
+    saturation_shift: 0
+    value_scale: 0
+    value_shift: 0
+    zoom_range: 0.2
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
+  artifacts_path: ../artifacts/cifar10_baseline_jeon/
+  model_output_fname: cifar10_baseline_jeon.h5
+  history_fname: cifar10_baseline_jeon_history.csv
+  checkpoint_fname: cifar10_baseline_jeon_chk.h5
