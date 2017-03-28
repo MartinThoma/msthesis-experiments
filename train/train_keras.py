@@ -64,6 +64,54 @@ def apply_hierarchy(hierarchy, y):
     return y
 
 
+def get_level(list_, level):
+    """
+    Select a part of a nested list_ by level.
+
+    Parameters
+    ----------
+    list : nested list
+    level : list
+
+    Returns
+    -------
+    list
+
+    Examples
+    --------
+    >>> list_ = [[0, 1], [2, [3, 4, 5, [6, 7, [8, 9]]]]]
+    >>> get_level(list_, [0])
+    [0, 1]
+    >>> get_level(list_, [1])
+    [2, [3, 4, 5, [6, 7, [8, 9]]]]
+    >>> get_level(list_, [1, 1, 3])
+    [6, 7, [8, 9]]
+    """
+    if len(level) > 0:
+        i = level.pop(0)
+        return get_level(list_[i], level)
+    else:
+        return list_
+
+
+def filter_by_class(X_old, y_old, remaining_cls):
+    """Remove all instances of classes which are not in remaining_cls."""
+    X = []
+    y = []
+    for x_tmp, y_tmp in zip(X_old, y_old):
+        if y_tmp in remaining_cls:
+            X.append(x_tmp)
+            y.append(y_tmp)
+    return np.array(X), np.array(y)
+
+
+def update_labels(y, old_cli2new_cli):
+    """Update labels y with a dictionary old_cli2new_cli."""
+    for i in range(len(y)):
+        y[i] = old_cli2new_cli[y[i]]
+    return y
+
+
 def main(data_module, model_module, optimizer_module, filename, config):
     """Patch everything together."""
     batch_size = config['train']['batch_size']
@@ -84,10 +132,26 @@ def main(data_module, model_module, optimizer_module, filename, config):
             hierarchy = json.load(data_file)
         logging.info("Loaded hierarchy: {}".format(hierarchy))
         data_module.n_classes = len(hierarchy)
-        logging.info("New model has {} classes".format(data_module.n_classes))
         y_train = apply_hierarchy(hierarchy, y_train)
         y_test = apply_hierarchy(hierarchy, y_test)
+        if 'subset' in config['dataset']:
+            remaining_cls = get_level(hierarchy, config['dataset']['subset'])
+            # Only do this if coarse is False:
+            remaining_cls = flatten_completely(remaining_cls)
+            data_module.n_classes = len(remaining_cls)
+            X_train, y_train = filter_by_class(X_train, y_train, remaining_cls)
+            print("X_train.shape={}".format(X_train.shape))
+            print("y_train.shape={}".format(y_train.shape))
+            X_test, y_test = filter_by_class(X_test, y_test, remaining_cls)
+            print("x_test.shape={}".format(X_test.shape))
+            print("y_test.shape={}".format(y_test.shape))
+            old_cli2new_cli = {}
+            for new_cli, old_cli in enumerate(remaining_cls):
+                old_cli2new_cli[old_cli] = new_cli
+            y_train = update_labels(y_train, old_cli2new_cli)
+            y_test = update_labels(y_test, old_cli2new_cli)
     nb_classes = data_module.n_classes
+    logging.info("# classes = {}".format(data_module.n_classes))
     img_rows = data_module.img_rows
     img_cols = data_module.img_cols
     img_channels = data_module.img_channels
@@ -133,20 +197,21 @@ def main(data_module, model_module, optimizer_module, filename, config):
         print('Using real-time data augmentation.')
         # This will do preprocessing and realtime data augmentation:
         datagen = ImageDataGenerator(
-            featurewise_center=data_augmentation['featurewise_center'],  # set input mean to 0 over the dataset
+            # set input mean to 0 over the dataset
+            featurewise_center=data_augmentation['featurewise_center'],
             samplewise_center=False,  # set each sample mean to 0
             # divide inputs by std of the dataset
             featurewise_std_normalization=False,
             samplewise_std_normalization=False,  # divide each input by its std
-            zca_whitening=data_augmentation['zca_whitening'],  # apply ZCA whitening
+            zca_whitening=data_augmentation['zca_whitening'],
             # randomly rotate images in the range (degrees, 0 to 180)
             rotation_range=data_augmentation['rotation_range'],
             # randomly shift images horizontally (fraction of total width)
             width_shift_range=data_augmentation['width_shift_range'],
             # randomly shift images vertically (fraction of total height)
             height_shift_range=data_augmentation['height_shift_range'],
-            horizontal_flip=data_augmentation['horizontal_flip'],  # randomly flip images
-            vertical_flip=data_augmentation['vertical_flip'],  # randomly flip images
+            horizontal_flip=data_augmentation['horizontal_flip'],
+            vertical_flip=data_augmentation['vertical_flip'],
             hsv_augmentation=(data_augmentation['hue_shift'],
                               data_augmentation['saturation_scale'],
                               data_augmentation['saturation_shift'],
@@ -171,9 +236,10 @@ def main(data_module, model_module, optimizer_module, filename, config):
                              monitor="val_acc",
                              save_best_only=True,
                              save_weights_only=False)
+        steps_per_epoch = X_train.shape[0] // batch_size
         history_cb = model.fit_generator(datagen.flow(X_train, Y_train,
                                          batch_size=batch_size),
-                                         steps_per_epoch=X_train.shape[0]  // batch_size,
+                                         steps_per_epoch=steps_per_epoch,
                                          epochs=nb_epoch,
                                          validation_data=(X_test, Y_test),
                                          callbacks=[cb])
@@ -196,3 +262,8 @@ def main(data_module, model_module, optimizer_module, filename, config):
     model_fn = os.path.join(config['train']['artifacts_path'],
                             config['train']['model_output_fname'])
     model.save(model_fn)
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
