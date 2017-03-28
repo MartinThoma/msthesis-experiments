@@ -5,11 +5,15 @@ model:
 optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
+  nesterov: True
+  momentum: 0.9
 train:
   script_path: ../train/train_keras.py
   batch_size: 64
   epochs: 300
   data_augmentation:
+    samplewise_center: True
+    samplewise_std_normalization: True
     rotation_range: 0
     width_shift_range: 0.15
     height_shift_range: 0.15
