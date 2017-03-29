@@ -13,6 +13,9 @@ import json
 import imp
 import pprint
 import os
+train_keras = imp.load_source('train_keras', "train/train_keras.py")
+from train_keras import get_level, flatten_completely, filter_by_class
+from train_keras import update_labels
 try:
     to_unicode = unicode
 except NameError:
@@ -43,7 +46,7 @@ def _write_cm(cm, path):
         outfile.write(to_unicode(str_))
 
 
-def create_cm(model_path, data_module, artifacts_path):
+def create_cm(model_path, data_module, artifacts_path, config):
     """Create confusion matrices."""
     # Load model
     model = load_model(model_path)
@@ -52,10 +55,29 @@ def create_cm(model_path, data_module, artifacts_path):
     X_test = data['x_test']
     y_train = data['y_train']
     y_test = data['y_test']
-    n_classes = data_module.n_classes
 
     X_train = data_module.preprocess(X_train)
     X_test = data_module.preprocess(X_test)
+
+    # load hierarchy, if present
+    if 'hierarchy_path' in config['dataset']:
+        with open(config['dataset']['hierarchy_path']) as data_file:
+            hierarchy = json.load(data_file)
+        if 'subset' in config['dataset']:
+            remaining_cls = get_level(hierarchy, config['dataset']['subset'])
+            logging.info("Remaining classes: {}".format(remaining_cls))
+            # Only do this if coarse is False:
+            remaining_cls = flatten_completely(remaining_cls)
+            data_module.n_classes = len(remaining_cls)
+            X_train, y_train = filter_by_class(X_train, y_train, remaining_cls)
+            X_test, y_test = filter_by_class(X_test, y_test, remaining_cls)
+            old_cli2new_cli = {}
+            for new_cli, old_cli in enumerate(remaining_cls):
+                old_cli2new_cli[old_cli] = new_cli
+            y_train = update_labels(y_train, old_cli2new_cli)
+            y_test = update_labels(y_test, old_cli2new_cli)
+
+    n_classes = data_module.n_classes
 
     # Calculate confusion matrix for training set
     cm = _calculate_cm(model, X_train, y_train, n_classes)
@@ -98,4 +120,4 @@ if __name__ == '__main__':
     artifacts_path = experiment_meta['train']['artifacts_path']
     model_path = os.path.join(artifacts_path,
                               experiment_meta['train']['model_output_fname'])
-    create_cm(model_path, data, artifacts_path)
+    create_cm(model_path, data, artifacts_path, experiment_meta)
