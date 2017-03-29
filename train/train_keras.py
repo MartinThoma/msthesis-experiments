@@ -131,31 +131,30 @@ def main(data_module, model_module, optimizer_module, filename, config):
         with open(config['dataset']['hierarchy_path']) as data_file:
             hierarchy = json.load(data_file)
         logging.info("Loaded hierarchy: {}".format(hierarchy))
-        data_module.n_classes = len(hierarchy)
-        y_train = apply_hierarchy(hierarchy, y_train)
-        y_test = apply_hierarchy(hierarchy, y_test)
         if 'subset' in config['dataset']:
             remaining_cls = get_level(hierarchy, config['dataset']['subset'])
             # Only do this if coarse is False:
             remaining_cls = flatten_completely(remaining_cls)
             data_module.n_classes = len(remaining_cls)
             X_train, y_train = filter_by_class(X_train, y_train, remaining_cls)
-            print("X_train.shape={}".format(X_train.shape))
-            print("y_train.shape={}".format(y_train.shape))
             X_test, y_test = filter_by_class(X_test, y_test, remaining_cls)
-            print("x_test.shape={}".format(X_test.shape))
-            print("y_test.shape={}".format(y_test.shape))
             old_cli2new_cli = {}
             for new_cli, old_cli in enumerate(remaining_cls):
                 old_cli2new_cli[old_cli] = new_cli
             y_train = update_labels(y_train, old_cli2new_cli)
             y_test = update_labels(y_test, old_cli2new_cli)
+        if config['dataset']['coarse']:
+            data_module.n_classes = len(hierarchy)
+            print("!" * 80)
+            print("this might be wrong!!!!")
+            y_train = apply_hierarchy(hierarchy, y_train)
+            y_test = apply_hierarchy(hierarchy, y_test)
     nb_classes = data_module.n_classes
     logging.info("# classes = {}".format(data_module.n_classes))
     img_rows = data_module.img_rows
     img_cols = data_module.img_cols
     img_channels = data_module.img_channels
-    data_augmentation = config['train']['data_augmentation']
+    da = config['train']['data_augmentation']
 
     # X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
     #                                                   test_size=0.10,
@@ -186,7 +185,7 @@ def main(data_module, model_module, optimizer_module, filename, config):
     print("Finished compiling")
     print("Building model...")
 
-    if not data_augmentation:
+    if not da:
         print('Not using data augmentation.')
         model.fit(X_train, Y_train,
                   batch_size=batch_size,
@@ -198,28 +197,30 @@ def main(data_module, model_module, optimizer_module, filename, config):
         # This will do preprocessing and realtime data augmentation:
         datagen = ImageDataGenerator(
             # set input mean to 0 over the dataset
-            featurewise_center=data_augmentation['featurewise_center'],
-            samplewise_center=data_augmentation['samplewise_center'],  # set each sample mean to 0
+            featurewise_center=da['featurewise_center'],
+            # set each sample mean to 0
+            samplewise_center=da['samplewise_center'],
             # divide inputs by std of the dataset
             featurewise_std_normalization=False,
-            samplewise_std_normalization=data_augmentation['samplewise_std_normalization'],  # divide each input by its std
-            zca_whitening=data_augmentation['zca_whitening'],
+            # divide each input by its std
+            samplewise_std_normalization=da['samplewise_std_normalization'],
+            zca_whitening=da['zca_whitening'],
             # randomly rotate images in the range (degrees, 0 to 180)
-            rotation_range=data_augmentation['rotation_range'],
+            rotation_range=da['rotation_range'],
             # randomly shift images horizontally (fraction of total width)
-            width_shift_range=data_augmentation['width_shift_range'],
+            width_shift_range=da['width_shift_range'],
             # randomly shift images vertically (fraction of total height)
-            height_shift_range=data_augmentation['height_shift_range'],
-            horizontal_flip=data_augmentation['horizontal_flip'],
-            vertical_flip=data_augmentation['vertical_flip'],
-            hsv_augmentation=(data_augmentation['hue_shift'],
-                              data_augmentation['saturation_scale'],
-                              data_augmentation['saturation_shift'],
-                              data_augmentation['value_scale'],
-                              data_augmentation['value_shift']),
-            zoom_range=data_augmentation['zoom_range'],
-            shear_range=data_augmentation['shear_range'],
-            channel_shift_range=data_augmentation['channel_shift_range'])
+            height_shift_range=da['height_shift_range'],
+            horizontal_flip=da['horizontal_flip'],
+            vertical_flip=da['vertical_flip'],
+            hsv_augmentation=(da['hue_shift'],
+                              da['saturation_scale'],
+                              da['saturation_shift'],
+                              da['value_scale'],
+                              da['value_shift']),
+            zoom_range=da['zoom_range'],
+            shear_range=da['shear_range'],
+            channel_shift_range=da['channel_shift_range'])
 
         # Compute quantities required for featurewise normalization
         # (std, mean, and principal components if ZCA whitening is applied).
