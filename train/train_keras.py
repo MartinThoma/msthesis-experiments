@@ -199,10 +199,10 @@ def main(data_module, model_module, optimizer_module, filename, config):
         datagen = ImageDataGenerator(
             # set input mean to 0 over the dataset
             featurewise_center=data_augmentation['featurewise_center'],
-            samplewise_center=False,  # set each sample mean to 0
+            samplewise_center=data_augmentation['samplewise_center'],  # set each sample mean to 0
             # divide inputs by std of the dataset
             featurewise_std_normalization=False,
-            samplewise_std_normalization=False,  # divide each input by its std
+            samplewise_std_normalization=data_augmentation['samplewise_std_normalization'],  # divide each input by its std
             zca_whitening=data_augmentation['zca_whitening'],
             # randomly rotate images in the range (degrees, 0 to 180)
             rotation_range=data_augmentation['rotation_range'],
