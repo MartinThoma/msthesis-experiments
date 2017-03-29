@@ -1,5 +1,8 @@
 dataset:
   script_path: ../datasets/gtsrb.py
+  hierarchy_path: ../datasets/gtsrb-hierarchy.json
+  subset: []
+  coarse: False
 model:
   script_path: ../models/sequential_keras.py
 optimizer:
