@@ -33,8 +33,8 @@ def flatten_completely(iterable):
     while len(queue) > 0:
         el = queue.pop(0)
         if isinstance(el, collections.Iterable):
-            for subel in el:
-                queue.append(subel)
+            for subel in el[::-1]:
+                queue.insert(0, subel)
         else:
             flattened.append(el)
     return flattened
