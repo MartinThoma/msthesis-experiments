@@ -10,6 +10,8 @@ train:
   batch_size: 64
   epochs: 300
   data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
     rotation_range: 15
     width_shift_range: 0.15
     height_shift_range: 0.15
@@ -23,6 +25,8 @@ train:
     zoom_range: 0.5
     shear_range: 0.1
     channel_shift_range: 0.1
+    featurewise_center: False
+    zca_whitening: False
   artifacts_path: ../artifacts/cifar10_seq-aug/
   model_output_fname: cifar10_seq.h5
   history_fname: cifar10_seq_history.csv

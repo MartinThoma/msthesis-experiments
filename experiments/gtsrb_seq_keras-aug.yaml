@@ -8,8 +8,10 @@ optimizer:
 train:
   script_path: ../train/train_keras.py
   batch_size: 64
-  epochs: 100
+  epochs: 300
   data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
     rotation_range: 15
     width_shift_range: 0.15
     height_shift_range: 0.15
@@ -23,7 +25,9 @@ train:
     zoom_range: 0.5
     shear_range: 0.1
     channel_shift_range: 0.1
+    featurewise_center: False
+    zca_whitening: False
   artifacts_path: ../artifacts/gtsrb_seq_keras-aug/
-  model_output_fname: gtsrb_seq.h5
-  history_fname: gtsrb_seq_history.csv
-  checkpoint_fname: gtsrb_seq_chk.h5
+  model_output_fname: gtsrb_seq-aug.h5
+  history_fname: gtsrb_seq_aug__history.csv
+  checkpoint_fname: gtsrb_aug_seq_chk.h5
