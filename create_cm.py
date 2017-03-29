@@ -12,6 +12,7 @@ import io
 import json
 import imp
 import pprint
+import collections
 import os
 train_keras = imp.load_source('train_keras', "train/train_keras.py")
 from train_keras import get_level, flatten_completely, filter_by_class
@@ -78,6 +79,7 @@ def create_cm(model_path, data_module, artifacts_path, config):
             y_test = update_labels(y_test, old_cli2new_cli)
 
     n_classes = data_module.n_classes
+    logging.info("n_classes={}".format(n_classes))
 
     # Calculate confusion matrix for training set
     cm = _calculate_cm(model, X_train, y_train, n_classes)
@@ -94,6 +96,18 @@ def create_cm(model_path, data_module, artifacts_path, config):
     print("Accuracy (Test): {:0.2f}% ({} of {} wrong)"
           .format(acc * 100, cm.sum() - correct_count, cm.sum()))
     _write_cm(cm, path=os.path.join(artifacts_path, 'cm-test.json'))
+
+    # Calculate the accuracy for each sub-group
+    if 'hierarchy_path' in config['dataset']:
+        hierarchy = get_level(hierarchy, config['dataset']['subset'])
+        for class_group in hierarchy:
+            if isinstance(class_group, collections.Iterable):
+                # calculate acc on this group
+                print("Group: {}".format(class_group))
+                correct = sum([cm[i][i] for i in class_group])
+                all_ = sum(cm[i][j] for i in class_group for j in class_group)
+                acc = correct / float(all_)
+                print("\t{:0.2f}%".format(acc * 100))
 
 
 def get_parser():
