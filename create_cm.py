@@ -81,14 +81,18 @@ def create_cm(model_path, data_module, artifacts_path, config):
 
     # Calculate confusion matrix for training set
     cm = _calculate_cm(model, X_train, y_train, n_classes)
-    acc = sum([cm[i][i] for i in range(n_classes)]) / float(cm.sum())
-    print("Accuracy (Train): {:0.2f}%".format(acc * 100))
+    correct_count = sum([cm[i][i] for i in range(n_classes)])
+    acc = correct_count / float(cm.sum())
+    print("Accuracy (Train): {:0.2f}% ({} of {} wrong)"
+          .format(acc * 100, cm.sum() - correct_count, cm.sum()))
     _write_cm(cm, path=os.path.join(artifacts_path, 'cm-train.json'))
 
     # Calculate confusion matrix for test set
     cm = _calculate_cm(model, X_test, y_test, n_classes)
-    acc = sum([cm[i][i] for i in range(n_classes)]) / float(cm.sum())
-    print("Accuracy (Test): {:0.2f}%".format(acc * 100))
+    correct_count = sum([cm[i][i] for i in range(n_classes)])
+    acc = correct_count / float(cm.sum())
+    print("Accuracy (Test): {:0.2f}% ({} of {} wrong)"
+          .format(acc * 100, cm.sum() - correct_count, cm.sum()))
     _write_cm(cm, path=os.path.join(artifacts_path, 'cm-test.json'))
 
 
