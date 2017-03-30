@@ -1,2 +1,11 @@
-[{"cmd": "ls -al"},
- {"cmd": "./run_training.py -f experiments/cifar10_seq2_keras.yaml"}]
+[
+    {
+        "cmd": "./run_training.py -f experiments/cifar10_seq2.yaml"
+    },
+    {
+        "cmd": "./run_training.py -f experiments/cifar100_seq2.yaml"
+    },
+    {
+        "cmd": "./run_training.py -f experiments/svhn_seq2.yaml"
+    },
+]

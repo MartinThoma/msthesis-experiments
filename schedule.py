@@ -23,9 +23,13 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
 def write_json(fname, data):
     # Write JSON file
     with io.open(fname, 'w', encoding='utf8') as outfile:
+        for i in range(len(data)):
+            if 'output' in data[i]:
+                data[i]['output'] = data[i]['output'].decode('utf8')
         str_ = json.dumps(data,
                           indent=4, sort_keys=True,
-                          separators=(',', ':'), ensure_ascii=False)
+                          separators=(',', ': '),
+                          ensure_ascii=False)
         outfile.write(to_unicode(str_))
 
 
