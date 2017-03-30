@@ -7,5 +7,5 @@
     },
     {
         "cmd": "./run_training.py -f experiments/svhn_seq2.yaml"
-    },
+    }
 ]
