@@ -194,6 +194,16 @@ def main(data_module, model_module, optimizer_module, filename, config):
                   shuffle=True)
     else:
         print('Using real-time data augmentation.')
+
+        if 'hue_shift' in da:
+            hsv_augmentation = (da['hue_shift'],
+                                da['saturation_scale'],
+                                da['saturation_shift'],
+                                da['value_scale'],
+                                da['value_shift'])
+        else:
+            hsv_augmentation = None
+
         # This will do preprocessing and realtime data augmentation:
         datagen = ImageDataGenerator(
             # set input mean to 0 over the dataset
@@ -213,11 +223,7 @@ def main(data_module, model_module, optimizer_module, filename, config):
             height_shift_range=da['height_shift_range'],
             horizontal_flip=da['horizontal_flip'],
             vertical_flip=da['vertical_flip'],
-            hsv_augmentation=(da['hue_shift'],
-                              da['saturation_scale'],
-                              da['saturation_shift'],
-                              da['value_scale'],
-                              da['value_shift']),
+            hsv_augmentation=hsv_augmentation,
             zoom_range=da['zoom_range'],
             shear_range=da['shear_range'],
             channel_shift_range=da['channel_shift_range'])
