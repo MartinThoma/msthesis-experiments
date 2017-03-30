@@ -281,7 +281,7 @@ def plot_cm(cm, zero_diagonal=False, labels=None):
     plt.savefig('confusion_matrix.png', format='png')
 
 
-def main(cm_file, perm_file, steps, labels_file):
+def main(cm_file, perm_file, steps, labels_file, limit_classes=None):
     """Run optimization and generate output."""
     # Load confusion matrix
     with open(cm_file) as f:
@@ -325,7 +325,8 @@ def main(cm_file, perm_file, steps, labels_file):
     acc = get_accuracy(cm_orig)
     print("Accuracy: {:0.2f}%".format(acc * 100))
     start = 0
-    limit_classes = len(cm)  # :50
+    if limit_classes is None:
+        limit_classes = len(cm)
     plot_cm(result['cm'][start:limit_classes, start:limit_classes],
             zero_diagonal=True, labels=labels[start:limit_classes])
 
@@ -357,6 +358,10 @@ def get_parser():
                         default=4 * 10**5,
                         type=int,
                         help="number of steps to iterate")
+    parser.add_argument("--limit",
+                        dest="limit_classes",
+                        type=int,
+                        help="Limit the number of classes in the output")
     return parser
 
 
@@ -364,4 +369,5 @@ if __name__ == "__main__":
     args = get_parser().parse_args()
     import doctest
     doctest.testmod()
-    main(args.cm_file, args.perm_file, args.n, args.labels_file)
+    main(args.cm_file, args.perm_file, args.n, args.labels_file,
+         args.limit_classes)
