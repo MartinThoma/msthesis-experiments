@@ -11,7 +11,7 @@ import numpy as np
 np.random.seed(0)
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
-from keras.callbacks import ModelCheckpoint
+from keras.callbacks import ModelCheckpoint, EarlyStopping
 from keras.utils import np_utils
 # from sklearn.model_selection import train_test_split
 import csv
@@ -237,13 +237,16 @@ def main(data_module, model_module, optimizer_module, filename, config):
                              monitor="val_acc",
                              save_best_only=True,
                              save_weights_only=False)
+        es = EarlyStopping(monitor='val_acc',
+                           min_delta=0,
+                           patience=10, verbose=1, mode='auto')
         steps_per_epoch = X_train.shape[0] // batch_size
         history_cb = model.fit_generator(datagen.flow(X_train, Y_train,
                                          batch_size=batch_size),
                                          steps_per_epoch=steps_per_epoch,
                                          epochs=nb_epoch,
                                          validation_data=(X_test, Y_test),
-                                         callbacks=[cb])
+                                         callbacks=[cb, es])
         # Train one epoch without augmentation to make sure data distribution
         # is fit well
         model.fit(X_train, Y_train,
