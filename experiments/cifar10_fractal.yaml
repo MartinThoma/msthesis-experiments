@@ -13,8 +13,8 @@ train:
     rotation_range: 0
     width_shift_range: 0.15
     height_shift_range: 0.15
-    horizontal_flip: False
-    vertical_flip: True
+    horizontal_flip: True
+    vertical_flip: False
     hue_shift: 0
     saturation_scale: 0
     saturation_shift: 0

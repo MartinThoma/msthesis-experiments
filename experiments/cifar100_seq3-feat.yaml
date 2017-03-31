@@ -1,13 +1,16 @@
 dataset:
-  script_path: ../datasets/cifar10_keras.py
+  script_path: ../datasets/cifar100_keras.py
 model:
-  script_path: ../models/sequential_updated.py
+  script_path: ../models/seq3.py
 optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras2.py
-  artifacts_path: ../artifacts/cifar10_seq2/
+  artifacts_path: ../artifacts/cifar100_seq3-feat/
+  model_output_fname: cifar100_seq3-feat.h5
+  history_fname: cifar100_seq3-feat_history.csv
+  checkpoint_fname: cifar100_seq3-feat_chk.h5
   batch_size: 64
   epochs: 300
   data_augmentation:
@@ -26,8 +29,5 @@ train:
     zoom_range: 0.5
     shear_range: 0.1
     channel_shift_range: 0.1
-    featurewise_center: False
+    featurewise_center: True
     zca_whitening: False
-  model_output_fname: cifar10_seq.h5
-  history_fname: cifar10_seq_history.csv
-  checkpoint_fname: cifar10_seq_chk.h5
