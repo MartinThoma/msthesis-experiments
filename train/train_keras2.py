@@ -257,9 +257,10 @@ def main(data_module, model_module, optimizer_module, filename, config):
         # is fit well
         model.fit(X_train, Y_train,
                   batch_size=batch_size,
-                  epochs=1,
+                  epochs=nb_epoch,
                   validation_data=(X_test, Y_test),
-                  shuffle=True)
+                  shuffle=True,
+                  callbacks=[cb, es])
         loss_history = history_cb.history["loss"]
         acc_history = history_cb.history["acc"]
         val_acc_history = history_cb.history["val_acc"]
