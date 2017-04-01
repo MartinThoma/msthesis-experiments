@@ -28,6 +28,6 @@ train:
     channel_shift_range: 0.1
     featurewise_center: False
     zca_whitening: False
-  model_output_fname: cifar10_seq.h5
-  history_fname: cifar10_seq_history.csv
-  checkpoint_fname: cifar10_seq_chk.h5
+  model_output_fname: cifar10_seq2.h5
+  history_fname: cifar10_seq2_history.csv
+  checkpoint_fname: cifar10_seq2_chk.h5
