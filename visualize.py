@@ -78,6 +78,7 @@ def swap(cm, i, j):
 
 
 def move_1d(perm, from_start, from_end, insert_pos):
+    """Move a block in a list."""
     assert insert_pos < from_start or insert_pos > from_end
     if insert_pos > from_end:
         p_new = (list(range(from_end + 1, insert_pos + 1)) +
@@ -281,6 +282,68 @@ def plot_cm(cm, zero_diagonal=False, labels=None):
     plt.savefig('confusion_matrix.png', format='png')
 
 
+def extract_clusters(cm, steps=10**4, lambda_=0.013):
+    """
+    Find clusters in cm.
+
+    Parameters
+    ----------
+    lambda_ : float
+        The closer to 0, the more groups
+        The bigger, the bigger groups
+
+    Idea:
+        mininmize lambda (error between clusters) - (count of clusters)
+        s.t.: Each inter-cluster accuracy has to be lower than the overall
+              accuracy
+    """
+    def create_weight_matrix(grouping):
+        n = len(grouping) + 1
+        weight_matrix = np.zeros((n, n))
+        for i in range(n):
+            seen_1 = False
+            for j in range(i + 1, n):
+                if seen_1:
+                    weight_matrix[i][j] = 1
+                elif grouping[j - 1] == 1:
+                    seen_1 = True
+                    weight_matrix[i][j] = 1
+        return weight_matrix + weight_matrix.transpose()
+
+    def get_score(cm, grouping, lambda_):
+        inter_cluster_err = 0.0
+        weights = create_weight_matrix(grouping)
+        inter_cluster_err = calculate_score(cm, weights)
+        return lambda_ * inter_cluster_err - sum(grouping)
+    n = len(cm)
+    grouping = np.zeros(n - 1)
+    minimal_score = get_score(cm, grouping, lambda_)
+    best_grouping = grouping.copy()
+    for i in range(steps):
+        pos = random.randint(0, n - 2)
+        grouping = best_grouping.copy()
+        grouping[pos] = (grouping[pos] + 1) % 2
+        current_score = get_score(cm, grouping, lambda_)
+        if current_score < minimal_score:
+            best_grouping = grouping
+            minimal_score = current_score
+            logging.info("Best grouping: {} (score: {})".format(grouping, minimal_score))
+    return best_grouping
+
+
+def apply_grouping(labels, grouping):
+    groups = []
+    current_group = [labels[0]]
+    for label, cut in zip(labels[1:], grouping):
+        if cut:
+            groups.append(current_group)
+            current_group = [label]
+        else:
+            current_group.append(label)
+    groups.append(current_group)
+    return groups
+
+
 def main(cm_file, perm_file, steps, labels_file, limit_classes=None):
     """Run optimization and generate output."""
     # Load confusion matrix
@@ -329,6 +392,10 @@ def main(cm_file, perm_file, steps, labels_file, limit_classes=None):
         limit_classes = len(cm)
     plot_cm(result['cm'][start:limit_classes, start:limit_classes],
             zero_diagonal=True, labels=labels[start:limit_classes])
+    grouping = extract_clusters(result['cm'])
+    # Print nice
+    for group in apply_grouping(labels, grouping):
+        print("\t{}".format(group))
 
 
 def get_parser():
