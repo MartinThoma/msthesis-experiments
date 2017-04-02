@@ -29,13 +29,22 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     stream=sys.stdout)
 
 
-def _calculate_cm(model, X, y, n_classes):
+def _calculate_cm(model, X, y, n_classes, smooth):
     y_i = y.flatten()
     y_pred = model.predict(X)
-    y_pred_i = y_pred.argmax(1)
-    cm = np.zeros((n_classes, n_classes), dtype=np.int)
-    for i, j in zip(y_i, y_pred_i):
-        cm[i][j] += 1
+    if smooth:
+        cm = np.zeros((n_classes, n_classes), dtype=np.float64)
+        class_count = np.zeros(n_classes, dtype=np.int)
+        for i, pred in zip(y_i, y_pred):
+            cm[i] += pred
+            class_count[i] += 1
+        for i in range(n_classes):
+            cm[i] /= class_count[i]
+    else:
+        cm = np.zeros((n_classes, n_classes), dtype=np.int)
+        y_pred_i = y_pred.argmax(1)
+        for i, j in zip(y_i, y_pred_i):
+            cm[i][j] += 1
     return cm
 
 
@@ -47,9 +56,13 @@ def _write_cm(cm, path):
         outfile.write(to_unicode(str_))
 
 
-def create_cm(model_path, data_module, artifacts_path, config):
+def create_cm(model_path, data_module, artifacts_path, config, smooth):
     """Create confusion matrices."""
     # Load model
+    if not os.path.isfile(model_path):
+        logging.error("File {} does not exist. You might need to train it."
+                      .format(model_path))
+        sys.exit(-1)
     model = load_model(model_path)
     data = data_module.load_data()
     X_train = data['x_train']
@@ -82,7 +95,7 @@ def create_cm(model_path, data_module, artifacts_path, config):
     logging.info("n_classes={}".format(n_classes))
 
     # Calculate confusion matrix for training set
-    cm = _calculate_cm(model, X_train, y_train, n_classes)
+    cm = _calculate_cm(model, X_train, y_train, n_classes, smooth)
     correct_count = sum([cm[i][i] for i in range(n_classes)])
     acc = correct_count / float(cm.sum())
     print("Accuracy (Train): {:0.2f}% ({} of {} wrong)"
@@ -90,7 +103,7 @@ def create_cm(model_path, data_module, artifacts_path, config):
     _write_cm(cm, path=os.path.join(artifacts_path, 'cm-train.json'))
 
     # Calculate confusion matrix for test set
-    cm = _calculate_cm(model, X_test, y_test, n_classes)
+    cm = _calculate_cm(model, X_test, y_test, n_classes, smooth)
     correct_count = sum([cm[i][i] for i in range(n_classes)])
     acc = correct_count / float(cm.sum())
     print("Accuracy (Test): {:0.2f}% ({} of {} wrong)"
@@ -120,6 +133,11 @@ def get_parser():
                         help="experiment definition file",
                         metavar="FILE.yaml",
                         required=True)
+    parser.add_argument("--smooth",
+                        action="store_true",
+                        dest="smooth",
+                        default=False,
+                        help="Use prediction probability instead of argmax")
     return parser
 
 if __name__ == '__main__':
@@ -138,4 +156,4 @@ if __name__ == '__main__':
     artifacts_path = experiment_meta['train']['artifacts_path']
     model_path = os.path.join(artifacts_path,
                               experiment_meta['train']['model_output_fname'])
-    create_cm(model_path, data, artifacts_path, experiment_meta)
+    create_cm(model_path, data, artifacts_path, experiment_meta, args.smooth)
