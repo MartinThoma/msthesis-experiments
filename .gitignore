@@ -100,3 +100,4 @@ artifacts/
 *.h5
 *.png
 *.npy
+*.bundle
