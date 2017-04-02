@@ -18,6 +18,12 @@ train_path: train/train.py
 * **optimizer** contains `train(total_loss, global_step)`
 * **train** contains `train(data, model, optimizer)`
 
+## Requirements
+
+* matplotlib
+* Tensorflow 1.0
+* Keras 2.0 (adjusted preprocessing/image.py)
+
 ## Plan
 
 * GTSBM
