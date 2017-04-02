@@ -1,16 +1,16 @@
 dataset:
   script_path: ../datasets/cifar10_keras.py
 model:
-  script_path: ../models/sequential_updated.py
+  script_path: ../models/densenet.py
 optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras2.py
-  artifacts_path: ../artifacts/cifar10_seq2/
-  model_output_fname: cifar10_seq2.h5
-  history_fname: cifar10_seq2_history.csv
-  checkpoint_fname: cifar10_seq2_chk.h5
+  artifacts_path: ../artifacts/cifar10_dense/
+  model_output_fname: cifar10_dense.h5
+  history_fname: cifar10_dense_history.csv
+  checkpoint_fname: cifar10_dense_chk.h5
   batch_size: 64
   epochs: 300
   data_augmentation:

@@ -6,10 +6,16 @@ optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
-  script_path: ../train/train_keras.py
+  script_path: ../train/train_keras2.py
+  artifacts_path: ../artifacts/cifar10_fractal/
+  model_output_fname: cifar10_fractal.h5
+  history_fname: cifar10_fractal_history.csv
+  checkpoint_fname: cifar10_fractal_chk.h5
   batch_size: 64
   epochs: 300
   data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
     rotation_range: 0
     width_shift_range: 0.15
     height_shift_range: 0.15
@@ -25,7 +31,3 @@ train:
     channel_shift_range: 0
     featurewise_center: False
     zca_whitening: False
-  artifacts_path: ../artifacts/cifar10_baseline_jeon/
-  model_output_fname: cifar10_baseline_jeon.h5
-  history_fname: cifar10_baseline_jeon_history.csv
-  checkpoint_fname: cifar10_baseline_jeon_chk.h5

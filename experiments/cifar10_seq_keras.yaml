@@ -6,11 +6,11 @@ optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
-  script_path: ../train/train_keras.py
-  batch_size: 64
-  epochs: 50
-  data_augmentation: False
+  script_path: ../train/train_keras2.py
   artifacts_path: ../artifacts/cifar10_seq/
   model_output_fname: cifar10_seq.h5
   history_fname: cifar10_seq_history.csv
   checkpoint_fname: cifar10_seq_chk.h5
+  batch_size: 64
+  epochs: 300
+  data_augmentation: False
