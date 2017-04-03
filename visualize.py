@@ -315,23 +315,64 @@ def extract_clusters(cm, steps=10**4, lambda_=0.013):
         weights = create_weight_matrix(grouping)
         inter_cluster_err = calculate_score(cm, weights)
         return lambda_ * inter_cluster_err - sum(grouping)
-    n = len(cm)
-    grouping = np.zeros(n - 1)
-    minimal_score = get_score(cm, grouping, lambda_)
-    best_grouping = grouping.copy()
-    for i in range(steps):
-        pos = random.randint(0, n - 2)
-        grouping = best_grouping.copy()
-        grouping[pos] = (grouping[pos] + 1) % 2
-        current_score = get_score(cm, grouping, lambda_)
-        if current_score < minimal_score:
-            best_grouping = grouping
-            minimal_score = current_score
-            logging.info("Best grouping: {} (score: {})".format(grouping, minimal_score))
+
+    def find_thres(cm, percentage):
+        """
+        Find a threshold for grouping.
+
+        Parameters
+        ----------
+        cm : numpy array
+        percentage : float
+            Probability that two neighboring classes belong togehter
+        """
+        n = int(len(cm) * (1.0 - percentage))
+        con = sorted(get_neighboring_connectivity(cm))
+        return con[n]
+
+    def get_neighboring_connectivity(cm):
+        con = []
+        n = len(cm)
+        for i in range(n - 1):
+            con.append(cm[i][i + 1] + cm[i + 1][i])
+        return con
+
+    def split_at_con_thres(cm, thres):
+        """
+        Two classes are not in the same group if they are not connected strong.
+
+        Minimum connection strength is thres. The bigger this value, the more
+        clusters / the smaller clusters you will get.
+        """
+        con = get_neighboring_connectivity(cm)
+        return [el < thres for el in con]
+
+    method = 'local-connectivity'
+
+    if method == 'energy':
+        n = len(cm)
+        grouping = np.zeros(n - 1)
+        minimal_score = get_score(cm, grouping, lambda_)
+        best_grouping = grouping.copy()
+        for i in range(steps):
+            pos = random.randint(0, n - 2)
+            grouping = best_grouping.copy()
+            grouping[pos] = (grouping[pos] + 1) % 2
+            current_score = get_score(cm, grouping, lambda_)
+            if current_score < minimal_score:
+                best_grouping = grouping
+                minimal_score = current_score
+                logging.info("Best grouping: {} (score: {})"
+                             .format(grouping, minimal_score))
+    elif method == 'local-connectivity':
+        thres = find_thres(cm, 0.2)  # hyper-parameter
+        logging.info("Found threshold for local connection: {}".format(thres))
+        best_grouping = split_at_con_thres(cm, thres)
     return best_grouping
 
 
 def apply_grouping(labels, grouping):
+    """Return list of grouped labels."""
     groups = []
     current_group = [labels[0]]
     for label, cut in zip(labels[1:], grouping):
@@ -395,7 +436,7 @@ def main(cm_file, perm_file, steps, labels_file, limit_classes=None):
     grouping = extract_clusters(result['cm'])
     # Print nice
     for group in apply_grouping(labels, grouping):
-        print("\t{}".format(group))
+        print("\t{}: {}".format(len(group), [str(el) for el in group]))
 
 
 def get_parser():
