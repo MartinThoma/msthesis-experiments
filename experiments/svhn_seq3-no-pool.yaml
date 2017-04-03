@@ -1,0 +1,33 @@
+dataset:
+  script_path: ../datasets/svhn.py
+model:
+  script_path: ../models/seq3-no-pooling.py
+optimizer:
+  script_path: ../optimizers/adam_keras.py
+  initial_lr: 0.0001
+train:
+  script_path: ../train/train_keras2.py
+  artifacts_path: ../artifacts/svhn_seq3-no-pooling/
+  model_output_fname: svhn_seq3-no-pooling.h5
+  history_fname: svhn_seq3-no-pooling_history.csv
+  checkpoint_fname: svhn_seq3-no-pooling_chk.h5
+  batch_size: 64
+  epochs: 300
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 15
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    hue_shift: 0.2
+    saturation_scale: 0.5
+    saturation_shift: 0.2
+    value_scale: 0.5
+    value_shift: 0.2
+    zoom_range: 0.5
+    shear_range: 0.1
+    channel_shift_range: 0.1
+    featurewise_center: False
+    zca_whitening: False
