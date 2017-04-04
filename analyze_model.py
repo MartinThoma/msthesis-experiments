@@ -17,7 +17,7 @@ import numpy.ma as ma
 import yaml
 import matplotlib.cm as cm
 import imp
-from create_cm import make_paths_absolute
+from run_training import make_paths_absolute
 import os
 import pprint
 import scipy.misc
@@ -37,17 +37,16 @@ def make_mosaic(imgs, nrows, ncols, border=1):
     Given a set of images with all the same shape, makes a
     mosaic with nrows and ncols
     """
-    imgs = imgs.transpose(2, 0, 1)
-    print("mosaic shape {}".format(imgs.shape))
     imshape = imgs.shape[1:]
 
     mosaic = np.zeros((nrows * imshape[0] + (nrows - 1) * border,
-                       ncols * imshape[1] + (ncols - 1) * border),
+                       ncols * imshape[1] + (ncols - 1) * border,
+                       imgs.shape[-1]),
                       dtype=np.float32)
 
     paddedh = imshape[0] + border
     paddedw = imshape[1] + border
-    for i in xrange(nrows * ncols):
+    for i in range(nrows * ncols):
         row = int(np.floor(i / ncols))
         col = i % ncols
 
