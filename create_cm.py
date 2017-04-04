@@ -7,6 +7,7 @@ import logging
 import sys
 import yaml
 from keras.models import load_model
+from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 import io
 import json
@@ -17,6 +18,7 @@ import os
 train_keras = imp.load_source('train_keras', "train/train_keras.py")
 from train_keras import get_level, flatten_completely, filter_by_class
 from train_keras import update_labels
+from analyze_model import make_mosaic
 try:
     to_unicode = unicode
 except NameError:
@@ -29,9 +31,89 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     stream=sys.stdout)
 
 
-def _calculate_cm(model, X, y, n_classes, smooth):
+def _calculate_cm(config, model, X_train, X, y, n_classes, smooth):
     y_i = y.flatten()
-    y_pred = model.predict(X)
+
+    if config['evaluate']['augmentation_factor'] > 1:
+        # Test time augmentation
+        da = config['evaluate']['data_augmentation']
+        if 'hue_shift' in da:
+            hsv_augmentation = (da['hue_shift'],
+                                da['saturation_scale'],
+                                da['saturation_shift'],
+                                da['value_scale'],
+                                da['value_shift'])
+        else:
+            hsv_augmentation = None
+
+        # This will do preprocessing and realtime data augmentation:
+        datagen = ImageDataGenerator(
+            # set input mean to 0 over the dataset
+            featurewise_center=da['featurewise_center'],
+            # set each sample mean to 0
+            samplewise_center=da['samplewise_center'],
+            # divide inputs by std of the dataset
+            featurewise_std_normalization=False,
+            # divide each input by its std
+            samplewise_std_normalization=da['samplewise_std_normalization'],
+            zca_whitening=da['zca_whitening'],
+            # randomly rotate images in the range (degrees, 0 to 180)
+            rotation_range=da['rotation_range'],
+            # randomly shift images horizontally (fraction of total width)
+            width_shift_range=da['width_shift_range'],
+            # randomly shift images vertically (fraction of total height)
+            height_shift_range=da['height_shift_range'],
+            horizontal_flip=da['horizontal_flip'],
+            vertical_flip=da['vertical_flip'],
+            hsv_augmentation=hsv_augmentation,
+            zoom_range=da['zoom_range'],
+            shear_range=da['shear_range'],
+            channel_shift_range=da['channel_shift_range'])
+
+        # Compute quantities required for featurewise normalization
+        # (std, mean, and principal components if ZCA whitening is applied).
+        datagen.fit(X_train, seed=0)
+
+        # Apply normalization to test data
+        # for i in range(len(X)):
+        #     X[i] = datagen.standardize(X[i])
+
+        y_pred = np.zeros((X.shape[0], n_classes))
+
+        augmentation_factor = config['evaluate']['augmentation_factor']
+        samples = 5000
+        batch_arr = np.zeros([augmentation_factor * samples] +
+                             list(X[0].shape))
+        print("batch_arr.shape={}".format(batch_arr.shape))
+        if len(X) % samples != 0:
+            logging.warning("len(X) % samples != 0 (len(X)={})".format(len(X)))
+        for index_sample in range(0, len(X), samples):
+            for subi in range(samples):
+                batch = datagen.flow(np.array([X[index_sample + subi]]),
+                                     np.array([y[index_sample + subi]]),
+                                     batch_size=augmentation_factor)
+                for i, el in enumerate(batch):
+                    if i == 0:
+                        batch_arr[subi * augmentation_factor + i] = \
+                            X[index_sample + subi]
+                        continue
+                    x, label = el
+                    batch_arr[subi * augmentation_factor + i] = x
+                    if i == augmentation_factor - 1:
+                        break
+                # import scipy.misc
+                # mosaic = make_mosaic(batch_arr, 2, 2)
+                # scipy.misc.imshow(mosaic)
+            y_pred_single = model.predict(batch_arr)
+            for subi in range(samples):
+                y_pred_s = (y_pred_single[subi * augmentation_factor:
+                                          (subi + 1) * augmentation_factor].sum(axis=0) /
+                            float(augmentation_factor))
+                y_pred[index_sample + subi] = y_pred_s
+            print("\t{:>7} of {}".format(index_sample, len(X)))
+    else:
+        y_pred = model.predict(X)
+
     if smooth:
         cm = np.zeros((n_classes, n_classes), dtype=np.float64)
         class_count = np.zeros(n_classes, dtype=np.int)
@@ -56,8 +138,19 @@ def _write_cm(cm, path):
         outfile.write(to_unicode(str_))
 
 
-def create_cm(model_path, data_module, artifacts_path, config, smooth):
-    """Create confusion matrices."""
+def create_cm(data_module, config, smooth):
+    """
+    Create confusion matrices.
+
+    Parameters
+    ----------
+    data_module : Python module
+    config : dict
+    smooth : boolean
+    """
+    artifacts_path = config['train']['artifacts_path']
+    model_path = os.path.join(artifacts_path,
+                              config['train']['model_output_fname'])
     # Load model
     if not os.path.isfile(model_path):
         logging.error("File {} does not exist. You might need to train it."
@@ -95,7 +188,8 @@ def create_cm(model_path, data_module, artifacts_path, config, smooth):
     logging.info("n_classes={}".format(n_classes))
 
     # Calculate confusion matrix for training set
-    cm = _calculate_cm(model, X_train, y_train, n_classes, smooth)
+    cm = _calculate_cm(config, model, X_train, X_train, y_train, n_classes,
+                       smooth)
     correct_count = sum([cm[i][i] for i in range(n_classes)])
     acc = correct_count / float(cm.sum())
     print("Accuracy (Train): {:0.2f}% ({} of {} wrong)"
@@ -103,7 +197,8 @@ def create_cm(model_path, data_module, artifacts_path, config, smooth):
     _write_cm(cm, path=os.path.join(artifacts_path, 'cm-train.json'))
 
     # Calculate confusion matrix for test set
-    cm = _calculate_cm(model, X_test, y_test, n_classes, smooth)
+    cm = _calculate_cm(config, model, X_train, X_test, y_test, n_classes,
+                       smooth)
     correct_count = sum([cm[i][i] for i in range(n_classes)])
     acc = correct_count / float(cm.sum())
     print("Accuracy (Test): {:0.2f}% ({} of {} wrong)"
@@ -153,7 +248,4 @@ if __name__ == '__main__':
     dpath = experiment_meta['dataset']['script_path']
     sys.path.insert(1, os.path.dirname(dpath))
     data = imp.load_source('data', experiment_meta['dataset']['script_path'])
-    artifacts_path = experiment_meta['train']['artifacts_path']
-    model_path = os.path.join(artifacts_path,
-                              experiment_meta['train']['model_output_fname'])
-    create_cm(model_path, data, artifacts_path, experiment_meta, args.smooth)
+    create_cm(data, experiment_meta, args.smooth)
