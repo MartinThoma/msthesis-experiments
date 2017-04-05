@@ -10,17 +10,24 @@ img_rows = 32
 img_cols = 32
 img_channels = 3
 
+_mean_filename = "cifar-100-mean.npy"
+
+
 def load_data(label_mode='fine'):
-    """Loads CIFAR100 dataset.
+    """
+    Load CIFAR100 dataset.
 
-    # Arguments
-        label_mode: one of "fine", "coarse".
+    Parameters
+    ----------
+    label_mode: one of "fine", "coarse".
 
-    # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    Returns
+    -------
+    Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
 
-    # Raises
-        ValueError: in case of invalid `label_mode`.
+    Raises
+    ------
+    ValueError: in case of invalid `label_mode`.
     """
     if label_mode not in ['fine', 'coarse']:
         raise ValueError('label_mode must be one of "fine" "coarse".')
@@ -46,8 +53,24 @@ def load_data(label_mode='fine'):
             'x_test': x_test, 'y_test': y_test}
 
 
-def preprocess(x):
+def preprocess(x, subtact_mean=False):
     """Preprocess features."""
     x = x.astype('float32')
-    x /= 255.0
+
+    if not subtact_mean:
+        x /= 255.0
+    else:
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        mean_path = os.path.join(dir_path, _mean_filename)
+        mean_image = np.load(mean_path)
+        x -= mean_image
+        x /= 128.
     return x
+
+
+if __name__ == '__main__':
+    data = load_data()
+    mean_image = np.mean(data['x_train'], axis=0)
+    np.save(_mean_filename, mean_image)
+    import scipy.misc
+    scipy.misc.imshow(mean_image)

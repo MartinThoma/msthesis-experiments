@@ -10,6 +10,8 @@ img_rows = 32
 img_cols = 32
 img_channels = 3
 
+_mean_filename = "cifar-10-mean.npy"
+
 
 def load_data():
     """
@@ -47,8 +49,24 @@ def load_data():
             'x_test': x_test, 'y_test': y_test}
 
 
-def preprocess(x):
+def preprocess(x, subtact_mean=False):
     """Preprocess features."""
     x = x.astype('float32')
-    x /= 255.0
+
+    if not subtact_mean:
+        x /= 255.0
+    else:
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        mean_path = os.path.join(dir_path, _mean_filename)
+        mean_image = np.load(mean_path)
+        x -= mean_image
+        x /= 128.
     return x
+
+
+if __name__ == '__main__':
+    data = load_data()
+    mean_image = np.mean(data['x_train'], axis=0)
+    np.save(_mean_filename, mean_image)
+    import scipy.misc
+    scipy.misc.imshow(mean_image.squeeze())

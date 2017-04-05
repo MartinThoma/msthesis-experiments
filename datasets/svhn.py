@@ -13,6 +13,7 @@ from keras.utils.data_utils import get_file
 from keras import backend as K
 import scipy.io
 import os
+import numpy as np
 
 
 labels = [str(i) for i in range(10)]
@@ -20,6 +21,8 @@ n_classes = len(labels)
 img_rows = 32
 img_cols = 32
 img_channels = 3
+
+_mean_filename = "svhn-mean.npy"
 
 
 def _replace_10(y):
@@ -87,15 +90,28 @@ def load_data():
     return data
 
 
-def preprocess(x):
+def preprocess(x, subtact_mean=False):
     """Preprocess features."""
     x = x.astype('float32')
-    x /= 255.0
+    
+    if not subtact_mean:
+        x /= 255.0
+    else:
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        mean_path = os.path.join(dir_path, _mean_filename)
+        mean_image = np.load(mean_path)
+        x -= mean_image
+        x /= 128.
     return x
 
 
 if __name__ == '__main__':
     data = load_data()
+    mean_image = np.mean(data['x_train'], axis=0)
+    np.save(_mean_filename, mean_image)
+    import scipy.misc
+    scipy.misc.imshow(mean_image.squeeze())
+
     print("n_classes={}".format(n_classes))
     print("labels={}".format(labels))
     print("data['x_train'].shape={}".format(data['x_train'].shape))

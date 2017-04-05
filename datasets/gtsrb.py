@@ -24,6 +24,8 @@ import random
 random.seed(0)
 from six.moves import cPickle as pickle
 
+_mean_filename = "gtsrb-mean.npy"
+
 
 labels = ['speed limit 20 (prohibitory)',
           'speed limit 30 (prohibitory)',
@@ -271,15 +273,27 @@ def load_data():
     return data
 
 
-def preprocess(x):
+def preprocess(x, subtact_mean=False):
     """Preprocess features."""
     x = x.astype('float32')
-    x /= 255.0
+
+    if not subtact_mean:
+        x /= 255.0
+    else:
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        mean_path = os.path.join(dir_path, _mean_filename)
+        mean_image = np.load(mean_path)
+        x -= mean_image
+        x /= 128.
     return x
 
 
 if __name__ == '__main__':
-    data = gtsrb.load_data()
+    data = load_data()
+    mean_image = np.mean(data['x_train'], axis=0)
+    np.save(_mean_filename, mean_image)
+    import scipy.misc
+    scipy.misc.imshow(mean_image.squeeze())
     print(data['x_train'].shape)
     print(data['y_train'].shape)
     print(data['x_test'].shape)
