@@ -145,7 +145,7 @@ def _write_cm(cm, path):
         outfile.write(to_unicode(str_))
 
 
-def create_cm(data_module, config, smooth):
+def create_cm(data_module, config, smooth, model_path):
     """
     Create confusion matrices.
 
@@ -154,15 +154,18 @@ def create_cm(data_module, config, smooth):
     data_module : Python module
     config : dict
     smooth : boolean
+    model_path : string
     """
     artifacts_path = config['train']['artifacts_path']
-    model_path = os.path.join(artifacts_path,
-                              config['train']['model_output_fname'])
+    if model_path is None:
+        model_path = os.path.join(artifacts_path,
+                                  config['train']['model_output_fname'])
     # Load model
     if not os.path.isfile(model_path):
         logging.error("File {} does not exist. You might need to train it."
                       .format(model_path))
         sys.exit(-1)
+    logging.info("Load model {}".format(model_path))
     model = load_model(model_path)
     data = data_module.load_data()
     X_train = data['x_train']
@@ -235,6 +238,10 @@ def get_parser():
                         help="experiment definition file",
                         metavar="FILE.yaml",
                         required=True)
+    parser.add_argument("--model",
+                        dest="model_fname",
+                        help="path to a h5 keras model file",
+                        default=None)
     parser.add_argument("--smooth",
                         action="store_true",
                         dest="smooth",
@@ -255,4 +262,4 @@ if __name__ == '__main__':
     dpath = experiment_meta['dataset']['script_path']
     sys.path.insert(1, os.path.dirname(dpath))
     data = imp.load_source('data', experiment_meta['dataset']['script_path'])
-    create_cm(data, experiment_meta, args.smooth)
+    create_cm(data, experiment_meta, args.smooth, args.model_fname)
