@@ -269,7 +269,7 @@ def main(data_module, model_module, optimizer_module, filename, config):
                                      save_weights_only=False)
         es = EarlyStopping(monitor='val_acc',
                            min_delta=0,
-                           patience=15, verbose=1, mode='auto')
+                           patience=10, verbose=1, mode='auto')
         remote = RemoteMonitor(root='http://localhost:9000')
         lr_reducer = ReduceLROnPlateau(monitor='val_acc',
                                        factor=0.3,
@@ -277,7 +277,7 @@ def main(data_module, model_module, optimizer_module, filename, config):
                                        patience=3,
                                        min_lr=0.5e-6,
                                        verbose=1)
-        callbacks = [checkpoint, es, lr_reducer]  # remote, 
+        callbacks = [checkpoint, es]  # remote, 
         steps_per_epoch = X_train.shape[0] // batch_size
         history_cb = model.fit_generator(datagen.flow(X_train, Y_train,
                                          batch_size=batch_size),
