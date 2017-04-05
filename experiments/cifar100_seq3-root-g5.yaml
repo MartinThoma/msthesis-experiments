@@ -10,10 +10,10 @@ optimizer:
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras2.py
-  artifacts_path: ../artifacts/cifar100_seq3/
-  model_output_fname: cifar100_seq3.h5
-  history_fname: cifar100_seq3_history.csv
-  checkpoint_fname: cifar100_seq3_chk.h5
+  artifacts_path: ../artifacts/cifar100_seq3-root-g5/
+  model_output_fname: cifar100_seq3-root-g5.h5
+  history_fname: cifar100_seq3-root-g5_history.csv
+  checkpoint_fname: cifar100_seq3-root-g5_chk.h5
   batch_size: 64
   epochs: 300
   data_augmentation:
