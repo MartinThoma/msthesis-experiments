@@ -109,7 +109,7 @@ def filter_by_class(X_old, y_old, remaining_cls):
 def update_labels(y, old_cli2new_cli):
     """Update labels y with a dictionary old_cli2new_cli."""
     for i in range(len(y)):
-        y[i] = old_cli2new_cli[y[i]]
+        y[i][0] = old_cli2new_cli[y[i][0]]
     return y
 
 
@@ -269,14 +269,15 @@ def main(data_module, model_module, optimizer_module, filename, config):
                                      save_weights_only=False)
         es = EarlyStopping(monitor='val_acc',
                            min_delta=0,
-                           patience=10, verbose=1, mode='auto')
+                           patience=15, verbose=1, mode='auto')
         remote = RemoteMonitor(root='http://localhost:9000')
         lr_reducer = ReduceLROnPlateau(monitor='val_acc',
                                        factor=0.3,
                                        cooldown=0,
-                                       patience=5,
-                                       min_lr=0.5e-6)
-        callbacks = [checkpoint, es, remote, lr_reducer]
+                                       patience=3,
+                                       min_lr=0.5e-6,
+                                       verbose=1)
+        callbacks = [checkpoint, es, lr_reducer]  # remote, 
         steps_per_epoch = X_train.shape[0] // batch_size
         history_cb = model.fit_generator(datagen.flow(X_train, Y_train,
                                          batch_size=batch_size),
