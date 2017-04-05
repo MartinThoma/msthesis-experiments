@@ -23,6 +23,7 @@ train_path: train/train.py
 * matplotlib
 * Tensorflow 1.0
 * Keras 2.0 (adjusted [preprocessing/image.py](https://github.com/fchollet/keras/pull/6003))
+* seaborn
 
 ## Plan
 
