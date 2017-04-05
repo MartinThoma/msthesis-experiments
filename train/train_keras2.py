@@ -12,6 +12,7 @@ np.random.seed(0)
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
 from keras.callbacks import ModelCheckpoint, EarlyStopping, RemoteMonitor
+from keras.callbacks import ReduceLROnPlateau
 from keras.utils import np_utils
 # from sklearn.model_selection import train_test_split
 import csv
@@ -262,21 +263,27 @@ def main(data_module, model_module, optimizer_module, filename, config):
         model_chk_path = os.path.join(config['train']['artifacts_path'],
                                       config['train']['checkpoint_fname'])
         model_chk_path = get_nonexistant_path(model_chk_path)
-        cb = ModelCheckpoint(model_chk_path,
-                             monitor="val_acc",
-                             save_best_only=True,
-                             save_weights_only=False)
+        checkpoint = ModelCheckpoint(model_chk_path,
+                                     monitor="val_acc",
+                                     save_best_only=True,
+                                     save_weights_only=False)
         es = EarlyStopping(monitor='val_acc',
                            min_delta=0,
                            patience=10, verbose=1, mode='auto')
         remote = RemoteMonitor(root='http://localhost:9000')
+        lr_reducer = ReduceLROnPlateau(monitor='val_acc',
+                                       factor=0.3,
+                                       cooldown=0,
+                                       patience=5,
+                                       min_lr=0.5e-6)
+        callbacks = [checkpoint, es, remote, lr_reducer]
         steps_per_epoch = X_train.shape[0] // batch_size
         history_cb = model.fit_generator(datagen.flow(X_train, Y_train,
                                          batch_size=batch_size),
                                          steps_per_epoch=steps_per_epoch,
                                          epochs=nb_epoch,
                                          validation_data=(X_test, Y_test),
-                                         callbacks=[cb, es, remote])
+                                         callbacks=callbacks)
         # Train one epoch without augmentation to make sure data distribution
         # is fit well
         model.fit(X_train, Y_train,
@@ -284,7 +291,7 @@ def main(data_module, model_module, optimizer_module, filename, config):
                   epochs=nb_epoch,
                   validation_data=(X_test, Y_test),
                   shuffle=True,
-                  callbacks=[cb, es])
+                  callbacks=callbacks)
         loss_history = history_cb.history["loss"]
         acc_history = history_cb.history["acc"]
         val_acc_history = history_cb.history["val_acc"]
