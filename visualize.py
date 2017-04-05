@@ -385,6 +385,16 @@ def apply_grouping(labels, grouping):
     return groups
 
 
+def _remove_single_element_groups(hierarchy):
+    h_new = []
+    for el in hierarchy:
+        if len(el) > 1:
+            h_new.append(el)
+        else:
+            h_new.append(el[0])
+    return h_new
+
+
 def main(cm_file, perm_file, steps, labels_file, limit_classes=None):
     """Run optimization and generate output."""
     # Load confusion matrix
@@ -425,6 +435,8 @@ def main(cm_file, perm_file, steps, labels_file, limit_classes=None):
     print("Score: {}".format(calculate_score(result['cm'], weights)))
     print("Perm: {}".format(list(result['perm'])))
     labels = [labels[i] for i in result['perm']]
+    class_indices = list(range(len(labels)))
+    class_indices = [class_indices[i] for i in result['perm']]
     print("Symbols: {}".format(labels))
     acc = get_accuracy(cm_orig)
     print("Accuracy: {:0.2f}%".format(acc * 100))
@@ -434,6 +446,15 @@ def main(cm_file, perm_file, steps, labels_file, limit_classes=None):
     plot_cm(result['cm'][start:limit_classes, start:limit_classes],
             zero_diagonal=True, labels=labels[start:limit_classes])
     grouping = extract_clusters(result['cm'])
+    # Store grouping as hierarchy
+    with open('hierarchy.tmp.json', 'w') as outfile:
+        hierarchy = apply_grouping(class_indices, grouping)
+        hierarchy = _remove_single_element_groups(hierarchy)
+        str_ = json.dumps(hierarchy,
+                          indent=4, sort_keys=True,
+                          separators=(',', ':'), ensure_ascii=False)
+        outfile.write(str_)
+
     # Print nice
     for group in apply_grouping(labels, grouping):
         print("\t{}: {}".format(len(group), [str(el) for el in group]))
