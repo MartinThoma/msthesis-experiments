@@ -81,14 +81,19 @@ def _calculate_cm(config, model, X_train, X, y, n_classes, smooth):
         y_pred = np.zeros((X.shape[0], n_classes))
 
         augmentation_factor = config['evaluate']['augmentation_factor']
-        samples = 5000
+        samples = config['evaluate']['batch_size']
         batch_arr = np.zeros([augmentation_factor * samples] +
                              list(X[0].shape))
         print("batch_arr.shape={}".format(batch_arr.shape))
         if len(X) % samples != 0:
-            logging.warning("len(X) % samples != 0 (len(X)={})".format(len(X)))
+            logging.warning(("len(X) % config['evaluate']['batch_size'] != 0 "
+                             "(len(X)={})").format(len(X)))
+        run_through_X = False
         for index_sample in range(0, len(X), samples):
             for subi in range(samples):
+                if index_sample + subi == len(X):
+                    run_through_X = True
+                    break
                 batch = datagen.flow(np.array([X[index_sample + subi]]),
                                      np.array([y[index_sample + subi]]),
                                      batch_size=augmentation_factor)
@@ -101,6 +106,8 @@ def _calculate_cm(config, model, X_train, X, y, n_classes, smooth):
                     batch_arr[subi * augmentation_factor + i] = x
                     if i == augmentation_factor - 1:
                         break
+            if run_through_X:
+                break
                 # import scipy.misc
                 # mosaic = make_mosaic(batch_arr, 2, 2)
                 # scipy.misc.imshow(mosaic)

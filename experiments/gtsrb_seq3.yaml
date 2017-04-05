@@ -12,7 +12,7 @@ train:
   script_path: ../train/train_keras2.py
   artifacts_path: ../artifacts/gtsrb_seq3/
   batch_size: 64
-  epochs: 200
+  epochs: 300
   data_augmentation:
     samplewise_center: False
     samplewise_std_normalization: False
@@ -34,3 +34,19 @@ train:
   model_output_fname: gtsrb_seq.h5
   history_fname: gtsrb_seq_history.csv
   checkpoint_fname: gtsrb_seq_chk.h5
+evaluate:
+  batch_size: 1000
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 5
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    zoom_range: 0.2
+    shear_range: 0.1
+    channel_shift_range: 0.0
+    featurewise_center: False
+    zca_whitening: False
