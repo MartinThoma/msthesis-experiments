@@ -35,9 +35,10 @@ def make_paths_absolute(dir_, conf):
     tmp = os.path.join(dir_, tmp)
     conf["dataset"]["script_path"] = os.path.abspath(tmp)
 
-    tmp = conf["dataset"]["hierarchy_path"]
-    tmp = os.path.join(dir_, tmp)
-    conf["dataset"]["hierarchy_path"] = os.path.abspath(tmp)
+    if 'hierarchy_path' in conf["dataset"]:
+        tmp = conf["dataset"]["hierarchy_path"]
+        tmp = os.path.join(dir_, tmp)
+        conf["dataset"]["hierarchy_path"] = os.path.abspath(tmp)
     return conf
 
 
