@@ -129,7 +129,11 @@ def main(ensemble_fname):
 
     # Calculate confusion matrix
     # y_val_i = y_val.flatten()
-    y_preds = [model.predict(X_eval) for model in models]
+    y_preds = []
+    for model_path, model in zip(model_names, models):
+        print("Evaluate model {}...".format(model_path))
+        pred = model.predict(X_eval)
+        y_preds.append(pred)
 
     for model_index, y_val_pred in enumerate(y_preds):
         cm = calculate_cm(y_eval, y_val_pred, n_classes)
