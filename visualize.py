@@ -283,7 +283,7 @@ def plot_cm(cm, zero_diagonal=False, labels=None):
     plt.savefig('confusion_matrix.png', format='png')
 
 
-def extract_clusters(cm, steps=10**4, lambda_=0.013):
+def extract_clusters(cm, labels, steps=10**4, lambda_=0.013):
     """
     Find clusters in cm.
 
@@ -331,6 +331,48 @@ def extract_clusters(cm, steps=10**4, lambda_=0.013):
         con = sorted(get_neighboring_connectivity(cm))
         return con[n]
 
+    def find_thres_interactive(cm, labels):
+        """
+        Find a threshold for grouping.
+
+        The threshold is the minimum connection strength for two classes to be
+        within the same cluster.
+
+        Parameters
+        ----------
+        cm : numpy array
+        percentage : float
+            Probability that two neighboring classes belong togehter
+        """
+        n = len(cm)
+        con = sorted(zip(get_neighboring_connectivity(cm),
+                         zip(range(n - 1), range(1, n))))
+        # pos_low = 0
+        pos_str = None
+
+        # Lowest position from which we know that they are connected
+        pos_up = n - 1
+
+        # Highest position from which we know that they are not connected
+        neg_low = 0
+        # neg_up = n - 1
+        while pos_up - 1 > neg_low:
+            print("pos_up={}, neg_low={}, pos_str={}".format(pos_up, neg_low, pos_str))
+            pos = int((pos_up + neg_low) / 2)
+            con_str, (i1, i2) = con[pos]
+            should_be_conn = raw_input('Should {} and {} be in one cluster?'
+                                       ' (y/n): '
+                                       .format(labels[i1], labels[i2]))
+            if should_be_conn == 'n':
+                neg_low = pos
+            elif should_be_conn == 'y':
+                pos_up = pos
+                pos_str = con_str
+            else:
+                print("Please type only 'y' or 'n'. You typed {}."
+                      .format(should_be_conn))
+        return pos_str
+
     def get_neighboring_connectivity(cm):
         con = []
         n = len(cm)
@@ -338,7 +380,7 @@ def extract_clusters(cm, steps=10**4, lambda_=0.013):
             con.append(cm[i][i + 1] + cm[i + 1][i])
         return con
 
-    def split_at_con_thres(cm, thres):
+    def split_at_con_thres(cm, thres, labels, interactive):
         """
         Two classes are not in the same group if they are not connected strong.
 
@@ -346,7 +388,23 @@ def extract_clusters(cm, steps=10**4, lambda_=0.013):
         clusters / the smaller clusters you will get.
         """
         con = get_neighboring_connectivity(cm)
-        return [el < thres for el in con]
+        grouping = []
+        for i, el in enumerate(con):
+            if el == thres and interactive:
+                should_conn = '-'
+                while should_conn not in ['y', 'n']:
+                    should_conn = raw_input('Should {} and {} be in one '
+                                            'cluster? (y/n): '
+                                            .format(labels[i], labels[i + 1]))
+                    if should_conn == 'y':
+                        grouping.append(0)
+                    elif should_conn == 'n':
+                        grouping.append(1)
+                    else:
+                        print("please type either 'y' or 'n'")
+            else:
+                grouping.append(el < thres)
+        return grouping
 
     method = 'local-connectivity'
 
@@ -366,9 +424,11 @@ def extract_clusters(cm, steps=10**4, lambda_=0.013):
                 logging.info("Best grouping: {} (score: {})"
                              .format(grouping, minimal_score))
     elif method == 'local-connectivity':
-        thres = find_thres(cm, 0.2)  # hyper-parameter
+        # thres = find_thres(cm, 0.1)  # hyper-parameter
+        thres = find_thres_interactive(cm, labels)
         logging.info("Found threshold for local connection: {}".format(thres))
-        best_grouping = split_at_con_thres(cm, thres)
+        best_grouping = split_at_con_thres(cm, thres, labels, True)
+    logging.info("Found {} clusters".format(sum(best_grouping) + 1))
     return best_grouping
 
 
@@ -446,7 +506,7 @@ def main(cm_file, perm_file, steps, labels_file, limit_classes=None):
         limit_classes = len(cm)
     plot_cm(result['cm'][start:limit_classes, start:limit_classes],
             zero_diagonal=True, labels=labels[start:limit_classes])
-    grouping = extract_clusters(result['cm'])
+    grouping = extract_clusters(result['cm'], labels)
     y_pred = [0]
     cluster_i = 0
     for el in grouping:
