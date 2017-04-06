@@ -19,21 +19,19 @@ train_keras = imp.load_source('train_keras', "train/train_keras.py")
 from train_keras import get_level, flatten_completely, filter_by_class
 from train_keras import update_labels
 from analyze_model import make_mosaic
+from run_training import make_paths_absolute
 try:
     to_unicode = unicode
 except NameError:
     to_unicode = str
 
-from run_training import make_paths_absolute
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
                     stream=sys.stdout)
 
 
-def _calculate_cm(config, model, X_train, X, y, n_classes, smooth):
-    y_i = y.flatten()
-
+def run_model_prediction(model, config, X_train, X, n_classes):
     if config['evaluate']['augmentation_factor'] > 1:
         # Test time augmentation
         da = config['evaluate']['data_augmentation']
@@ -95,7 +93,7 @@ def _calculate_cm(config, model, X_train, X, y, n_classes, smooth):
                     run_through_X = True
                     break
                 batch = datagen.flow(np.array([X[index_sample + subi]]),
-                                     np.array([y[index_sample + subi]]),
+                                     np.array([np.zeros(n_classes)]),
                                      batch_size=augmentation_factor)
                 for i, el in enumerate(batch):
                     if i == 0:
@@ -120,6 +118,12 @@ def _calculate_cm(config, model, X_train, X, y, n_classes, smooth):
             print("\t{:>7} of {}".format(index_sample, len(X)))
     else:
         y_pred = model.predict(X)
+    return y_pred
+
+
+def _calculate_cm(config, model, X_train, X, y, n_classes, smooth):
+    y_i = y.flatten()
+    y_pred = run_model_prediction(model, config, X_train, X, n_classes)
 
     if smooth:
         cm = np.zeros((n_classes, n_classes), dtype=np.float64)

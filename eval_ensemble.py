@@ -3,25 +3,33 @@
 
 """Build an ensemble of CIFAR 100 Keras models."""
 
+import imp
+import json
 import logging
+import os
 import sys
-import yaml
+
+
 # import os
 # os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
 # os.environ["CUDA_VISIBLE_DEVICES"] = ""
 from keras.models import load_model
-from sklearn.model_selection import train_test_split
-import numpy as np
 from keras.utils import np_utils
+
+
 from natsort import natsorted
 
-import json
-import imp
-import os
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+
+import yaml
+
 train_keras = imp.load_source('train_keras', "train/train_keras.py")
+
 from train_keras import get_level, flatten_completely, filter_by_class
 from train_keras import update_labels
-
+from create_cm import run_model_prediction
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
                     stream=sys.stdout)
@@ -111,7 +119,6 @@ def main(ensemble_fname):
     n_classes = data_module.n_classes
     logging.info("n_classes={}".format(n_classes))
 
-
     X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
                                                       test_size=0.10,
                                                       random_state=42)
@@ -132,7 +139,7 @@ def main(ensemble_fname):
     y_preds = []
     for model_path, model in zip(model_names, models):
         print("Evaluate model {}...".format(model_path))
-        pred = model.predict(X_eval)
+        pred = run_model_prediction(model, config, X_train, X_eval, n_classes)
         y_preds.append(pred)
 
     for model_index, y_val_pred in enumerate(y_preds):
