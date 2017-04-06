@@ -18,8 +18,8 @@ random.seed(0)
 import logging
 import sys
 import os
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 from sklearn.metrics import silhouette_score
+from sklearn.cluster import SpectralClustering
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -40,9 +40,7 @@ def main(cm_file, perm_file, steps, labels_file, limit_classes=None):
     else:
         labels = list(range(len(cm)))
 
-    n_clusters = 14
-
-    from sklearn.cluster import SpectralClustering
+    n_clusters = 14  # hyperparameter
     spectral = SpectralClustering(n_clusters=n_clusters,
                                   eigen_solver='arpack',
                                   affinity="nearest_neighbors")
@@ -51,12 +49,14 @@ def main(cm_file, perm_file, steps, labels_file, limit_classes=None):
         y_pred = spectral.labels_.astype(np.int)
     else:
         y_pred = spectral.predict(cm)
-    print("silhouette_score={}".format(silhouette_score(cm, y_pred)))
+    sscore = silhouette_score(cm, y_pred)
+    print("silhouette_score={} with {} clusters"
+          .format(sscore, n_clusters))
     grouping = [[] for _ in range(n_clusters)]
     for label, y in zip(labels, y_pred):
         grouping[y].append(label)
     for group in grouping:
-        print(group)
+        print("  {}: {}".format(len(group), group))
 
 
 def get_parser():
