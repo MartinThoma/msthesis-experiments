@@ -19,6 +19,7 @@ import logging
 import sys
 import os
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from sklearn.metrics import silhouette_score
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -446,6 +447,13 @@ def main(cm_file, perm_file, steps, labels_file, limit_classes=None):
     plot_cm(result['cm'][start:limit_classes, start:limit_classes],
             zero_diagonal=True, labels=labels[start:limit_classes])
     grouping = extract_clusters(result['cm'])
+    y_pred = [0]
+    cluster_i = 0
+    for el in grouping:
+        if el == 1:
+            cluster_i += 1
+        y_pred.append(cluster_i)
+    print("silhouette_score={}".format(silhouette_score(cm, y_pred)))
     # Store grouping as hierarchy
     with open('hierarchy.tmp.json', 'w') as outfile:
         hierarchy = apply_grouping(class_indices, grouping)
