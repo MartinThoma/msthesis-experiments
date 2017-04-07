@@ -280,7 +280,7 @@ def plot_cm(cm, zero_diagonal=False, labels=None):
     plt.colorbar(res, cax=cax)
     plt.tight_layout()
 
-    plt.savefig('confusion_matrix.png', format='png')
+    plt.savefig('confusion_matrix.tmp.png', format='png')
 
 
 def extract_clusters(cm, labels, steps=10**4, lambda_=0.013):
@@ -357,7 +357,8 @@ def extract_clusters(cm, labels, steps=10**4, lambda_=0.013):
         neg_low = 0
         # neg_up = n - 1
         while pos_up - 1 > neg_low:
-            print("pos_up={}, neg_low={}, pos_str={}".format(pos_up, neg_low, pos_str))
+            print("pos_up={}, neg_low={}, pos_str={}"
+                  .format(pos_up, neg_low, pos_str))
             pos = int((pos_up + neg_low) / 2)
             con_str, (i1, i2) = con[pos]
             should_be_conn = raw_input('Should {} and {} be in one cluster?'
@@ -407,6 +408,7 @@ def extract_clusters(cm, labels, steps=10**4, lambda_=0.013):
         return grouping
 
     method = 'local-connectivity'
+    interactive = False
 
     if method == 'energy':
         n = len(cm)
@@ -424,10 +426,13 @@ def extract_clusters(cm, labels, steps=10**4, lambda_=0.013):
                 logging.info("Best grouping: {} (score: {})"
                              .format(grouping, minimal_score))
     elif method == 'local-connectivity':
-        # thres = find_thres(cm, 0.1)  # hyper-parameter
-        thres = find_thres_interactive(cm, labels)
+        if interactive:
+            thres = find_thres_interactive(cm, labels)
+        else:
+            thres = find_thres(cm, 0.1)  # hyper-parameter
         logging.info("Found threshold for local connection: {}".format(thres))
-        best_grouping = split_at_con_thres(cm, thres, labels, True)
+        best_grouping = split_at_con_thres(cm, thres, labels,
+                                           interactive=interactive)
     logging.info("Found {} clusters".format(sum(best_grouping) + 1))
     return best_grouping
 

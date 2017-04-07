@@ -42,14 +42,15 @@ def flatten_completely(iterable):
     while len(queue) > 0:
         el = queue.pop(0)
         if isinstance(el, collections.Iterable):
-            for subel in el:
-                queue.append(subel)
+            for subel in el[::-1]:
+                queue.insert(0, subel)
         else:
             flattened.append(el)
     return flattened
 
 
 def get_oldi2newi(hierarchy):
+    """Get a dict mapping from the old class idx to the new class indices."""
     oldi2newi = {}
     n = len(flatten_completely(hierarchy))
     for i in range(n):
@@ -105,9 +106,9 @@ def main(cm_fname, hierarchy_fname):
     # recalls = [get_recall(cm, i) for i in range(len(cm))]
     # acc = (sum([el['recall'] * el['total'] for el in recalls]) /
     #        sum([el['total'] for el in recalls]))
-    print("Total acc={:0.2f}".format(get_accuracy(cm) * 100))
+    print("Total acc={:0.2f}%".format(get_accuracy(cm) * 100))
     cm_root = get_grouped_cm(cm, hierarchy)
-    print("Root acc={:0.2f}".format(get_accuracy(cm_root) * 100))
+    print("Root acc={:0.2f}%".format(get_accuracy(cm_root) * 100))
     # print(recalls)
     print(cm)
     print(hierarchy)

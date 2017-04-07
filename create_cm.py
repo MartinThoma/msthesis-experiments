@@ -78,9 +78,9 @@ def run_model_prediction(model, config, X_train, X, n_classes):
 
         y_pred = np.zeros((X.shape[0], n_classes))
 
-        augmentation_factor = config['evaluate']['augmentation_factor']
+        a_factor = config['evaluate']['augmentation_factor']
         samples = config['evaluate']['batch_size']
-        batch_arr = np.zeros([augmentation_factor * samples] +
+        batch_arr = np.zeros([a_factor * samples] +
                              list(X[0].shape))
         print("batch_arr.shape={}".format(batch_arr.shape))
         if len(X) % samples != 0:
@@ -94,15 +94,15 @@ def run_model_prediction(model, config, X_train, X, n_classes):
                     break
                 batch = datagen.flow(np.array([X[index_sample + subi]]),
                                      np.array([np.zeros(n_classes)]),
-                                     batch_size=augmentation_factor)
+                                     batch_size=a_factor)
                 for i, el in enumerate(batch):
                     if i == 0:
-                        batch_arr[subi * augmentation_factor + i] = \
+                        batch_arr[subi * a_factor + i] = \
                             X[index_sample + subi]
                         continue
                     x, label = el
-                    batch_arr[subi * augmentation_factor + i] = x
-                    if i == augmentation_factor - 1:
+                    batch_arr[subi * a_factor + i] = x
+                    if i == a_factor - 1:
                         break
             if run_through_X:
                 break
@@ -111,9 +111,9 @@ def run_model_prediction(model, config, X_train, X, n_classes):
                 # scipy.misc.imshow(mosaic)
             y_pred_single = model.predict(batch_arr)
             for subi in range(samples):
-                y_pred_s = (y_pred_single[subi * augmentation_factor:
-                                          (subi + 1) * augmentation_factor].sum(axis=0) /
-                            float(augmentation_factor))
+                y_pred_s = (y_pred_single[subi * a_factor:
+                                          (subi + 1) * a_factor].sum(axis=0) /
+                            float(a_factor))
                 y_pred[index_sample + subi] = y_pred_s
             print("\t{:>7} of {}".format(index_sample, len(X)))
     else:
@@ -171,13 +171,14 @@ def create_cm(data_module, config, smooth, model_path):
         sys.exit(-1)
     logging.info("Load model {}".format(model_path))
     model = load_model(model_path)
-    data = data_module.load_data()
-    X_train = data['x_train']
-    X_test = data['x_test']
-    y_train = data['y_train']
-    y_test = data['y_test']
 
+    # The data, shuffled and split between train and test sets:
+    data = data_module.load_data()
+    print("Data loaded.")
+
+    X_train, y_train = data['x_train'], data['y_train']
     X_train = data_module.preprocess(X_train)
+    X_test, y_test = data['x_test'], data['y_test']
     X_test = data_module.preprocess(X_test)
 
     # load hierarchy, if present
@@ -198,22 +199,22 @@ def create_cm(data_module, config, smooth, model_path):
             y_train = update_labels(y_train, old_cli2new_cli)
             y_test = update_labels(y_test, old_cli2new_cli)
 
-    n_classes = data_module.n_classes
-    logging.info("n_classes={}".format(n_classes))
+    nb_classes = data_module.n_classes
+    logging.info("# classes = {}".format(data_module.n_classes))
 
     # Calculate confusion matrix for training set
-    cm = _calculate_cm(config, model, X_train, X_train, y_train, n_classes,
+    cm = _calculate_cm(config, model, X_train, X_train, y_train, nb_classes,
                        smooth)
-    correct_count = sum([cm[i][i] for i in range(n_classes)])
+    correct_count = sum([cm[i][i] for i in range(nb_classes)])
     acc = correct_count / float(cm.sum())
     print("Accuracy (Train): {:0.2f}% ({} of {} wrong)"
           .format(acc * 100, cm.sum() - correct_count, cm.sum()))
     _write_cm(cm, path=os.path.join(artifacts_path, 'cm-train.json'))
 
     # Calculate confusion matrix for test set
-    cm = _calculate_cm(config, model, X_train, X_test, y_test, n_classes,
+    cm = _calculate_cm(config, model, X_train, X_test, y_test, nb_classes,
                        smooth)
-    correct_count = sum([cm[i][i] for i in range(n_classes)])
+    correct_count = sum([cm[i][i] for i in range(nb_classes)])
     acc = correct_count / float(cm.sum())
     print("Accuracy (Test): {:0.2f}% ({} of {} wrong)"
           .format(acc * 100, cm.sum() - correct_count, cm.sum()))
