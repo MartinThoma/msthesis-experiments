@@ -2,6 +2,7 @@ dataset:
   script_path: ../datasets/cifar100_keras.py
   hierarchy_path: ../datasets/cifar100-hierarchy.json
   coarse: False
+  subset: []
 model:
   script_path: ../models/seq3.py
 optimizer:
