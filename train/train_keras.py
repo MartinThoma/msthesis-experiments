@@ -12,8 +12,8 @@ import numpy as np
 np.random.seed(0)
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
-from keras.callbacks import ModelCheckpoint, EarlyStopping, RemoteMonitor
-from keras.callbacks import ReduceLROnPlateau
+from keras.callbacks import ModelCheckpoint, EarlyStopping
+# from keras.callbacks import RemoteMonitor, ReduceLROnPlateau
 from keras.utils import np_utils
 # from sklearn.model_selection import train_test_split
 import csv
@@ -22,6 +22,7 @@ import logging
 import os
 import sys
 import collections
+from copy import deepcopy
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -31,6 +32,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
 def flatten_completely(iterable):
     """Make a flat list out of an interable of iterables of iterables ..."""
     flattened = []
+    iterable = deepcopy(iterable)
     queue = [iterable]
     while len(queue) > 0:
         el = queue.pop(0)
@@ -42,25 +44,18 @@ def flatten_completely(iterable):
     return flattened
 
 
-def get_oldi2newi(hierarchy):
+def get_old_cli2new_cli(hierarchy):
     """Get a dict mapping from the old class idx to the new class indices."""
-    oldi2newi = {}
-    n = len(flatten_completely(hierarchy))
-    for i in range(n):
-        if i in hierarchy:  # is it in the first level?
-            oldi2newi[i] = hierarchy.index(i)
-        else:
-            for j, group in enumerate(hierarchy):
-                if isinstance(group, (int, long)):
-                    continue
-                if i in group:
-                    oldi2newi[i] = j
-    return oldi2newi
+    remaining_cls = flatten_completely(hierarchy)
+    old_cli2new_cli = {}
+    for new_cli, old_cli in enumerate(remaining_cls):
+        old_cli2new_cli[old_cli] = new_cli
+    return old_cli2new_cli
 
 
 def apply_hierarchy(hierarchy, y):
     """Apply a hierarchy to a label vector."""
-    oldi2newi = get_oldi2newi(hierarchy)
+    oldi2newi = get_old_cli2new_cli(hierarchy)
     for i in range(len(y)):
         y[i] = oldi2newi[y[i][0]]
     return y
@@ -89,6 +84,7 @@ def get_level(list_, level):
     >>> get_level(list_, [1, 1, 3])
     [6, 7, [8, 9]]
     """
+    level = deepcopy(level)
     if len(level) > 0:
         i = level.pop(0)
         return get_level(list_[i], level)
@@ -136,6 +132,49 @@ def get_nonexistant_path(fname_path):
     return new_fname
 
 
+def handle_hierarchies(config, data_module, X_train, y_train, X_test, y_test):
+    """
+    Adjust data to hierarchy.
+
+    Parameters
+    ----------
+    config : dict
+    data_module : Python module
+    X_train : np.array
+    y_train : np.array
+    X_test : np.array
+    y_test : np.array
+
+    Returns
+    -------
+    list
+        Hierarchy
+    """
+    with open(config['dataset']['hierarchy_path']) as data_file:
+        hierarchy = json.load(data_file)
+    logging.info("Loaded hierarchy: {}".format(hierarchy))
+    if 'subset' in config['dataset']:
+        remaining_cls = get_level(hierarchy, config['dataset']['subset'])
+        logging.info("Remaining classes: {}".format(remaining_cls))
+        # Only do this if coarse is False:
+        old_cli2new_cli = get_old_cli2new_cli(remaining_cls)
+        remaining_cls = flatten_completely(remaining_cls)
+        data_module.n_classes = len(old_cli2new_cli)
+        X_train, y_train = filter_by_class(X_train, y_train, remaining_cls)
+        X_test, y_test = filter_by_class(X_test, y_test, remaining_cls)
+        y_train = update_labels(y_train, old_cli2new_cli)
+        y_test = update_labels(y_test, old_cli2new_cli)
+    if config['dataset']['coarse']:
+        data_module.n_classes = len(hierarchy)
+        print("!" * 80)
+        print("this might be wrong!!!!")
+        y_train = apply_hierarchy(hierarchy, y_train)
+        y_test = apply_hierarchy(hierarchy, y_test)
+    return {'hierarchy': hierarchy,
+            'X_train': X_train, 'y_train': y_train,
+            'X_test': X_test, 'y_test': y_test}
+
+
 def main(data_module, model_module, optimizer_module, filename, config):
     """Patch everything together."""
     batch_size = config['train']['batch_size']
@@ -152,28 +191,14 @@ def main(data_module, model_module, optimizer_module, filename, config):
 
     # load hierarchy, if present
     if 'hierarchy_path' in config['dataset']:
-        with open(config['dataset']['hierarchy_path']) as data_file:
-            hierarchy = json.load(data_file)
-        logging.info("Loaded hierarchy: {}".format(hierarchy))
-        if 'subset' in config['dataset']:
-            remaining_cls = get_level(hierarchy, config['dataset']['subset'])
-            logging.info("Remaining classes: {}".format(remaining_cls))
-            # Only do this if coarse is False:
-            remaining_cls = flatten_completely(remaining_cls)
-            data_module.n_classes = len(remaining_cls)
-            X_train, y_train = filter_by_class(X_train, y_train, remaining_cls)
-            X_test, y_test = filter_by_class(X_test, y_test, remaining_cls)
-            old_cli2new_cli = {}
-            for new_cli, old_cli in enumerate(remaining_cls):
-                old_cli2new_cli[old_cli] = new_cli
-            y_train = update_labels(y_train, old_cli2new_cli)
-            y_test = update_labels(y_test, old_cli2new_cli)
-        if config['dataset']['coarse']:
-            data_module.n_classes = len(hierarchy)
-            print("!" * 80)
-            print("this might be wrong!!!!")
-            y_train = apply_hierarchy(hierarchy, y_train)
-            y_test = apply_hierarchy(hierarchy, y_test)
+        ret = handle_hierarchies(config, data_module,
+                                 X_train, y_train, X_test, y_test)
+        # hierarchy = ret['hierarchy']
+        X_train = ret['X_train']
+        y_train = ret['y_train']
+        X_test = ret['X_test']
+        y_test = ret['y_test']
+
     nb_classes = data_module.n_classes
     logging.info("# classes = {}".format(data_module.n_classes))
     img_rows = data_module.img_rows

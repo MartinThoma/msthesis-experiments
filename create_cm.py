@@ -16,9 +16,8 @@ import pprint
 import collections
 import os
 train_keras = imp.load_source('train_keras', "train/train_keras.py")
-from train_keras import get_level, flatten_completely, filter_by_class
-from train_keras import update_labels
-from msthesis_utils import make_mosaic
+from train_keras import get_level, handle_hierarchies, get_old_cli2new_cli
+# from msthesis_utils import make_mosaic
 from run_training import make_paths_absolute
 try:
     to_unicode = unicode
@@ -32,6 +31,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
 
 
 def run_model_prediction(model, config, X_train, X, n_classes):
+    """Run (non)augmented model prediction."""
     if config['evaluate']['augmentation_factor'] > 1:
         # Test time augmentation
         da = config['evaluate']['data_augmentation']
@@ -183,22 +183,13 @@ def create_cm(data_module, config, smooth, model_path):
 
     # load hierarchy, if present
     if 'hierarchy_path' in config['dataset']:
-        with open(config['dataset']['hierarchy_path']) as data_file:
-            hierarchy = json.load(data_file)
-        if 'subset' in config['dataset']:
-            remaining_cls = get_level(hierarchy, config['dataset']['subset'])
-            logging.info("Remaining classes: {}".format(remaining_cls))
-            # Only do this if coarse is False:
-            remaining_cls = flatten_completely(remaining_cls)
-            data_module.n_classes = len(remaining_cls)
-            X_train, y_train = filter_by_class(X_train, y_train, remaining_cls)
-            X_test, y_test = filter_by_class(X_test, y_test, remaining_cls)
-            old_cli2new_cli = {}
-            for new_cli, old_cli in enumerate(remaining_cls):
-                old_cli2new_cli[old_cli] = new_cli
-            y_train = update_labels(y_train, old_cli2new_cli)
-            y_test = update_labels(y_test, old_cli2new_cli)
-
+        ret = handle_hierarchies(config, data_module,
+                                 X_train, y_train, X_test, y_test)
+        hierarchy = ret['hierarchy']
+        X_train = ret['X_train']
+        y_train = ret['y_train']
+        X_test = ret['X_test']
+        y_test = ret['y_test']
     nb_classes = data_module.n_classes
     logging.info("# classes = {}".format(data_module.n_classes))
 
@@ -223,14 +214,20 @@ def create_cm(data_module, config, smooth, model_path):
     # Calculate the accuracy for each sub-group
     if 'hierarchy_path' in config['dataset']:
         hierarchy = get_level(hierarchy, config['dataset']['subset'])
+        oldi2newi = get_old_cli2new_cli(hierarchy)
         for class_group in hierarchy:
             if isinstance(class_group, collections.Iterable):
                 # calculate acc on this group
                 print("Group: {}".format(class_group))
-                correct = sum([cm[i][i] for i in class_group])
-                all_ = sum(cm[i][j] for i in class_group for j in class_group)
-                acc = correct / float(all_)
-                print("\t{:0.2f}%".format(acc * 100))
+                correct = sum([cm[oldi2newi[i]][oldi2newi[i]]
+                               for i in class_group])  # TODO
+                all_ = sum(cm[oldi2newi[i]][oldi2newi[j]]
+                           for i in class_group for j in class_group)
+                if all_ == 0:
+                    print("\t--- (no elements)")
+                else:
+                    acc = correct / float(all_)
+                    print("\t{:0.2f}%".format(acc * 100))
 
 
 def get_parser():
@@ -254,11 +251,13 @@ def get_parser():
                         help="Use prediction probability instead of argmax")
     return parser
 
+
 if __name__ == '__main__':
     args = get_parser().parse_args()
     # Read YAML experiment definition file
     with open(args.filename, 'r') as stream:
         experiment_meta = yaml.load(stream)
+
     # Make paths absolute
     experiment_meta = make_paths_absolute(os.path.dirname(args.filename),
                                           experiment_meta)
