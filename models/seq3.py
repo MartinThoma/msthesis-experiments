@@ -48,7 +48,9 @@ def create_model(nb_classes, input_shape):
     model.add(MaxPooling2D(pool_size=(2, 2)))
 
     model.add(Convolution2D(512, (4, 4),
-                            padding='valid'))
+                            padding='valid',
+                            kernel_initializer='he_uniform',
+                            kernel_regularizer=l2(0.0001)))
     model.add(BatchNormalization())
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
