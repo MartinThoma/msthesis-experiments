@@ -18,7 +18,7 @@ import os
 train_keras = imp.load_source('train_keras', "train/train_keras.py")
 from train_keras import get_level, flatten_completely, filter_by_class
 from train_keras import update_labels
-from analyze_model import make_mosaic
+from msthesis_utils import make_mosaic
 from run_training import make_paths_absolute
 try:
     to_unicode = unicode
