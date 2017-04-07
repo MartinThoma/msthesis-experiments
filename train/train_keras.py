@@ -11,7 +11,8 @@ import numpy as np
 np.random.seed(0)
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
-from keras.callbacks import ModelCheckpoint
+from keras.callbacks import ModelCheckpoint, EarlyStopping, RemoteMonitor
+from keras.callbacks import ReduceLROnPlateau
 from keras.utils import np_utils
 # from sklearn.model_selection import train_test_split
 import csv
@@ -108,8 +109,30 @@ def filter_by_class(X_old, y_old, remaining_cls):
 def update_labels(y, old_cli2new_cli):
     """Update labels y with a dictionary old_cli2new_cli."""
     for i in range(len(y)):
-        y[i] = old_cli2new_cli[y[i]]
+        y[i][0] = old_cli2new_cli[y[i][0]]
     return y
+
+
+def get_nonexistant_path(fname_path):
+    """
+    Get the path to a filename which does not exist by incrementing path.
+
+    Examples
+    --------
+    >>> get_nonexistant_path('/etc/issue')
+    '/etc/issue-1'
+    >>> get_nonexistant_path('whatever/1337bla.py')
+    'whatever/1337bla.py'
+    """
+    if not os.path.exists(fname_path):
+        return fname_path
+    filename, file_extension = os.path.splitext(fname_path)
+    i = 1
+    new_fname = "{}-{}{}".format(filename, i, file_extension)
+    while os.path.exists(new_fname):
+        i += 1
+        new_fname = "{}-{}{}".format(filename, i, file_extension)
+    return new_fname
 
 
 def main(data_module, model_module, optimizer_module, filename, config):
@@ -240,17 +263,28 @@ def main(data_module, model_module, optimizer_module, filename, config):
         model_chk_path = os.path.join(config['train']['artifacts_path'],
                                       config['train']['checkpoint_fname'])
         model_chk_path = get_nonexistant_path(model_chk_path)
-        cb = ModelCheckpoint(model_chk_path,
-                             monitor="val_acc",
-                             save_best_only=True,
-                             save_weights_only=False)
+        checkpoint = ModelCheckpoint(model_chk_path,
+                                     monitor="val_acc",
+                                     save_best_only=True,
+                                     save_weights_only=False)
+        es = EarlyStopping(monitor='val_acc',
+                           min_delta=0,
+                           patience=10, verbose=1, mode='auto')
+        remote = RemoteMonitor(root='http://localhost:9000')
+        lr_reducer = ReduceLROnPlateau(monitor='val_acc',
+                                       factor=0.3,
+                                       cooldown=0,
+                                       patience=3,
+                                       min_lr=0.5e-6,
+                                       verbose=1)
+        callbacks = [checkpoint, es]  # remote, 
         steps_per_epoch = X_train.shape[0] // batch_size
         history_cb = model.fit_generator(datagen.flow(X_train, Y_train,
                                          batch_size=batch_size),
                                          steps_per_epoch=steps_per_epoch,
                                          epochs=nb_epoch,
                                          validation_data=(X_test, Y_test),
-                                         callbacks=[cb])
+                                         callbacks=callbacks)
         # Train one epoch without augmentation to make sure data distribution
         # is fit well
         model.fit(X_train, Y_train,
@@ -258,7 +292,7 @@ def main(data_module, model_module, optimizer_module, filename, config):
                   epochs=nb_epoch,
                   validation_data=(X_test, Y_test),
                   shuffle=True,
-                  callbacks=[cb, es])
+                  callbacks=callbacks)
         loss_history = history_cb.history["loss"]
         acc_history = history_cb.history["acc"]
         val_acc_history = history_cb.history["val_acc"]

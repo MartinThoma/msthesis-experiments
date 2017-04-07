@@ -9,7 +9,7 @@ optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
-  script_path: ../train/train_keras2.py
+  script_path: ../train/train_keras.py
   artifacts_path: ../artifacts/gtsrb_seq3/
   batch_size: 64
   epochs: 300

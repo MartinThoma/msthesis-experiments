@@ -9,7 +9,7 @@ optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
-  script_path: ../train/train_keras2.py
+  script_path: ../train/train_keras.py
   artifacts_path: ../artifacts/cifar100_seq3-root-g10/
   model_output_fname: cifar100_seq3-root-g10.h5
   history_fname: cifar100_seq3-root-g10_history.csv

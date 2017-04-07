@@ -8,7 +8,7 @@ optimizer:
   nesterov: True
   momentum: 0.9
 train:
-  script_path: ../train/train_keras2.py
+  script_path: ../train/train_keras.py
   artifacts_path: ../artifacts/cifar10_baseline_jeon/
   model_output_fname: cifar10_baseline_jeon.h5
   history_fname: cifar10_baseline_jeon_history.csv
