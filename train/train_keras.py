@@ -62,7 +62,7 @@ def apply_hierarchy(hierarchy, y):
     """Apply a hierarchy to a label vector."""
     oldi2newi = get_oldi2newi(hierarchy)
     for i in range(len(y)):
-        y[i] = oldi2newi[y[i]]
+        y[i] = oldi2newi[y[i][0]]
     return y
 
 
@@ -157,6 +157,7 @@ def main(data_module, model_module, optimizer_module, filename, config):
         logging.info("Loaded hierarchy: {}".format(hierarchy))
         if 'subset' in config['dataset']:
             remaining_cls = get_level(hierarchy, config['dataset']['subset'])
+            logging.info("Remaining classes: {}".format(remaining_cls))
             # Only do this if coarse is False:
             remaining_cls = flatten_completely(remaining_cls)
             data_module.n_classes = len(remaining_cls)
