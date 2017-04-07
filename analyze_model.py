@@ -21,6 +21,7 @@ from run_training import make_paths_absolute
 import os
 import pprint
 import scipy.misc
+import scipy.stats
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -38,6 +39,89 @@ def get_activations(model, layer_index, X_batch):
     return activations
 
 
+def show_conv_act_distrib(model, X, show_feature_maps=False):
+    X_train = np.array([X])
+    ax = plt.axes()
+    layer_count = 0
+    for layer_index in range(len(model.layers)):
+        act = get_activations(model, layer_index, X_train)[0]
+        if show_feature_maps:
+            scipy.misc.imshow(X_train[0])
+            mosaik = make_mosaic(act[0], 8, 4)
+            scipy.misc.imshow(mosaik)
+        data = act[0].flatten()
+        if isinstance(model.layers[layer_index],
+                      keras.layers.convolutional.Conv2D):
+            print("\tlen(data)={}".format(len(data)))
+            if len(data) > 3:
+                _, p = scipy.stats.normaltest(data)
+                print("\tData is normal distributed (p={})".format(p))
+            sns.distplot(data, hist=False, norm_hist=False, kde=True, ax=ax,
+                         label=str(layer_count))
+        layer_count += 1
+    ax.set_title('convolution activations')
+    ax.legend()
+    sns.plt.show()
+
+
+def show_conv_weight_dist(model, small_thres=10**-6):
+    f, (ax1, ax2) = plt.subplots(1, 2)
+    layer_count = 0
+    for layer in model.layers:
+        if not isinstance(layer, keras.layers.convolutional.Conv2D):
+            continue
+        weights = layer.get_weights()
+
+        # Filter
+        print("{}: {} filter weights in {}th layer"
+              .format(weights[0].shape,
+                      reduce(operator.mul, weights[0].shape, 1),
+                      layer_count))
+        data = weights[0].flatten()
+        data_small = np.array([el for el in data if abs(el) < small_thres])
+        print("< {}: {}".format(small_thres, len(data_small)))
+        sns.distplot(data, hist=False, norm_hist=True, kde=True, ax=ax1,
+                     label=str(layer_count))
+
+        # Bias
+        print("{}: {} bias weights in {}th layer"
+              .format(weights[1].shape,
+                      reduce(operator.mul, weights[1].shape, 1),
+                      layer_count))
+        data = weights[1].flatten()
+        data_small = np.array([el for el in data if abs(el) < small_thres])
+        print("< {}: {}".format(small_thres, len(data_small)))
+        sns.distplot(data, hist=False, norm_hist=False, kde=True, ax=ax2,
+                     label=str(layer_count))
+        layer_count += 1
+    ax1.set_title('Filter weights')
+    ax2.set_title('Bias weights')
+    ax1.legend()
+    ax2.legend()
+    sns.plt.show()
+
+
+def show_batchnorm_weight_dist(model):
+    layer_count = 1
+    f, (ax1, ax2) = plt.subplots(1, 2)
+    layer_count = 0
+    for layer in model.layers:
+        if isinstance(layer, keras.layers.normalization.BatchNormalization):
+            weights = layer.get_weights()
+            data = weights[0].flatten()
+            sns.distplot(data, hist=False, norm_hist=False, kde=True, ax=ax1,
+                         label=str(layer_count))
+            data = weights[1].flatten()
+            sns.distplot(data, hist=False, norm_hist=False, kde=True, ax=ax2,
+                         label=str(layer_count))
+        layer_count += 1
+    ax1.set_title('gamma weights')
+    ax2.set_title('beta weights')
+    ax1.legend()
+    ax2.legend()
+    sns.plt.show()
+
+
 def main(data_module, model_path):
     model = load_model(model_path)
 
@@ -51,75 +135,11 @@ def main(data_module, model_path):
     X_train = data_module.preprocess(X_train)
     X_test = data_module.preprocess(X_test)
 
-    for layer_index in range(len(model.layers)):
-        # layer_index = 3
-        print(model.layers[layer_index])
-        act = get_activations(model, layer_index, X_train[:32])[0]
-        for i in [0, 10, 30]:
-            scipy.misc.imshow(X_train[i])
-            plt.figure(figsize=(15, 15))
-            plt.title('conv1 weights')
-            mosaik = make_mosaic(act[i], 8, 4)
-            scipy.misc.imshow(mosaik)
-            data = act[i].flatten()
-            ax = plt.axes()
-            sns.distplot(data, hist=True, norm_hist=False, kde=False, ax=ax)
-            ax.set_title('activation for input {}'.format(i))
-            sns.plt.show()
+    show_conv_act_distrib(model, X_train[0])
 
     print("## Weight analyzation")
-    layer_count = 1
-    for layer in model.layers:
-        if isinstance(layer, keras.layers.normalization.BatchNormalization):
-            weights = layer.get_weights()
-            print("--BatchNorm:")
-            data = weights[0].flatten()
-            ax = plt.axes()
-            sns.distplot(data, hist=True, norm_hist=False, kde=False, ax=ax)
-            ax.set_title('gamma weights')
-            sns.plt.show()
-            #
-            data = weights[1].flatten()
-            ax = plt.axes()
-            sns.distplot(data, hist=True, norm_hist=False, kde=False, ax=ax)
-            ax.set_title('beta weights')
-            sns.plt.show()
-            print(weights[2].shape)
-            print(weights[3].shape)
-            print("--")
-        if not isinstance(layer, keras.layers.convolutional.Conv2D):
-            continue
-        weights = layer.get_weights()
-
-        # Filter
-        print("{}: {} filter weights in {}th layer"
-              .format(weights[0].shape,
-                      reduce(operator.mul, weights[0].shape, 1),
-                      layer_count))
-        data = weights[0].flatten()
-        data = np.array([el for el in data if abs(el) < 10**-5])
-        print("small: {}".format(len(data)))
-        if len(data) < 2:
-            continue
-        ax = plt.axes()
-        sns.distplot(data, hist=True, norm_hist=False, kde=False, ax=ax)
-        ax.set_title('Filter weights')
-        sns.plt.show()
-
-        # Bias
-        continue
-        print("{}: {} bias weights in {}th layer"
-              .format(weights[1].shape,
-                      reduce(operator.mul, weights[1].shape, 1),
-                      layer_count))
-        data = weights[1].flatten()
-        data = np.array([el for el in data if abs(el) < 10**-3])
-        ax = plt.axes()
-        sns.distplot(data, hist=True, norm_hist=False, kde=False, ax=ax)
-        ax.set_title('Bias weights')
-        sns.plt.show()
-        layer_count += 1
-        # sys.exit()
+    show_conv_weight_dist(model)
+    show_batchnorm_weight_dist(model)
 
 
 def get_parser():
