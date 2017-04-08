@@ -175,7 +175,8 @@ def handle_hierarchies(config, data_module, X_train, y_train, X_test, y_test):
             'X_test': X_test, 'y_test': y_test}
 
 
-def main(data_module, model_module, optimizer_module, filename, config):
+def main(data_module, model_module, optimizer_module, filename, config,
+         use_val=False):
     """Patch everything together."""
     batch_size = config['train']['batch_size']
     nb_epoch = config['train']['epochs']
@@ -186,7 +187,12 @@ def main(data_module, model_module, optimizer_module, filename, config):
 
     X_train, y_train = data['x_train'], data['y_train']
     X_train = data_module.preprocess(X_train)
-    X_test, y_test = data['x_test'], data['y_test']
+    if 'use_val' in config['train']:
+        use_val = config['train']['use_val']
+    if use_val:
+        X_test, y_test = data['x_val'], data['y_val']
+    else:
+        X_test, y_test = data['x_test'], data['y_test']
     X_test = data_module.preprocess(X_test)
 
     # load hierarchy, if present
