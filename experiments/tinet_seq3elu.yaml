@@ -1,0 +1,44 @@
+dataset:
+  script_path: ../datasets/tiny_imagenet.py
+model:
+  script_path: ../models/seq3elu.py
+optimizer:
+  script_path: ../optimizers/adam_keras.py
+  initial_lr: 0.0001
+train:
+  script_path: ../train/train_keras.py
+  artifacts_path: ../artifacts/tinet_seq3elu/
+  model_output_fname: tinet_seq3elu.h5
+  history_fname: tinet_seq3elu_history.csv
+  checkpoint_fname: tinet_seq3elu_chk.h5
+  batch_size: 64
+  epochs: 1000
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0.1
+    shear_range: 0.1
+    channel_shift_range: 0.05
+    featurewise_center: False
+    zca_whitening: False
+evaluate:
+  batch_size: 1000
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0.1
+    shear_range: 0.1
+    channel_shift_range: 0.05
+    featurewise_center: False
+    zca_whitening: False
