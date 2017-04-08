@@ -192,7 +192,7 @@ def load_data():
 
     Returns
     -------
-    Tuple of Numpy arrays: `(x_train, y_train), x_test`.
+    dict
     """
     # Download if not already done
     url = 'http://benchmark.ini.rub.de/Dataset/'
