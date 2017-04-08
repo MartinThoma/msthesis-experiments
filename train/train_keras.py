@@ -24,6 +24,7 @@ import sys
 import collections
 from copy import deepcopy
 from keras.models import load_model
+import time
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -265,11 +266,13 @@ def main(data_module, model_module, optimizer_module, filename, config,
 
     if not da:
         print('Not using data augmentation.')
+        t0 = time.time()
         model.fit(X_train, Y_train,
                   batch_size=batch_size,
                   epochs=nb_epoch,
                   validation_data=(X_test, Y_test),
                   shuffle=True)
+        t1 = time.time()
     else:
         print('Using real-time data augmentation.')
 
@@ -334,6 +337,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
         #                                verbose=1)
         callbacks = [checkpoint, es]  # remote,
         steps_per_epoch = X_train.shape[0] // batch_size
+        t0 = time.time()
         history_cb = model.fit_generator(datagen.flow(X_train, Y_train,
                                          batch_size=batch_size),
                                          steps_per_epoch=steps_per_epoch,
@@ -348,6 +352,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
                   validation_data=(X_test, Y_test),
                   shuffle=True,
                   callbacks=callbacks)
+        t1 = time.time()
         loss_history = history_cb.history["loss"]
         acc_history = history_cb.history["acc"]
         val_acc_history = history_cb.history["val_acc"]
@@ -365,6 +370,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
             writer = csv.writer(fp, delimiter=',')
             writer.writerows([("loss", "acc", "val_acc")])
             writer.writerows(data)
+    print("wall-clock training time: {}s".format(t1 - t0))
     model_fn = os.path.join(config['train']['artifacts_path'],
                             config['train']['model_output_fname'])
     model_fn = get_nonexistant_path(model_fn)
