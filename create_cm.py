@@ -15,6 +15,7 @@ import imp
 import pprint
 import collections
 import os
+import time
 train_keras = imp.load_source('train_keras', "train/train_keras.py")
 from train_keras import get_level, handle_hierarchies, get_old_cli2new_cli
 # from msthesis_utils import make_mosaic
@@ -32,6 +33,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
 
 def run_model_prediction(model, config, X_train, X, n_classes):
     """Run (non)augmented model prediction."""
+    t0 = time.time()
     if config['evaluate']['augmentation_factor'] > 1:
         # Test time augmentation
         da = config['evaluate']['data_augmentation']
@@ -118,6 +120,10 @@ def run_model_prediction(model, config, X_train, X, n_classes):
             print("\t{:>7} of {}".format(index_sample, len(X)))
     else:
         y_pred = model.predict(X)
+    t1 = time.time()
+    pred_time = t1 - t0
+    print("Wall-clock prediction time: {} ({} s/sample)"
+          .format(pred_time, pred_time / len(X)))
     return y_pred
 
 
