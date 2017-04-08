@@ -23,6 +23,7 @@ import os
 import sys
 import collections
 from copy import deepcopy
+from keras.models import load_model
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -232,6 +233,27 @@ def main(data_module, model_module, optimizer_module, filename, config,
 
     model = model_module.create_model(nb_classes, input_shape)
     print("Model created")
+
+    if 'initializing_model_path' in config['model']:
+        init_model_path = config['model']['initializing_model_path']
+        if not os.path.isfile(init_model_path):
+            logging.error("initializing_model={} not found"
+                          .format(init_model_path))
+            sys.exit(-1)
+        init_model = load_model(init_model_path)
+        layer_dict_init = dict([(layer.name, layer)
+                                for layer in init_model.layers])
+        layer_dict_model = dict([(layer.name, layer)
+                                 for layer in model.layers])
+        for layer_name in layer_dict_model.keys():
+            if layer_name in layer_dict_init:
+                print("\tLoad layer weights '{}'".format(layer_name))
+                weights = layer_dict_init[layer_name].get_weights()
+                try:
+                    layer_dict_model[layer_name].set_weights(weights)
+                except ValueError:
+                    print("\t\twrong shape - skip")
+        logging.info("Done initializing")
 
     model.summary()
     optimizer = optimizer_module.get_optimizer(config)
