@@ -13,7 +13,6 @@ from keras.regularizers import l2
 def create_model(nb_classes, input_shape):
     """Create a VGG-16 like model."""
     model = Sequential()
-    print("input_shape: %s" % str(input_shape))
     # input_shape = (None, None, 3)  # for fcn
     model.add(Convolution2D(32, (3, 3), padding='same',
                             input_shape=input_shape,
