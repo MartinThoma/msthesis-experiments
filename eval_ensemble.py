@@ -78,7 +78,7 @@ def get_bin(x, n=0):
     return format(x, 'b').zfill(n)
 
 
-def main(ensemble_fname):
+def main(ensemble_fname, evaluate_training_data):
     # Read YAML file
     with open(ensemble_fname) as data_file:
         config = yaml.load(data_file)
@@ -123,8 +123,12 @@ def main(ensemble_fname):
                                                       test_size=0.10,
                                                       random_state=42)
 
-    X_eval = X_test
-    y_eval = y_test
+    if evaluate_training_data:
+        X_eval = X_train
+        y_eval = y_test
+    else:
+        X_eval = X_test
+        y_eval = y_test
 
     # Load models
     model_names = natsorted(config["models"])
@@ -142,20 +146,28 @@ def main(ensemble_fname):
         pred = run_model_prediction(model, config, X_train, X_eval, n_classes)
         y_preds.append(pred)
 
+    accuracies = []
+
     for model_index, y_val_pred in enumerate(y_preds):
         cm = calculate_cm(y_eval, y_val_pred, n_classes)
-        acc = sum([cm[i][i] for i in range(n_classes)]) / float(cm.sum())
+        acc = sum([cm[i][i] for i in range(n_classes)]) / float(cm.sum()) * 100
+        accuracies.append(acc)
         print("Cl #{} ({}): accuracy: {:0.2f}".format(model_index + 1,
                                                       model_names[model_index],
-                                                      acc * 100))
+                                                      acc))
+
+    accuracies = np.array(accuracies)
+    print("Mean single acc={} (std={})".format(np.mean(accuracies),
+                                               np.std(accuracies)))
+
     max_acc = 0.0
-    for x in range(1, 2**len(y_preds) - 1):
+    for x in range(1, 2**len(y_preds)):
         bitstring = get_bin(x, len(y_preds))
         y_preds_take = [p for p, i in zip(y_preds, bitstring) if i == "1"]
         y_val_pred = sum(y_preds_take) / bitstring.count("1")
         cm = calculate_cm(y_eval, y_val_pred, n_classes)
         acc = sum([cm[i][i] for i in range(n_classes)]) / float(cm.sum())
-        if acc >= max_acc:
+        if acc >= max_acc or x == (2**len(y_preds) - 1):
             print("Ensemble Accuracy: {:0.2f}% ({})".format(acc * 100,
                                                             bitstring))
             max_acc = acc
@@ -174,9 +186,14 @@ def get_parser():
                         dest="ensemble_fname",
                         help="File to describe an ensemble.",
                         metavar="FILE")
+    parser.add_argument("--train",
+                        action="store_true",
+                        dest="evaluate_training_data",
+                        default=False,
+                        help="Evaluate on the training set")
     return parser
 
 
 if __name__ == "__main__":
     args = get_parser().parse_args()
-    main(args.ensemble_fname)
+    main(args.ensemble_fname, args.evaluate_training_data)
