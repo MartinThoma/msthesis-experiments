@@ -10,6 +10,7 @@ from keras.models import load_model
 from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 import io
+import csv
 import json
 import imp
 import pprint
@@ -127,6 +128,15 @@ def run_model_prediction(model, config, X_train, X, n_classes):
     return y_pred
 
 
+def _write_preds(y_preds, class_ids, fpath):
+    """Write predictions to a CSV file."""
+    with open(fpath, 'w') as fp:
+        writer = csv.writer(fp, delimiter=',')
+        writer.writerow(["i"] + class_ids)
+        for i, y_pred in enumerate(y_preds):
+            writer.writerow([i] + list(y_pred))
+
+
 def _calculate_cm(config, model, X_train, X, y, n_classes, smooth):
     y_i = y.flatten()
     y_pred = run_model_prediction(model, config, X_train, X, n_classes)
@@ -144,7 +154,7 @@ def _calculate_cm(config, model, X_train, X, y, n_classes, smooth):
         y_pred_i = y_pred.argmax(1)
         for i, j in zip(y_i, y_pred_i):
             cm[i][j] += 1
-    return cm
+    return {'cm': cm, 'y_pred': y_pred}
 
 
 def _write_cm(cm, path):
@@ -196,26 +206,35 @@ def create_cm(data_module, config, smooth, model_path):
         y_train = ret['y_train']
         X_test = ret['X_test']
         y_test = ret['y_test']
+        remaining_cls = ret['remaining_cls']
     nb_classes = data_module.n_classes
     logging.info("# classes = {}".format(data_module.n_classes))
 
     # Calculate confusion matrix for training set
-    cm = _calculate_cm(config, model, X_train, X_train, y_train, nb_classes,
-                       smooth)
+    ret = _calculate_cm(config, model, X_train, X_train, y_train, nb_classes,
+                        smooth)
+    cm = ret['cm']
     correct_count = sum([cm[i][i] for i in range(nb_classes)])
     acc = correct_count / float(cm.sum())
     print("Accuracy (Train): {:0.2f}% ({} of {} wrong)"
           .format(acc * 100, cm.sum() - correct_count, cm.sum()))
     _write_cm(cm, path=os.path.join(artifacts_path, 'cm-train.json'))
+    _write_preds(ret['y_pred'],
+                 remaining_cls,
+                 os.path.join(artifacts_path, 'preds.train.csv'))
 
     # Calculate confusion matrix for test set
-    cm = _calculate_cm(config, model, X_train, X_test, y_test, nb_classes,
-                       smooth)
+    ret = _calculate_cm(config, model, X_train, X_test, y_test, nb_classes,
+                        smooth)
+    cm = ret['cm']
     correct_count = sum([cm[i][i] for i in range(nb_classes)])
     acc = correct_count / float(cm.sum())
     print("Accuracy (Test): {:0.2f}% ({} of {} wrong)"
           .format(acc * 100, cm.sum() - correct_count, cm.sum()))
     _write_cm(cm, path=os.path.join(artifacts_path, 'cm-test.json'))
+    _write_preds(ret['y_pred'],
+                 remaining_cls,
+                 os.path.join(artifacts_path, 'preds.test.csv'))
 
     # Calculate the accuracy for each sub-group
     if 'hierarchy_path' in config['dataset']:
@@ -233,7 +252,7 @@ def create_cm(data_module, config, smooth, model_path):
                     print("\t--- (no elements)")
                 else:
                     acc = correct / float(all_)
-                    print("\t{:0.2f}%".format(acc * 100))
+                    print("\t{:0.2f}% (all: {})".format(acc * 100, all_))
 
 
 def get_parser():

@@ -149,7 +149,7 @@ def handle_hierarchies(config, data_module, X_train, y_train, X_test, y_test):
 
     Returns
     -------
-    list
+    dict
         Hierarchy
     """
     with open(config['dataset']['hierarchy_path']) as data_file:
@@ -174,7 +174,8 @@ def handle_hierarchies(config, data_module, X_train, y_train, X_test, y_test):
         y_test = apply_hierarchy(hierarchy, y_test)
     return {'hierarchy': hierarchy,
             'X_train': X_train, 'y_train': y_train,
-            'X_test': X_test, 'y_test': y_test}
+            'X_test': X_test, 'y_test': y_test,
+            'remaining_cls': remaining_cls}
 
 
 def main(data_module, model_module, optimizer_module, filename, config,
