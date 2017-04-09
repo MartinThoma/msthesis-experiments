@@ -16,7 +16,7 @@ img_rows = 28
 img_cols = 28
 img_channels = 1
 
-_mean_filename = "hasy-mean.npy"
+_mean_filename = "mnist-mean.npy"
 
 
 def load_data(path='mnist.npz'):
