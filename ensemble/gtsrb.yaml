@@ -1,10 +1,29 @@
 dataset:
   script_path: ../datasets/gtsrb.py
-  hierarchy_path: ../datasets/gtsrb-hierarchy.json
-  subset: []
-  coarse: False
 models:
-- "../artifacts/gtsrb_seq2_keras/gtsrb_seq.h5"
-- "../artifacts/gtsrb_seq2_keras/gtsrb_seq-1.h5"
-- "../artifacts/gtsrb_seq2_keras/gtsrb_seq-2.h5"
-- "../artifacts/gtsrb_seq3/gtsrb_seq.h5"
+- "../artifacts/gtsrb_baseline/gtsrb_baseline.h5"
+- "../artifacts/gtsrb_baseline/gtsrb_baseline-1.h5"
+- "../artifacts/gtsrb_baseline/gtsrb_baseline-2.h5"
+- "../artifacts/gtsrb_baseline/gtsrb_baseline-3.h5"
+- "../artifacts/gtsrb_baseline/gtsrb_baseline-4.h5"
+- "../artifacts/gtsrb_baseline/gtsrb_baseline-5.h5"
+- "../artifacts/gtsrb_baseline/gtsrb_baseline-6.h5"
+- "../artifacts/gtsrb_baseline/gtsrb_baseline-7.h5"
+- "../artifacts/gtsrb_baseline/gtsrb_baseline-8.h5"
+- "../artifacts/gtsrb_baseline/gtsrb_baseline-9.h5"
+evaluate:
+  batch_size: 10000
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
