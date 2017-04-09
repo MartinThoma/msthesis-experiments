@@ -10,10 +10,10 @@ import scipy.misc
 
 n_classes = 10
 labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-WIDTH = 28
-HEIGHT = 28
-img_rows = 28
-img_cols = 28
+WIDTH = 32  # 28
+HEIGHT = 32  # 28
+img_rows = 32  # 28
+img_cols = 32  # 28
 img_channels = 1
 
 _mean_filename = "mnist-mean.npy"
@@ -54,6 +54,7 @@ def preprocess(x, subtact_mean=False):
     for i, x_i in enumerate(x):
         x_new[i] = scipy.misc.imresize(x_i, (32, 32))
     x = x_new
+    x = x.astype('float32')
     if not subtact_mean:
         x /= 255.0
     else:
@@ -62,6 +63,7 @@ def preprocess(x, subtact_mean=False):
         mean_image = np.load(mean_path)
         x -= mean_image
         x /= 128.
+    x = x.reshape(x.shape[0], x.shape[1], x.shape[2], 1)
     return x
 
 
