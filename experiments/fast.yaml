@@ -7,13 +7,10 @@ optimizer:
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
+  artifacts_path: ../artifacts/fast/
   batch_size: 32
   epochs: 1
   data_augmentation: False
-  artifacts_path: ../artifacts/gtsrb_seq_keras_fast/
-  model_output_fname: gtsrb_seq.h5
-  history_fname: gtsrb_seq_history.csv
-  checkpoint_fname: gtsrb_seq_chk.h5
 evaluate:
   batch_size: 1000
   augmentation_factor: 32

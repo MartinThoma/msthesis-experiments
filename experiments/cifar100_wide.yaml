@@ -8,9 +8,6 @@ optimizer:
 train:
   script_path: ../train/train_keras.py
   artifacts_path: ../artifacts/cifar100_wide_resnet/
-  model_output_fname: cifar100_wide_resnet.h5
-  history_fname: cifar100_wide_resnet_history.csv
-  checkpoint_fname: cifar100_wide_resnet_chk.h5
   batch_size: 64
   epochs: 1000
   data_augmentation:

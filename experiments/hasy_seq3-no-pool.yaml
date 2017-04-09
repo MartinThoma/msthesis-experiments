@@ -8,9 +8,6 @@ optimizer:
 train:
   script_path: ../train/train_keras.py
   artifacts_path: ../artifacts/hasy_seq3-no-pooling/
-  model_output_fname: hasy_seq3-no-pooling.h5
-  history_fname: hasy_seq3-no-pooling_history.csv
-  checkpoint_fname: hasy_seq3-no-pooling_chk.h5
   batch_size: 64
   epochs: 200
   data_augmentation:

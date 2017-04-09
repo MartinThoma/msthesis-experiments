@@ -1,19 +1,13 @@
 dataset:
-  script_path: ../datasets/cifar100_keras.py
-  hierarchy_path: ../datasets/cifar100-hierarchy.json
-  subset: [5]
-  coarse: False
+  script_path: ../datasets/svhn.py
 model:
-  script_path: ../models/seq3.py
+  script_path: ../models/baseline.py
 optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
-  artifacts_path: ../artifacts/cifar100_seq3-root-g1/
-  model_output_fname: cifar100_seq3-root-g1.h5
-  history_fname: cifar100_seq3-root-g1_history.csv
-  checkpoint_fname: cifar100_seq3-root-g1_chk.h5
+  artifacts_path: ../artifacts/svhn_baseline/
   batch_size: 64
   epochs: 300
   data_augmentation:
@@ -22,7 +16,7 @@ train:
     rotation_range: 15
     width_shift_range: 0.15
     height_shift_range: 0.15
-    horizontal_flip: True
+    horizontal_flip: False
     vertical_flip: False
     hue_shift: 0.2
     saturation_scale: 0.5
@@ -43,7 +37,7 @@ evaluate:
     rotation_range: 5
     width_shift_range: 0.15
     height_shift_range: 0.15
-    horizontal_flip: True
+    horizontal_flip: False
     vertical_flip: False
     zoom_range: 0.2
     shear_range: 0.1

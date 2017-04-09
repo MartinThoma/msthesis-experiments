@@ -7,10 +7,7 @@ optimizer:
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
+  artifacts_path: ../artifacts/hasy_dense/
   batch_size: 64
   epochs: 50
   data_augmentation: False
-  artifacts_path: ../artifacts/hasy_dense/
-  model_output_fname: hasy_dense.h5
-  history_fname: hasy_dense_history.csv
-  checkpoint_fname: hasy_dense_chk.h5

@@ -31,9 +31,6 @@ train:
     channel_shift_range: 0.1
     featurewise_center: False
     zca_whitening: False
-  model_output_fname: gtsrb_seq.h5
-  history_fname: gtsrb_seq_history.csv
-  checkpoint_fname: gtsrb_seq_chk.h5
 evaluate:
   batch_size: 1000
   augmentation_factor: 32

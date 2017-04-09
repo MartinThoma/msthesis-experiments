@@ -1,16 +1,17 @@
 dataset:
   script_path: ../datasets/cifar100_keras.py
   hierarchy_path: ../datasets/cifar100-hierarchy.json
-  subset: [36]
+  subset: [5]
   coarse: False
 model:
-  script_path: ../models/seq3.py
+  script_path: ../models/baseline.py
+  initializing_model_path: ../artifacts/cifar100_baseline/cifar100_baseline-1.h5
 optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
-  artifacts_path: ../artifacts/cifar100_seq3-root-g7/
+  artifacts_path: ../artifacts/cifar100_baseline-root-g1/
   batch_size: 64
   epochs: 300
   data_augmentation:

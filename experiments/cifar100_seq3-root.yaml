@@ -4,16 +4,13 @@ dataset:
   coarse: False
   subset: []
 model:
-  script_path: ../models/seq3.py
+  script_path: ../models/baseline.py
 optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
-  artifacts_path: ../artifacts/cifar100_seq3-root/
-  model_output_fname: cifar100_seq3-root.h5
-  history_fname: cifar100_seq3-root_history.csv
-  checkpoint_fname: cifar100_seq3-root_chk.h5
+  artifacts_path: ../artifacts/cifar100_baseline-root/
   batch_size: 64
   epochs: 300
   data_augmentation:

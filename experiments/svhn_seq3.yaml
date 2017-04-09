@@ -8,9 +8,6 @@ optimizer:
 train:
   script_path: ../train/train_keras.py
   artifacts_path: ../artifacts/svhn_seq3/
-  model_output_fname: svhn_seq3.h5
-  history_fname: svhn_seq3_history.csv
-  checkpoint_fname: svhn_seq3_chk.h5
   batch_size: 64
   epochs: 300
   data_augmentation:

@@ -10,6 +10,7 @@ optimizer:
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
+  artifacts_path: ../artifacts/gtsrb_seq2_keras/
   batch_size: 64
   epochs: 200
   data_augmentation:
@@ -30,7 +31,3 @@ train:
     channel_shift_range: 0.1
     featurewise_center: False
     zca_whitening: False
-  artifacts_path: ../artifacts/gtsrb_seq2_keras/
-  model_output_fname: gtsrb_seq.h5
-  history_fname: gtsrb_seq_history.csv
-  checkpoint_fname: gtsrb_seq_chk.h5

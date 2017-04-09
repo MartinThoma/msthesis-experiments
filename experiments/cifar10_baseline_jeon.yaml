@@ -10,9 +10,6 @@ optimizer:
 train:
   script_path: ../train/train_keras.py
   artifacts_path: ../artifacts/cifar10_baseline_jeon/
-  model_output_fname: cifar10_baseline_jeon.h5
-  history_fname: cifar10_baseline_jeon_history.csv
-  checkpoint_fname: cifar10_baseline_jeon_chk.h5
   batch_size: 64
   epochs: 300
   data_augmentation:

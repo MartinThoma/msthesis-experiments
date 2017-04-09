@@ -28,6 +28,3 @@ train:
     featurewise_center: False
     zca_whitening: False
   artifacts_path: ../artifacts/cifar10_seq-aug/
-  model_output_fname: cifar10_seq.h5
-  history_fname: cifar10_seq_history.csv
-  checkpoint_fname: cifar10_seq_chk.h5

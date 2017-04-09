@@ -7,6 +7,7 @@ optimizer:
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
+  artifacts_path: ../artifacts/cifar100_seq_keras-aug/
   batch_size: 64
   epochs: 300
   data_augmentation:
@@ -27,7 +28,3 @@ train:
     channel_shift_range: 0.1
     featurewise_center: False
     zca_whitening: False
-  artifacts_path: ../artifacts/cifar100_seq_keras-aug/
-  model_output_fname: cifar100_seq.h5
-  history_fname: cifar100_seq_history.csv
-  checkpoint_fname: cifar100_seq_chk.h5

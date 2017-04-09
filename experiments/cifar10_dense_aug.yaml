@@ -8,9 +8,6 @@ optimizer:
 train:
   script_path: ../train/train_keras.py
   artifacts_path: ../artifacts/cifar10_dense_aug/
-  model_output_fname: cifar10_dense_aug.h5
-  history_fname: cifar10_dense_aug_history.csv
-  checkpoint_fname: cifar10_dense_aug_chk.h5
   batch_size: 64
   epochs: 300
   data_augmentation:

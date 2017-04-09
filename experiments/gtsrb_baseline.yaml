@@ -1,30 +1,31 @@
 dataset:
   script_path: ../datasets/gtsrb.py
 model:
-  script_path: ../models/seq3elu.py
-  initializing_model_path: ../artifacts/cifar100_seq3elu/cifar100_seq3elu-3.h5
+  script_path: ../models/baseline.py
 optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
-  artifacts_path: ../artifacts/cifar10_seq3elu/
-  model_output_fname: cifar10_seq3elu.h5
-  history_fname: cifar10_seq3elu_history.csv
-  checkpoint_fname: cifar10_seq3elu_chk.h5
+  artifacts_path: ../artifacts/gtsrb_baseline/
   batch_size: 64
-  epochs: 1000
+  epochs: 300
   data_augmentation:
     samplewise_center: False
     samplewise_std_normalization: False
-    rotation_range: 0
-    width_shift_range: 0.1
-    height_shift_range: 0.1
-    horizontal_flip: True
+    rotation_range: 15
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
     vertical_flip: False
-    zoom_range: 0
-    shear_range: 0
-    channel_shift_range: 0
+    hue_shift: 0.2
+    saturation_scale: 0.5
+    saturation_shift: 0.2
+    value_scale: 0.5
+    value_shift: 0.2
+    zoom_range: 0.5
+    shear_range: 0.1
+    channel_shift_range: 0.1
     featurewise_center: False
     zca_whitening: False
 evaluate:
@@ -33,13 +34,13 @@ evaluate:
   data_augmentation:
     samplewise_center: False
     samplewise_std_normalization: False
-    rotation_range: 0
+    rotation_range: 5
     width_shift_range: 0.15
     height_shift_range: 0.15
-    horizontal_flip: True
+    horizontal_flip: False
     vertical_flip: False
-    zoom_range: 0
-    shear_range: 0
-    channel_shift_range: 0
+    zoom_range: 0.2
+    shear_range: 0.1
+    channel_shift_range: 0.0
     featurewise_center: False
     zca_whitening: False

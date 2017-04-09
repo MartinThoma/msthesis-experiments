@@ -7,6 +7,7 @@ optimizer:
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
+  artifacts_path: ../artifacts/hasy_seq3/
   batch_size: 64
   epochs: 200
   data_augmentation:
@@ -22,7 +23,3 @@ train:
     channel_shift_range: 0
     featurewise_center: False
     zca_whitening: False
-  artifacts_path: ../artifacts/hasy_seq3/
-  model_output_fname: hasy_seq3.h5
-  history_fname: hasy_seq3_history.csv
-  checkpoint_fname: hasy_seq3_chk.h5
