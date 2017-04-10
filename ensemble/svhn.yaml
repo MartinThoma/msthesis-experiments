@@ -12,18 +12,18 @@ models:
 - "../artifacts/svhn_baseline/svhn_baseline-8.h5"
 - "../artifacts/svhn_baseline/svhn_baseline-9.h5"
 evaluate:
-  batch_size: 10000
-  augmentation_factor: 32
+  batch_size: 1627
+  augmentation_factor: 1
   data_augmentation:
     samplewise_center: False
     samplewise_std_normalization: False
     rotation_range: 0
     width_shift_range: 0.15
     height_shift_range: 0.15
-    horizontal_flip: True
+    horizontal_flip: False
     vertical_flip: False
     zoom_range: 0
-    shear_range: 0
+    shear_range: 0.1
     channel_shift_range: 0
     featurewise_center: False
     zca_whitening: False

@@ -12,7 +12,7 @@ models:
 - "../artifacts/cifar10_baseline/cifar10_baseline-8.h5"
 - "../artifacts/cifar10_baseline/cifar10_baseline-9.h5"
 evaluate:
-  batch_size: 10000
+  batch_size: 5000
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False
