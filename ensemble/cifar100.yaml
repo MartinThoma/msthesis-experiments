@@ -42,7 +42,7 @@ bad:
 - "../artifacts/cifar100-models/cifar100.h5"
 - "../artifacts/cifar100_resnetpa/cifar100_resnetpa_chk.h5"
 evaluate:
-  batch_size: 10000
+  batch_size: 5000
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False
