@@ -20,8 +20,8 @@ import csv
 from six.moves import cPickle as pickle
 
 n_classes = 200
-img_rows = 32  # original is 64
-img_cols = 32  # original is 64
+img_rows = 64
+img_cols = 64
 img_channels = 3
 labels = None
 
@@ -121,8 +121,6 @@ def _get_val_data(train_dir, global_name):
     globals()[global_name] += files
     for file_ in files:
         img = scipy.misc.imread(file_, mode='RGB')
-        img = Image.fromarray(img)
-        img = img.resize((img_rows, img_cols), PIL.Image.ANTIALIAS)
         arr = np.array(img, dtype=np.uint8)
         x_train.append(arr)
         y_train.append(fname2cl[os.path.basename(file_)])
