@@ -1,7 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""Utility file for the STL10 dataset."""
+"""
+Utility file for the STL-10 dataset.
+
+See also
+--------
+Adam Coates, Honglak Lee, Andrew Y. Ng An Analysis of Single Layer Networks in
+Unsupervised Feature Learning AISTATS, 2011.
+
+https://cs.stanford.edu/~acoates/stl10/
+"""
 
 import numpy as np
 from keras.utils.data_utils import get_file
