@@ -26,6 +26,7 @@ from copy import deepcopy
 from keras.models import load_model
 import time
 import platform
+import datetime
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -185,6 +186,9 @@ def main(data_module, model_module, optimizer_module, filename, config,
     batch_size = config['train']['batch_size']
     nb_epoch = config['train']['epochs']
 
+    today = datetime.datetime.now()
+    datestring = today.strftime('%Y%m%d-%H%M-%S')
+
     # The data, shuffled and split between train and test sets:
     data = data_module.load_data()
     print("Data loaded.")
@@ -267,7 +271,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
     print("Building model...")
 
     checkpoint_fname = os.path.basename(config['train']['artifacts_path'])
-    checkpoint_fname = "{}_chk.h5".format(checkpoint_fname)
+    checkpoint_fname = "{}_{}_chk.h5".format(checkpoint_fname, datestring)
     model_chk_path = os.path.join(config['train']['artifacts_path'],
                                   checkpoint_fname)
     model_chk_path = get_nonexistant_path(model_chk_path)
@@ -370,7 +374,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
                      "%0.4f" % el[1],
                     "%0.4f" % el[2]) for el in history_data]
     history_fname = os.path.basename(config['train']['artifacts_path'])
-    history_fname = "{}_history.csv".format(history_fname)
+    history_fname = "{}_{}_history.csv".format(history_fname, datestring)
     csv_path = os.path.join(config['train']['artifacts_path'],
                             history_fname)
     csv_path = get_nonexistant_path(csv_path)
@@ -381,7 +385,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
     training_time = t1 - t0
     print("wall-clock training time: {}s".format(training_time))
     model_fn = os.path.basename(config['train']['artifacts_path'])
-    model_fn = "{}.h5".format(model_fn)
+    model_fn = "{}_{}.h5".format(model_fn, datestring)
     model_fn = os.path.join(config['train']['artifacts_path'], model_fn)
     model_fn = get_nonexistant_path(model_fn)
     model.save(model_fn)
@@ -390,7 +394,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
             'HOST': platform.node(),
             'epochs': len(history_data)}
     meta_train_fname = os.path.join(config['train']['artifacts_path'],
-                                    "train-meta.json")
+                                    "train-meta_{}.json".format(datestring))
     meta_train_fname = get_nonexistant_path(meta_train_fname)
     with open(meta_train_fname, 'w') as outfile:
         str_ = json.dumps(data,
