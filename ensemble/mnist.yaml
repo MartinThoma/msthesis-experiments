@@ -2,25 +2,25 @@ dataset:
   script_path: ../datasets/mnist.py
 models:
 - "../artifacts/mnist_baseline/mnist_baseline.h5"
+- "../artifacts/mnist_baseline/mnist_baseline_20170410-1323-06.h5"
+- "../artifacts/mnist_baseline/mnist_baseline_20170410-1326-05.h5"
+- "../artifacts/mnist_baseline/mnist_baseline_20170410-1441-29.h5"
+- "../artifacts/mnist_baseline/mnist_baseline_20170410-1443-10.h5"
+- "../artifacts/mnist_baseline/mnist_baseline_20170410-1447-59.h5"
+- "../artifacts/mnist_baseline/mnist_baseline_20170410-1701-00.h5"
+- "../artifacts/mnist_baseline/mnist_baseline_20170410-2219-47.h5"
+- "../artifacts/mnist_baseline/mnist_baseline_20170410-2220-33.h5"
 - "../artifacts/mnist_baseline/mnist_baseline-1.h5"
-- "../artifacts/mnist_baseline/mnist_baseline-2.h5"
-- "../artifacts/mnist_baseline/mnist_baseline-3.h5"
-- "../artifacts/mnist_baseline/mnist_baseline-4.h5"
-- "../artifacts/mnist_baseline/mnist_baseline-5.h5"
-- "../artifacts/mnist_baseline/mnist_baseline-6.h5"
-- "../artifacts/mnist_baseline/mnist_baseline-7.h5"
-- "../artifacts/mnist_baseline/mnist_baseline-8.h5"
-- "../artifacts/mnist_baseline/mnist_baseline-9.h5"
 evaluate:
   batch_size: 10000
-  augmentation_factor: 32
+  augmentation_factor: 1
   data_augmentation:
     samplewise_center: False
     samplewise_std_normalization: False
     rotation_range: 0
     width_shift_range: 0.15
     height_shift_range: 0.15
-    horizontal_flip: True
+    horizontal_flip: False
     vertical_flip: False
     zoom_range: 0
     shear_range: 0

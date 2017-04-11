@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/stl10.py
+models:
+- "../artifacts/stl10_baseline/stl10_baseline_20170410-1312-35.h5"
+- "../artifacts/stl10_baseline/stl10_baseline_20170410-1702-45.h5"
+- "../artifacts/stl10_baseline/stl10_baseline_20170410-1704-15.h5"
+- "../artifacts/stl10_baseline/stl10_baseline_20170410-1941-15.h5"
+- "../artifacts/stl10_baseline/stl10_baseline_20170410-1943-14.h5"
+- "../artifacts/stl10_baseline/stl10_baseline_20170410-2221-40.h5"
+- "../artifacts/stl10_baseline/stl10_baseline_20170410-2222-05.h5"
+- "../artifacts/stl10_baseline/stl10_baseline_20170410-2342-43.h5"
+- "../artifacts/stl10_baseline/stl10_baseline_20170410-2346-06.h5"
+- "../artifacts/stl10_baseline/stl10_baseline_20170411-0112-36.h5"
+evaluate:
+  batch_size: 1000
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
