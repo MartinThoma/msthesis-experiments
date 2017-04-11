@@ -148,13 +148,12 @@ def main(ensemble_fname, evaluate_training_data):
         cm = calculate_cm(y_eval, y_val_pred, n_classes)
         acc = sum([cm[i][i] for i in range(n_classes)]) / float(cm.sum()) * 100
         accuracies.append(acc)
-        print("Cl #{} ({}): accuracy: {:0.2f}".format(model_index + 1,
-                                                      model_names[model_index],
-                                                      acc))
+        print("Cl #{:>2} ({}): accuracy: {:0.2f}%"
+              .format(model_index + 1, model_names[model_index], acc))
 
     accuracies = np.array(accuracies)
-    print("Mean single acc={} (std={})".format(np.mean(accuracies),
-                                               np.std(accuracies)))
+    print("Mean single acc={:0.2f}% (std={:0.2f})".format(np.mean(accuracies),
+                                                          np.std(accuracies)))
 
     max_acc = 0.0
     for x in range(1, 2**len(y_preds)):
