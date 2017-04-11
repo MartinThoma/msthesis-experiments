@@ -163,7 +163,7 @@ def main(ensemble_fname, evaluate_training_data):
         y_val_pred = sum(y_preds_take) / bitstring.count("1")
         cm = calculate_cm(y_eval, y_val_pred, n_classes)
         acc = sum([cm[i][i] for i in range(n_classes)]) / float(cm.sum())
-        if acc >= max_acc or x == (2**len(y_preds) - 1):
+        if acc > max_acc or x == (2**len(y_preds) - 1):
             print("Ensemble Accuracy: {:0.2f}% ({})".format(acc * 100,
                                                             bitstring))
             max_acc = acc
