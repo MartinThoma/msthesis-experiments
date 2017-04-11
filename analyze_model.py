@@ -103,6 +103,7 @@ def show_conv_weight_dist(model, small_thres=10**-6):
         layer_index += 1
 
     layer_index = 0
+    filter_weights = []
     for layer in model.layers:
         if not isinstance(layer, keras.layers.convolutional.Conv2D):
             layer_index += 1
@@ -123,6 +124,7 @@ def show_conv_weight_dist(model, small_thres=10**-6):
                       reduce(operator.mul, weights[0].shape, 1),
                       layer_index))
         data = weights[0].flatten()
+        filter_weights.append(data)
         data_small = np.array([el for el in data if abs(el) < small_thres])
         print("< {}: {}".format(small_thres, len(data_small)))
         sns.distplot(data, hist=False, norm_hist=True, kde=True, ax=ax1,
@@ -145,8 +147,8 @@ def show_conv_weight_dist(model, small_thres=10**-6):
     ax2.legend()
     sns.plt.show()
 
-    # TODO!!!!!
-    ax = sns.boxplot(data=iris, orient="h", palette="Set2")
+    ax = sns.violinplot(data=filter_weights, orient="h", palette="Set2")
+    ax.set_title('Filter weight distribution by layer')
     sns.plt.show()
 
 
