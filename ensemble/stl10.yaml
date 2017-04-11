@@ -12,7 +12,7 @@ models:
 - "../artifacts/stl10_baseline/stl10_baseline_20170410-2346-06.h5"
 - "../artifacts/stl10_baseline/stl10_baseline_20170411-0112-36.h5"
 evaluate:
-  batch_size: 1000
+  batch_size: 500
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False
