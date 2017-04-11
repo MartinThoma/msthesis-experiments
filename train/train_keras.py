@@ -301,6 +301,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
                                shuffle=True,
                                callbacks=callbacks)
         t1 = time.time()
+        t2 = t1
     else:
         print('Using real-time data augmentation.')
 
@@ -354,6 +355,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
                                          epochs=nb_epoch,
                                          validation_data=(X_test, Y_test),
                                          callbacks=callbacks)
+        t1 = time.time()
         # Train one epoch without augmentation to make sure data distribution
         # is fit well
         model.fit(X_train, Y_train,
@@ -362,7 +364,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
                   validation_data=(X_test, Y_test),
                   shuffle=True,
                   callbacks=callbacks)
-        t1 = time.time()
+        t2 = time.time()
     loss_history = history_cb.history["loss"]
     acc_history = history_cb.history["acc"]
     val_acc_history = history_cb.history["val_acc"]
@@ -383,6 +385,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
         writer.writerows([("loss", "acc", "val_acc")])
         writer.writerows(history_data)
     training_time = t1 - t0
+    readjustment_time = t2- t1
     print("wall-clock training time: {}s".format(training_time))
     model_fn = os.path.basename(config['train']['artifacts_path'])
     model_fn = "{}_{}.h5".format(model_fn, datestring)
@@ -391,6 +394,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
     model.save(model_fn)
     # Store training meta data
     data = {'training_time': training_time,
+            'readjustment_time': readjustment_time,
             'HOST': platform.node(),
             'epochs': len(history_data)}
     meta_train_fname = os.path.join(config['train']['artifacts_path'],
