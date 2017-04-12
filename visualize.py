@@ -327,7 +327,7 @@ def extract_clusters(cm, labels, steps=10**4, lambda_=0.013):
         percentage : float
             Probability that two neighboring classes belong togehter
         """
-        n = int(len(cm) * (1.0 - percentage))
+        n = int(len(cm) * (1.0 - percentage)) - 1
         con = sorted(get_neighboring_connectivity(cm))
         return con[n]
 
