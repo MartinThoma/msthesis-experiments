@@ -47,7 +47,7 @@ def create_model(nb_classes, input_shape):
     model.add(Activation('elu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    model.add(Convolution2D(3, (3, 3), padding='same',
+    model.add(Convolution2D(3, (3, 3), padding='same',   # extremely thin!
                             kernel_initializer='he_uniform',
                             kernel_regularizer=l2(0.0001)))
     model.add(BatchNormalization())
