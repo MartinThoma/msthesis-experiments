@@ -2,7 +2,6 @@
 
 """Create a sequential model."""
 
-from keras import backend as K
 from keras.models import Sequential
 from keras.layers import Dropout, Activation
 from keras.layers import Convolution2D, MaxPooling2D
@@ -15,16 +14,23 @@ def create_model(nb_classes, input_shape):
     """Create a VGG-16 like model."""
     model = Sequential()
     # input_shape = (None, None, 3)  # for fcn
+    first = True
     min_feature_map_dimension = min(input_shape[:2])
     if min_feature_map_dimension < 32:
         print("ERROR: Please upsample the feature maps to have at least "
               "a size of 32 x 32. Currently, it has {}".format(input_shape))
     tmp = min_feature_map_dimension / 32.
     while tmp >= 2.:
-        model.add(Convolution2D(32, (3, 3), padding='same',
-                                input_shape=input_shape,
-                                kernel_initializer='he_uniform',
-                                kernel_regularizer=l2(0.0001)))
+        if first:
+            model.add(Convolution2D(32, (3, 3), padding='same',
+                                    kernel_initializer='he_uniform',
+                                    kernel_regularizer=l2(0.0001),
+                                    input_shape=input_shape))
+            first = False
+        else:
+            model.add(Convolution2D(32, (3, 3), padding='same',
+                                    kernel_initializer='he_uniform',
+                                    kernel_regularizer=l2(0.0001)))
         model.add(BatchNormalization())
         model.add(Activation('elu'))
         model.add(Convolution2D(32, (3, 3), padding='same',
@@ -34,10 +40,16 @@ def create_model(nb_classes, input_shape):
         model.add(Activation('elu'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         tmp /= 2
-    model.add(Convolution2D(32, (3, 3), padding='same',
-                            input_shape=input_shape,
-                            kernel_initializer='he_uniform',
-                            kernel_regularizer=l2(0.0001)))
+    if first:
+        model.add(Convolution2D(32, (3, 3), padding='same',
+                                kernel_initializer='he_uniform',
+                                kernel_regularizer=l2(0.0001),
+                                input_shape=input_shape))
+        first = False
+    else:
+        model.add(Convolution2D(32, (3, 3), padding='same',
+                                kernel_initializer='he_uniform',
+                                kernel_regularizer=l2(0.0001)))
     model.add(BatchNormalization())
     model.add(Activation('elu'))
     model.add(Convolution2D(32, (3, 3), padding='same',
