@@ -63,16 +63,23 @@ def load_data():
     url = 'http://ufldl.stanford.edu/housenumbers/'
     fname_train = 'train_32x32.mat'
     fname_test = 'test_32x32.mat'
+    fname_extra = 'extra_32x32.mat'
     # fname_extra = 'extra_32x32.mat'
     md5_train = 'e26dedcc434d2e4c54c9b2d4a06d8373'
     md5_test = 'eb5a983be6a315427106f1b164d9cef3'
+    md5_extra = 'a93ce644f1a588dc4d68dda5feec44a7'
     # md5_test_extra = 'fe31e9c9270bbcd7b84b7f21a9d9d9e5'
     fpath_train = _maybe_download(url, fname_train, md5_train)
     fpath_test = _maybe_download(url, fname_test, md5_test)
+    fpath_extra = _maybe_download(url, fname_extra, md5_extra)
 
     train_data = scipy.io.loadmat(fpath_train)
     test_data = scipy.io.loadmat(fpath_test)
+    extra_data = scipy.io.loadmat(fpath_extra)
     train_x, train_y = train_data['X'], _replace_10(train_data['y'])
+    extra_x, extra_y = extra_data['X'], _replace_10(extra_data['y'])
+    train_x = np.concatenate([train_x, extra_x], axis=-1)
+    train_y = np.concatenate([train_y, extra_y])
     test_x, test_y = test_data['X'], _replace_10(test_data['y'])
 
     data = {'x_train': train_x,
@@ -93,7 +100,7 @@ def load_data():
 def preprocess(x, subtact_mean=False):
     """Preprocess features."""
     x = x.astype('float32')
-    
+
     if not subtact_mean:
         x /= 255.0
     else:
