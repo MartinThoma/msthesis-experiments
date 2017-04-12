@@ -85,7 +85,6 @@ def run_model_prediction(model, config, X_train, X, n_classes):
         samples = config['evaluate']['batch_size']
         batch_arr = np.zeros([a_factor * samples] +
                              list(X[0].shape))
-        print("batch_arr.shape={}".format(batch_arr.shape))
         if len(X) % samples != 0:
             logging.warning(("len(X) % config['evaluate']['batch_size'] != 0 "
                              "(len(X)={})").format(len(X)))
