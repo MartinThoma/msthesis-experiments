@@ -54,6 +54,10 @@ def show_conv_act_distrib(model, X, show_feature_maps=False):
         layer_index += 1
 
     layer_index = 0
+    activations_by_layer_l = []
+    activations_by_layer_r = []
+    g1_labels = []
+    g2_labels = []
     for layer_index in range(len(model.layers)):
         act = get_activations(model, layer_index, X_train)[0]
         if show_feature_maps:
@@ -65,26 +69,29 @@ def show_conv_act_distrib(model, X, show_feature_maps=False):
                       keras.layers.convolutional.Conv2D):
             print("\tlayer {}: len(data)={}".format(layer_index, len(data)))
             if layer_index == first_layer_index:
-                color = 'red'
-                ax = ax1
+                activations_by_layer_l.append(data)
+                g1_labels.append(layer_index)
             elif layer_index == last_layer_index:
-                color = 'lime'
-                ax = ax1
+                activations_by_layer_l.append(data)
+                g1_labels.append(layer_index)
             else:
-                color = None
-                ax = ax2
-            if len(data) > 3:
-                _, p = scipy.stats.normaltest(data)
-                print("\tData is normal distributed (p={})".format(p))
-            sns.distplot(data, hist=False, norm_hist=False, kde=True, ax=ax,
-                         label=str(layer_index),
-                         color=color)
+                activations_by_layer_r.append(data)
+                g2_labels.append(layer_index)
         layer_index += 1
-    ax1.set_title('convolution activation of first layer')
+    sns.violinplot(data=activations_by_layer_l, orient="h",
+                   palette="Set2", ax=ax1)
+    ax1.set_yticklabels(g1_labels)
+    sns.violinplot(data=activations_by_layer_r, orient="h",
+                   palette="Set2", ax=ax2)
+    ax2.set_yticklabels(g2_labels)
+    ax1.set_title('Convolution activation of first layer and the last convolutional layer')
     ax1.legend()
-    ax2.set_title('convolution activations')
+    ax2.set_title('Convolution activations of middle layers')
     ax2.legend()
     sns.plt.show()
+
+    # ax.set_title('Filter weight distribution by layer')
+    # sns.plt.show()
 
 
 def show_conv_weight_dist(model, small_thres=10**-6):
@@ -104,6 +111,7 @@ def show_conv_weight_dist(model, small_thres=10**-6):
 
     layer_index = 0
     filter_weights = []
+    labels = []
     for layer in model.layers:
         if not isinstance(layer, keras.layers.convolutional.Conv2D):
             layer_index += 1
@@ -124,6 +132,7 @@ def show_conv_weight_dist(model, small_thres=10**-6):
                       reduce(operator.mul, weights[0].shape, 1),
                       layer_index))
         data = weights[0].flatten()
+        labels.append(layer_index)
         filter_weights.append(data)
         data_small = np.array([el for el in data if abs(el) < small_thres])
         print("< {}: {}".format(small_thres, len(data_small)))
@@ -147,8 +156,12 @@ def show_conv_weight_dist(model, small_thres=10**-6):
     ax2.legend()
     sns.plt.show()
 
-    ax = sns.violinplot(data=filter_weights, orient="h", palette="Set2")
-    ax.set_title('Filter weight distribution by layer')
+    f, (ax1, ax2) = plt.subplots(1, 2)
+    sns.violinplot(data=filter_weights[:1], orient="h", palette="Set2", ax=ax1)
+    sns.violinplot(data=filter_weights[1:2], orient="h", palette="Set2", ax=ax2)
+    ax1.set_yticklabels(labels[:1])
+    ax2.set_yticklabels(labels[1:2])
+    # f.set_title('Filter weight distribution by layer')
     sns.plt.show()
 
 
