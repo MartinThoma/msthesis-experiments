@@ -187,6 +187,7 @@ def create_cm(data_module, config, smooth, model_path):
         sys.exit(-1)
     logging.info("Load model {}".format(model_path))
     model = load_model(model_path)
+    model.summary()
 
     # The data, shuffled and split between train and test sets:
     data = data_module.load_data()
@@ -198,6 +199,7 @@ def create_cm(data_module, config, smooth, model_path):
     X_test = data_module.preprocess(X_test)
 
     # load hierarchy, if present
+    remaining_cls = [i for i in range(data_module.n_classes)]
     if 'hierarchy_path' in config['dataset']:
         ret = handle_hierarchies(config, data_module,
                                  X_train, y_train, X_test, y_test)
