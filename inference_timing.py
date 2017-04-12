@@ -4,6 +4,7 @@ import imp
 import os
 import sys
 import pprint
+import json
 import yaml
 import random
 import numpy as np
@@ -12,18 +13,23 @@ from keras.models import load_model
 train_keras = imp.load_source('train_keras', "train/train_keras.py")
 from run_training import make_paths_absolute
 import logging
+import datetime
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
                     stream=sys.stdout)
 
 
-def inference_timing(data_module, config, model_path, batch_size):
+def inference_timing(data_module, config, model_path, batch_sizes):
+    json_data = {'runs': []}
     artifacts_path = config['train']['artifacts_path']
+
     if model_path is None:
         model_path = os.path.basename(config['train']['artifacts_path'])
         model_path = "{}.h5".format(model_path)
         model_path = os.path.join(artifacts_path, model_path)
+    json_data['model_path'] = model_path
+
     # Load model
     if not os.path.isfile(model_path):
         logging.error("File {} does not exist. You might need to train it."
@@ -35,18 +41,36 @@ def inference_timing(data_module, config, model_path, batch_size):
     # The data, shuffled and split between train and test sets:
     data = data_module.load_data()
     print("Data loaded.")
-    times = []
-    x_train = data['x_train']
-    for i in range(1000):
-        start = random.randint(0, len(x_train) - batch_size)
-        X = x_train[start:start + batch_size]
-        t0 = time.time()
-        model.predict(X)
-        t1 = time.time()
-        times.append(t1 - t0)
-    times = np.array(times)
-    print("mean time={} (std={}, Batch size={})"
-          .format(np.mean(times), np.std(times), batch_size))
+
+    for run_i, batch_size in enumerate(batch_sizes):
+        json_data['runs'].append({'batch_size': batch_size})
+
+        times = []
+        x_train = data['x_train']
+        for i in range(1000):
+            start = random.randint(0, len(x_train) - batch_size)
+            X = x_train[start:start + batch_size]
+            t0 = time.time()
+            model.predict(X)
+            t1 = time.time()
+            if i < 100:
+                continue
+            times.append(t1 - t0)
+        times = np.array(times) * 1000
+        json_data['runs'][run_i]['mean_time'] = np.mean(times)
+        json_data['runs'][run_i]['std_time'] = np.std(times)
+        print("mean time={:0.0f}ms (std={}, Batch size={})"
+              .format(np.mean(times), np.std(times), batch_size))
+
+    today = datetime.datetime.now()
+    datestring = today.strftime('%Y%m%d-%H%M-%S')
+    json_fname = os.path.join(artifacts_path,
+                              "timing-{}.json".format(datestring))
+    with open(json_fname, 'w') as outfile:
+        str_ = json.dumps(json_data,
+                          indent=4, sort_keys=True,
+                          separators=(',', ': '), ensure_ascii=False)
+        outfile.write(str_)
 
 
 def get_parser():
@@ -63,11 +87,6 @@ def get_parser():
                         dest="model_fname",
                         help="path to a h5 keras model file",
                         default=None)
-    parser.add_argument("-n",
-                        dest="n",
-                        default=1,
-                        type=int,
-                        help="batch size")
     return parser
 
 
@@ -86,4 +105,4 @@ if __name__ == '__main__':
     dpath = experiment_meta['dataset']['script_path']
     sys.path.insert(1, os.path.dirname(dpath))
     data = imp.load_source('data', experiment_meta['dataset']['script_path'])
-    inference_timing(data, experiment_meta, args.model_fname, args.n)
+    inference_timing(data, experiment_meta, args.model_fname, [1, 128])

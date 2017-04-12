@@ -25,8 +25,16 @@ train_path: train/train.py
 * Keras 2.0 (adjusted [preprocessing/image.py](https://github.com/fchollet/keras/pull/6003), see misc directory)
 * seaborn
 
-## Plan
+## Run timining experiments
 
-* How do humans group classes?
-* Why do I use such an approach:
-    - Lower labeling cost
+Measuring inference time needs about 2 minutes:
+
+```
+$ ./inference_timing.py -f experiments/cifar10_baseline.yaml
+```
+
+Measuring training time takes about 70 minutes:
+
+```
+$ ./run_training.py -f experiments/cifar10_baseline.yaml
+```
