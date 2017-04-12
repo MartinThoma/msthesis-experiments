@@ -10,24 +10,7 @@ train:
   artifacts_path: ../artifacts/svhn_baseline/
   batch_size: 64
   epochs: 300
-  data_augmentation:
-    samplewise_center: False
-    samplewise_std_normalization: False
-    rotation_range: 15
-    width_shift_range: 0.15
-    height_shift_range: 0.15
-    horizontal_flip: False
-    vertical_flip: False
-    hue_shift: 0.2
-    saturation_scale: 0.5
-    saturation_shift: 0.2
-    value_scale: 0.5
-    value_shift: 0.2
-    zoom_range: 0.5
-    shear_range: 0.1
-    channel_shift_range: 0.1
-    featurewise_center: False
-    zca_whitening: False
+  data_augmentation: False
 evaluate:
   batch_size: 1000
   augmentation_factor: 32
