@@ -1,16 +1,16 @@
 dataset:
   script_path: ../datasets/svhn.py
 models:
-- "../artifacts/svhn_baseline/svhn_baseline.h5"
-- "../artifacts/svhn_baseline/svhn_baseline-1.h5"
-- "../artifacts/svhn_baseline/svhn_baseline-2.h5"
-- "../artifacts/svhn_baseline/svhn_baseline-3.h5"
-- "../artifacts/svhn_baseline/svhn_baseline-4.h5"
-- "../artifacts/svhn_baseline/svhn_baseline-5.h5"
-- "../artifacts/svhn_baseline/svhn_baseline-6.h5"
-- "../artifacts/svhn_baseline/svhn_baseline-7.h5"
-- "../artifacts/svhn_baseline/svhn_baseline-8.h5"
-- "../artifacts/svhn_baseline/svhn_baseline-9.h5"
+- "../artifacts/svhn_baseline/svhn_baseline_20170412-1711-59.h5"
+- "../artifacts/svhn_baseline/svhn_baseline_20170412-1728-50.h5"
+- "../artifacts/svhn_baseline/svhn_baseline_20170412-1846-26.h5"
+- "../artifacts/svhn_baseline/svhn_baseline_20170412-2127-42.h5"
+- "../artifacts/svhn_baseline/svhn_baseline_20170412-2128-55.h5"
+- "../artifacts/svhn_baseline/svhn_baseline_20170412-2357-53.h5"
+- "../artifacts/svhn_baseline/svhn_baseline_20170413-0000-22.h5"
+- "../artifacts/svhn_baseline/svhn_baseline_20170413-0023-51.h5"
+- "../artifacts/svhn_baseline/svhn_baseline_20170413-0138-39.h5"
+- "../artifacts/svhn_baseline/svhn_baseline_20170413-0341-49.h5"
 evaluate:
   batch_size: 1627
   augmentation_factor: 1
