@@ -277,4 +277,5 @@ if __name__ == "__main__":
         model_path = os.path.basename(config['train']['artifacts_path'])
         model_path = os.path.join(artifacts_path,
                                   "{}.h5".format(model_path))
+    logging.info("Take {}".format(model_path))
     main(data, model_path, args.image_fname)
