@@ -18,14 +18,6 @@ train:
     height_shift_range: 0.15
     horizontal_flip: False
     vertical_flip: False
-    hue_shift: 0.2
-    saturation_scale: 0.5
-    saturation_shift: 0.2
-    value_scale: 0.5
-    value_shift: 0.2
-    zoom_range: 0.5
-    shear_range: 0.1
-    channel_shift_range: 0.1
     featurewise_center: False
     zca_whitening: False
 evaluate:
