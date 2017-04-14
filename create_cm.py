@@ -17,6 +17,7 @@ import pprint
 import collections
 import os
 import time
+import glob
 train_keras = imp.load_source('train_keras', "train/train_keras.py")
 from train_keras import get_level, handle_hierarchies, get_old_cli2new_cli
 # from msthesis_utils import make_mosaic
@@ -177,8 +178,16 @@ def create_cm(data_module, config, smooth, model_path):
     """
     artifacts_path = config['train']['artifacts_path']
     if model_path is None:
-        model_path = os.path.join(artifacts_path,
-                                  config['train']['model_output_fname'])
+        model_paths = glob.glob("{}/*.h5".format(artifacts_path))
+        if len(model_paths) > 0:
+            for i in range(len(model_paths)):
+                model_path = model_paths[i]
+                if not ("chk" in model_path):
+                    break
+            print("Found models: {} (take {})".format(model_paths, model_path))
+        else:
+            print("No models found. Exit.")
+            sys.exit(-1)
     # Load model
     if not os.path.isfile(model_path):
         logging.error("File {} does not exist. You might need to train it."
