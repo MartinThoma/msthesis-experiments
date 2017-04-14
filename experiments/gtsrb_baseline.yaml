@@ -19,7 +19,10 @@ train:
     horizontal_flip: False
     vertical_flip: False
     featurewise_center: False
+    zoom_range: 0
+    shear_range: 0
     zca_whitening: False
+    channel_shift_range: 0
 evaluate:
   batch_size: 1000
   augmentation_factor: 32
