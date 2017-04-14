@@ -20,6 +20,7 @@ import os
 import pprint
 import scipy.misc
 import scipy.stats
+import glob
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -40,24 +41,10 @@ def get_activations(model, layer_index, X_batch):
 def show_conv_act_distrib(model, X, show_feature_maps=False):
     """Show the distribution of convolutional layers for one input."""
     X_train = np.array([X])
-    f, (ax1, ax2) = plt.subplots(1, 2)
-
-    # Get layer indices
-    layer_index = 0
-    first_layer_index = None
-    last_layer_index = None
-    for layer in model.layers:
-        if isinstance(layer, keras.layers.convolutional.Conv2D):
-            if first_layer_index is None:
-                first_layer_index = layer_index
-            last_layer_index = layer_index
-        layer_index += 1
 
     layer_index = 0
-    activations_by_layer_l = []
-    activations_by_layer_r = []
-    g1_labels = []
-    g2_labels = []
+    activations_by_layer = []
+    labels = []
     for layer_index in range(len(model.layers)):
         act = get_activations(model, layer_index, X_train)[0]
         if show_feature_maps:
@@ -68,47 +55,25 @@ def show_conv_act_distrib(model, X, show_feature_maps=False):
         if isinstance(model.layers[layer_index],
                       keras.layers.convolutional.Conv2D):
             print("\tlayer {}: len(data)={}".format(layer_index, len(data)))
-            if layer_index == first_layer_index:
-                activations_by_layer_l.append(data)
-                g1_labels.append(layer_index)
-            elif layer_index == last_layer_index:
-                activations_by_layer_l.append(data)
-                g1_labels.append(layer_index)
-            else:
-                activations_by_layer_r.append(data)
-                g2_labels.append(layer_index)
+            activations_by_layer.append(data)
+            labels.append(layer_index)
         layer_index += 1
-    sns.violinplot(data=activations_by_layer_l, orient="h",
-                   palette="colorblind", ax=ax1)
-    ax1.set_yticklabels(g1_labels)
-    sns.violinplot(data=activations_by_layer_r, orient="h",
-                   palette="colorblind", ax=ax2)
-    ax2.set_yticklabels(g2_labels)
-    ax1.set_title('Convolution activation of first layer and the last convolutional layer')
-    ax1.legend()
-    ax2.set_title('Convolution activations of middle layers')
-    ax2.legend()
-    sns.plt.show()
 
-    # ax.set_title('Filter weight distribution by layer')
-    # sns.plt.show()
+    # Activations
+    for label, fw in enumerate(activations_by_layer):
+        print("99% filter weight interval of layer {}: [{:.2f}, {:.2f}]"
+              .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
+
+    f, ax1 = plt.subplots(1, 1)
+    sns.violinplot(data=activations_by_layer, orient="v", palette="colorblind",
+                   ax=ax1)
+    ax1.set_xticklabels(labels)
+    ax1.set_title('Convolution activations by layer')
+    sns.plt.show()
 
 
 def show_conv_weight_dist(model, small_thres=10**-6):
     """Show the distribution of conv weights of model."""
-    f, (ax1, ax2) = plt.subplots(1, 2)
-
-    # Get layer indices
-    layer_index = 0
-    first_layer_index = None
-    last_layer_index = None
-    for layer in model.layers:
-        if isinstance(layer, keras.layers.convolutional.Conv2D):
-            if first_layer_index is None:
-                first_layer_index = layer_index
-            last_layer_index = layer_index
-        layer_index += 1
-
     layer_index = 0
     filter_weights = []
     bias_weights = []
@@ -118,14 +83,6 @@ def show_conv_weight_dist(model, small_thres=10**-6):
             layer_index += 1
             continue
         weights = layer.get_weights()
-
-        # Color
-        if layer_index == first_layer_index:
-            color = 'red'
-        elif layer_index == last_layer_index:
-            color = 'lime'
-        else:
-            color = None
 
         # Filter
         print("{}: {} filter weights in {}th layer"
@@ -137,8 +94,6 @@ def show_conv_weight_dist(model, small_thres=10**-6):
         filter_weights.append(data)
         data_small = np.array([el for el in data if abs(el) < small_thres])
         print("< {}: {}".format(small_thres, len(data_small)))
-        sns.distplot(data, hist=False, norm_hist=True, kde=True, ax=ax1,
-                     label=str(layer_index), color=color)
 
         # Bias
         print("{}: {} bias weights in {}th layer"
@@ -149,67 +104,76 @@ def show_conv_weight_dist(model, small_thres=10**-6):
         bias_weights.append(data)
         data_small = np.array([el for el in data if abs(el) < small_thres])
         print("< {}: {}".format(small_thres, len(data_small)))
-        sns.distplot(data, hist=False, norm_hist=False, kde=True, ax=ax2,
-                     label=str(layer_index), color=color)
         layer_index += 1
-    ax1.set_title('Filter weights')
-    ax2.set_title('Bias weights')
-    ax1.legend()
-    ax2.legend()
-    sns.plt.show()
 
     # labels = [1, 3, 5, 7, 9, 11, 13, 15]
 
-    f, (ax1) = plt.subplots(1, 1)
-    sns.violinplot(data=filter_weights, orient="v", palette="colorblind", ax=ax1)
+    # Filter weights
+    for label, fw in enumerate(filter_weights):
+        print("99% filter weight interval of layer {}: [{:.2f}, {:.2f}]"
+              .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
+
+    f, ax1 = plt.subplots(1, 1)
+    sns.violinplot(data=filter_weights, orient="v", palette="colorblind",
+                   ax=ax1)
     ax1.set_xticklabels(labels)
     ax1.set_title('Filter weight distribution by layer')
     sns.plt.show()
 
-    f, (ax1) = plt.subplots(1, 1)
-    sns.violinplot(data=bias_weights[-3:], orient="v", palette="colorblind", ax=ax1)
-    ax1.set_xticklabels(labels[-3:])
+    # Bias weights
+    for label, fw in enumerate(bias_weights):
+        print("99% bias weight interval of layer {}: [{:.2f}, {:.2f}]"
+              .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
+
+    f, ax1 = plt.subplots(1, 1)
+    sns.violinplot(data=bias_weights[:], orient="v", palette="colorblind",
+                   ax=ax1)
+    ax1.set_xticklabels(labels[:])
     ax1.set_title('Bias weight distribution by layer')
     sns.plt.show()
 
 
 def show_batchnorm_weight_dist(model):
     """Show the distribution of batch norm weighs for one model."""
-    f, (ax1, ax2) = plt.subplots(1, 2)
+    # analyze
+    gamma_weights = []
+    beta_weights = []
     layer_index = 0
-
-    first_layer_index = None
-    last_layer_index = None
+    labels = []
     for layer in model.layers:
         if isinstance(layer, keras.layers.normalization.BatchNormalization):
-            if first_layer_index is None:
-                first_layer_index = layer_index
-            last_layer_index = layer_index
-        layer_index += 1
-
-    layer_index = 0
-    for layer in model.layers:
-        if isinstance(layer, keras.layers.normalization.BatchNormalization):
-            # Color
-            if layer_index == first_layer_index:
-                color = 'red'
-            elif layer_index == last_layer_index:
-                color = 'lime'
-            else:
-                color = None
-
+            labels.append(layer_index)
             weights = layer.get_weights()
             data = weights[0].flatten()
-            sns.distplot(data, hist=False, norm_hist=False, kde=True, ax=ax1,
-                         label=str(layer_index), color=color)
+            gamma_weights.append(data)
             data = weights[1].flatten()
-            sns.distplot(data, hist=False, norm_hist=False, kde=True, ax=ax2,
-                         label=str(layer_index), color=color)
+            beta_weights.append(data)
         layer_index += 1
-    ax1.set_title('gamma weights')
-    ax2.set_title('beta weights')
-    ax1.legend()
-    ax2.legend()
+
+    # labels = [2, 4, 6, 8, 10, 12, 14, 16]
+
+    # Gamma weights
+    for label, fw in zip(labels, gamma_weights):
+        print("99% gamma interval of layer {}: [{:.2f}, {:.2f}]"
+              .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
+
+    f, ax1 = plt.subplots(1, 1)
+    sns.violinplot(data=gamma_weights, orient="v", palette="colorblind",
+                   ax=ax1)
+    ax1.set_xticklabels(labels)
+    ax1.set_title('Gamma distribution by layer')
+    sns.plt.show()
+
+    # beta weights
+    for label, fw in zip(labels, beta_weights):
+        print("99% beta interval of layer {}: [{:.2f}, {:.2f}]"
+              .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
+
+    f, ax1 = plt.subplots(1, 1)
+    sns.violinplot(data=beta_weights, orient="v", palette="colorblind",
+                   ax=ax1)
+    ax1.set_xticklabels(labels)
+    ax1.set_title('Beta distribution by layer')
     sns.plt.show()
 
 
@@ -235,6 +199,7 @@ def main(data_module, model_path, image_fname):
 
     print("## Weight analyzation")
     show_conv_weight_dist(model)
+    print("## BN analyzation")
     show_batchnorm_weight_dist(model)
 
 
@@ -283,7 +248,8 @@ if __name__ == "__main__":
     else:
         artifacts_path = config['train']['artifacts_path']
         model_path = os.path.basename(config['train']['artifacts_path'])
-        model_path = os.path.join(artifacts_path,
-                                  "{}.h5".format(model_path))
+        model_paths = glob.glob("{}/*.h5".format(artifacts_path))
+        model_paths = [m for m in model_paths if "_chk.h5" not in m]
+        model_path = model_paths[0]
     logging.info("Take {}".format(model_path))
     main(data, model_path, args.image_fname)
