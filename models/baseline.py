@@ -10,7 +10,7 @@ from keras.layers.pooling import GlobalAveragePooling2D
 from keras.regularizers import l2
 
 
-def create_model(nb_classes, input_shape):
+def create_model(nb_classes, input_shape, config):
     """Create a VGG-16 like model."""
     model = Sequential()
     # input_shape = (None, None, 3)  # for fcn
@@ -40,14 +40,24 @@ def create_model(nb_classes, input_shape):
         model.add(Activation('elu'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         tmp /= 2
+
+    if 'c1' in config['model']:
+        c1_nb_filter = config['model']['c1']['nb_filter']
+    else:
+        c1_nb_filter = 32
+    if 'c8' in config['model']:
+        c8_nb_filter = config['model']['c8']['nb_filter']
+    else:
+        c8_nb_filter = 512
+
     if first:
-        model.add(Convolution2D(32, (3, 3), padding='same',
+        model.add(Convolution2D(c1_nb_filter, (3, 3), padding='same',
                                 kernel_initializer='he_uniform',
                                 kernel_regularizer=l2(0.0001),
                                 input_shape=input_shape))
         first = False
     else:
-        model.add(Convolution2D(32, (3, 3), padding='same',
+        model.add(Convolution2D(c1_nb_filter, (3, 3), padding='same',
                                 kernel_initializer='he_uniform',
                                 kernel_regularizer=l2(0.0001)))
     model.add(BatchNormalization())
@@ -85,7 +95,7 @@ def create_model(nb_classes, input_shape):
     model.add(BatchNormalization())
     model.add(Activation('elu'))
     model.add(Dropout(0.5))
-    model.add(Convolution2D(512, (1, 1), padding='same',
+    model.add(Convolution2D(c8_nb_filter, (1, 1), padding='same',
                             kernel_initializer='he_uniform',
                             kernel_regularizer=l2(0.0001)))
     model.add(BatchNormalization())

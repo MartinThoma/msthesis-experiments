@@ -238,7 +238,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
     else:
         input_shape = (img_rows, img_cols, img_channels)
 
-    model = model_module.create_model(nb_classes, input_shape)
+    model = model_module.create_model(nb_classes, input_shape, config)
     print("Model created")
 
     if 'initializing_model_path' in config['model']:
@@ -396,7 +396,8 @@ def main(data_module, model_module, optimizer_module, filename, config,
     data = {'training_time': training_time,
             'readjustment_time': readjustment_time,
             'HOST': platform.node(),
-            'epochs': len(history_data)}
+            'epochs': len(history_data),
+            'config': config}
     meta_train_fname = os.path.join(config['train']['artifacts_path'],
                                     "train-meta_{}.json".format(datestring))
     meta_train_fname = get_nonexistant_path(meta_train_fname)
