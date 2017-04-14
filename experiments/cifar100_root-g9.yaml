@@ -1,34 +1,29 @@
 dataset:
   script_path: ../datasets/cifar100_keras.py
   hierarchy_path: ../datasets/cifar100-hierarchy.json
-  subset: [58]
+  subset: [48]
   coarse: False
 model:
-  script_path: ../models/seq3.py
+  script_path: ../models/baseline.py
 optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
   script_path: ../train/train_keras.py
-  artifacts_path: ../artifacts/cifar100_seq3-root-g10/
+  artifacts_path: ../artifacts/cifar100_root-g9/
   batch_size: 64
-  epochs: 300
+  epochs: 1000
   data_augmentation:
     samplewise_center: False
     samplewise_std_normalization: False
-    rotation_range: 15
-    width_shift_range: 0.15
-    height_shift_range: 0.15
+    rotation_range: 0
+    width_shift_range: 0.1
+    height_shift_range: 0.1
     horizontal_flip: True
     vertical_flip: False
-    hue_shift: 0.2
-    saturation_scale: 0.5
-    saturation_shift: 0.2
-    value_scale: 0.5
-    value_shift: 0.2
-    zoom_range: 0.5
-    shear_range: 0.1
-    channel_shift_range: 0.1
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
     featurewise_center: False
     zca_whitening: False
 evaluate:
@@ -37,13 +32,13 @@ evaluate:
   data_augmentation:
     samplewise_center: False
     samplewise_std_normalization: False
-    rotation_range: 5
+    rotation_range: 0
     width_shift_range: 0.15
     height_shift_range: 0.15
     horizontal_flip: True
     vertical_flip: False
-    zoom_range: 0.2
-    shear_range: 0.1
-    channel_shift_range: 0.0
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
     featurewise_center: False
     zca_whitening: False
