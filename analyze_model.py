@@ -79,10 +79,10 @@ def show_conv_act_distrib(model, X, show_feature_maps=False):
                 g2_labels.append(layer_index)
         layer_index += 1
     sns.violinplot(data=activations_by_layer_l, orient="h",
-                   palette="Set2", ax=ax1)
+                   palette="colorblind", ax=ax1)
     ax1.set_yticklabels(g1_labels)
     sns.violinplot(data=activations_by_layer_r, orient="h",
-                   palette="Set2", ax=ax2)
+                   palette="colorblind", ax=ax2)
     ax2.set_yticklabels(g2_labels)
     ax1.set_title('Convolution activation of first layer and the last convolutional layer')
     ax1.legend()
@@ -111,6 +111,7 @@ def show_conv_weight_dist(model, small_thres=10**-6):
 
     layer_index = 0
     filter_weights = []
+    bias_weights = []
     labels = []
     for layer in model.layers:
         if not isinstance(layer, keras.layers.convolutional.Conv2D):
@@ -145,6 +146,7 @@ def show_conv_weight_dist(model, small_thres=10**-6):
                       reduce(operator.mul, weights[1].shape, 1),
                       layer_index))
         data = weights[1].flatten()
+        bias_weights.append(data)
         data_small = np.array([el for el in data if abs(el) < small_thres])
         print("< {}: {}".format(small_thres, len(data_small)))
         sns.distplot(data, hist=False, norm_hist=False, kde=True, ax=ax2,
@@ -156,12 +158,18 @@ def show_conv_weight_dist(model, small_thres=10**-6):
     ax2.legend()
     sns.plt.show()
 
-    f, (ax1, ax2) = plt.subplots(1, 2)
-    sns.violinplot(data=filter_weights[:1], orient="h", palette="Set2", ax=ax1)
-    sns.violinplot(data=filter_weights[1:2], orient="h", palette="Set2", ax=ax2)
-    ax1.set_yticklabels(labels[:1])
-    ax2.set_yticklabels(labels[1:2])
-    # f.set_title('Filter weight distribution by layer')
+    # labels = [1, 3, 5, 7, 9, 11, 13, 15]
+
+    f, (ax1) = plt.subplots(1, 1)
+    sns.violinplot(data=filter_weights, orient="v", palette="colorblind", ax=ax1)
+    ax1.set_xticklabels(labels)
+    ax1.set_title('Filter weight distribution by layer')
+    sns.plt.show()
+
+    f, (ax1) = plt.subplots(1, 1)
+    sns.violinplot(data=bias_weights[-3:], orient="v", palette="colorblind", ax=ax1)
+    ax1.set_xticklabels(labels[-3:])
+    ax1.set_title('Bias weight distribution by layer')
     sns.plt.show()
 
 
