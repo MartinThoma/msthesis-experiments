@@ -10,7 +10,7 @@ from keras.layers.pooling import GlobalAveragePooling2D
 from keras.regularizers import l2
 
 
-def create_model(nb_classes, input_shape):
+def create_model(nb_classes, input_shape, config):
     """Create a VGG-16 like model."""
     model = Sequential()
     # input_shape = (None, None, 3)  # for fcn
