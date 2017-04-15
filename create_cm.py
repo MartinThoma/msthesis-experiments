@@ -174,7 +174,8 @@ def _write_cm(cm, path):
         outfile.write(to_unicode(str_))
 
 
-def create_cm(data_module, config, smooth, model_path, index_file):
+def create_cm(data_module, config, smooth, model_path, index_file,
+              evaluate_train=True):
     """
     Create confusion matrices.
 
@@ -232,7 +233,6 @@ def create_cm(data_module, config, smooth, model_path, index_file):
     logging.info("# classes = {}".format(data_module.n_classes))
 
     # Calculate confusion matrix for training set
-    evaluate_train = False
     if evaluate_train:
         ret = _calculate_cm(config, model, X_train, X_train, y_train,
                             nb_classes, smooth)
