@@ -14,6 +14,7 @@ train_keras = imp.load_source('train_keras', "train/train_keras.py")
 from run_training import make_paths_absolute
 import logging
 import datetime
+import glob
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -25,9 +26,17 @@ def inference_timing(data_module, config, model_path, batch_sizes):
     artifacts_path = config['train']['artifacts_path']
 
     if model_path is None:
-        model_path = os.path.basename(config['train']['artifacts_path'])
-        model_path = "{}.h5".format(model_path)
-        model_path = os.path.join(artifacts_path, model_path)
+        model_paths = glob.glob("{}/*.h5"
+                                .format(config['train']['artifacts_path']))
+        if len(model_paths) > 0:
+            for i in range(len(model_paths)):
+                model_path = model_paths[i]
+                if not ("chk" in model_path):
+                    break
+            print("Found models: {} (take {})".format(model_paths, model_path))
+        else:
+            print("No models found. Exit.")
+            sys.exit(-1)
     json_data['model_path'] = model_path
 
     # Load model
