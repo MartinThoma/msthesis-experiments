@@ -85,6 +85,9 @@ def run_model_prediction(model, config, X_train, X, n_classes):
 
         a_factor = config['evaluate']['augmentation_factor']
         samples = config['evaluate']['batch_size']
+        if len(X) < 1000:
+            logging.info("Override. Set batch_size to {}.".format(len(X)))
+            samples = len(X)
         batch_arr = np.zeros([a_factor * samples] +
                              list(X[0].shape))
         if len(X) % samples != 0:
