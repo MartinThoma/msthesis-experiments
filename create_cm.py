@@ -18,6 +18,7 @@ import collections
 import os
 import time
 import glob
+import pickle
 train_keras = imp.load_source('train_keras', "train/train_keras.py")
 from train_keras import get_level, handle_hierarchies, get_old_cli2new_cli
 # from msthesis_utils import make_mosaic
@@ -150,11 +151,16 @@ def _calculate_cm(config, model, X_train, X, y, n_classes, smooth):
         for i in range(n_classes):
             cm[i] /= class_count[i]
     else:
+        cm_indices = [[[] for _ in range(n_classes)] for _ in range(n_classes)]
         cm = np.zeros((n_classes, n_classes), dtype=np.int)
         y_pred_i = y_pred.argmax(1)
+        index = 0
         for i, j in zip(y_i, y_pred_i):
             cm[i][j] += 1
-    return {'cm': cm, 'y_pred': y_pred}
+            cm_indices[i][j].append(index)
+            index += 1
+    return {'cm': cm, 'y_pred': y_pred,
+            'cm_indices': cm_indices}
 
 
 def _write_cm(cm, path):
@@ -165,7 +171,7 @@ def _write_cm(cm, path):
         outfile.write(to_unicode(str_))
 
 
-def create_cm(data_module, config, smooth, model_path):
+def create_cm(data_module, config, smooth, model_path, index_file):
     """
     Create confusion matrices.
 
@@ -209,8 +215,10 @@ def create_cm(data_module, config, smooth, model_path):
     # load hierarchy, if present
     remaining_cls = [i for i in range(data_module.n_classes)]
     if 'hierarchy_path' in config['dataset']:
+        # Calculate confusion matrix for test set
         ret = handle_hierarchies(config, data_module,
-                                 X_train, y_train, X_test, y_test)
+                                 X_train, y_train, X_test, y_test,
+                                 index_file)
         hierarchy = ret['hierarchy']
         X_train = ret['X_train']
         y_train = ret['y_train']
@@ -221,22 +229,28 @@ def create_cm(data_module, config, smooth, model_path):
     logging.info("# classes = {}".format(data_module.n_classes))
 
     # Calculate confusion matrix for training set
-    ret = _calculate_cm(config, model, X_train, X_train, y_train, nb_classes,
-                        smooth)
-    cm = ret['cm']
-    correct_count = sum([cm[i][i] for i in range(nb_classes)])
-    acc = correct_count / float(cm.sum())
-    print("Accuracy (Train): {:0.2f}% ({} of {} wrong)"
-          .format(acc * 100, cm.sum() - correct_count, cm.sum()))
-    _write_cm(cm, path=os.path.join(artifacts_path, 'cm-train.json'))
-    _write_preds(ret['y_pred'],
-                 remaining_cls,
-                 os.path.join(artifacts_path, 'preds.train.csv'))
+    evaluate_train = False
+    if evaluate_train:
+        ret = _calculate_cm(config, model, X_train, X_train, y_train,
+                            nb_classes, smooth)
+        cm = ret['cm']
+        correct_count = sum([cm[i][i] for i in range(nb_classes)])
+        acc = correct_count / float(cm.sum())
+        print("Accuracy (Train): {:0.2f}% ({} of {} wrong)"
+              .format(acc * 100, cm.sum() - correct_count, cm.sum()))
+        _write_cm(cm, path=os.path.join(artifacts_path, 'cm-train.json'))
+        _write_preds(ret['y_pred'],
+                     remaining_cls,
+                     os.path.join(artifacts_path, 'preds.train.csv'))
 
-    # Calculate confusion matrix for test set
     ret = _calculate_cm(config, model, X_train, X_test, y_test, nb_classes,
                         smooth)
     cm = ret['cm']
+
+    with open('cm.indices.tmp.pickle', 'wb') as handle:
+        pickle.dump(ret['cm_indices'], handle,
+                    protocol=pickle.HIGHEST_PROTOCOL)
+
     correct_count = sum([cm[i][i] for i in range(nb_classes)])
     acc = correct_count / float(cm.sum())
     print("Accuracy (Test): {:0.2f}% ({} of {} wrong)"
@@ -258,11 +272,15 @@ def create_cm(data_module, config, smooth, model_path):
                                for i in class_group])  # TODO
                 all_ = sum(cm[oldi2newi[i]][oldi2newi[j]]
                            for i in class_group for j in class_group)
+                all2 = sum(cm[oldi2newi[i]][j]
+                           for i in class_group for j in range(len(oldi2newi)))
                 if all_ == 0:
                     print("\t--- (no elements)")
                 else:
                     acc = correct / float(all_)
-                    print("\t{:0.2f}% (all: {})".format(acc * 100, all_))
+                    print("\t{:0.2f}% (all: {:>3}; acc total:{:0.2f}%)"
+                          .format(acc * 100, all_,
+                                  correct / float(all2) * 100.0))
 
 
 def get_parser():
@@ -284,6 +302,9 @@ def get_parser():
                         dest="smooth",
                         default=False,
                         help="Use prediction probability instead of argmax")
+    parser.add_argument("--indices",
+                        dest="index_file",
+                        help="Restrict the data to indices in this file.")
     return parser
 
 
@@ -301,4 +322,5 @@ if __name__ == '__main__':
     dpath = experiment_meta['dataset']['script_path']
     sys.path.insert(1, os.path.dirname(dpath))
     data = imp.load_source('data', experiment_meta['dataset']['script_path'])
-    create_cm(data, experiment_meta, args.smooth, args.model_fname)
+    create_cm(data, experiment_meta, args.smooth, args.model_fname,
+              args.index_file)

@@ -27,6 +27,7 @@ from keras.models import load_model
 import time
 import platform
 import datetime
+import pickle
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -136,7 +137,8 @@ def get_nonexistant_path(fname_path):
     return new_fname
 
 
-def handle_hierarchies(config, data_module, X_train, y_train, X_test, y_test):
+def handle_hierarchies(config, data_module, X_train, y_train, X_test, y_test,
+                       index_file=None):
     """
     Adjust data to hierarchy.
 
@@ -148,6 +150,8 @@ def handle_hierarchies(config, data_module, X_train, y_train, X_test, y_test):
     y_train : np.array
     X_test : np.array
     y_test : np.array
+    remaining_idx : np.array
+        Indices of the test set which should remain
 
     Returns
     -------
@@ -165,7 +169,25 @@ def handle_hierarchies(config, data_module, X_train, y_train, X_test, y_test):
         remaining_cls = flatten_completely(remaining_cls)
         data_module.n_classes = len(old_cli2new_cli)
         X_train, y_train = filter_by_class(X_train, y_train, remaining_cls)
-        X_test, y_test = filter_by_class(X_test, y_test, remaining_cls)
+        if index_file is not None:
+            with open(index_file, 'rb') as handle:
+                cm_indices = pickle.load(handle)
+            remaining_idx = []
+            print("Length of index matrix: {}x{}"
+                  .format(len(cm_indices), len(cm_indices[0])))
+            remaining_cls_n = [flatten_completely(hierarchy).index(c)
+                               for c in remaining_cls]
+            for i in remaining_cls_n:
+                for j in remaining_cls_n:
+                    for class_idx in cm_indices[i][j]:
+                        remaining_idx.append(class_idx)
+            remaining_idx = np.array(remaining_idx)
+            print("Remaining indices: {}".format(len(remaining_idx)))
+
+            X_test = X_test[remaining_idx]
+            y_test = y_test[remaining_idx]
+        else:
+            X_test, y_test = filter_by_class(X_test, y_test, remaining_cls)
         y_train = update_labels(y_train, old_cli2new_cli)
         y_test = update_labels(y_test, old_cli2new_cli)
     if config['dataset']['coarse']:
