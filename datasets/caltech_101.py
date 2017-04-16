@@ -83,17 +83,9 @@ def load_data():
     """
     Load the Caltech-101 dataset.
 
-    Parameters
-    ----------
-    label_mode: one of "fine", "coarse".
-
     Returns
     -------
     Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-
-    Raises
-    ------
-    ValueError: in case of invalid `label_mode`.
     """
     dirname = '101_ObjectCategories'
     origin = ('http://www.vision.caltech.edu/Image_Datasets/Caltech101/'
