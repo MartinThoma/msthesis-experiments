@@ -24,13 +24,15 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     stream=sys.stdout)
 
 n_classes = 256
-img_rows = 32
-img_cols = 32
 img_channels = 3
-
 labels = None
 
-_mean_filename = "caltech-256-mean.npy"
+# Design decision
+img_rows = 64
+img_cols = 64
+
+
+_mean_filename = "caltech-256-{}-{}-mean.npy".format(img_rows, img_cols)
 
 
 def prepreprocess(img_path, res_width, res_height):
@@ -92,7 +94,8 @@ def load_data():
               '256_ObjectCategories.tar')
     path = get_file(dirname, origin=origin, untar=False)
 
-    pickle_fpath = os.path.join(path, "caltech-256-data.pickle")
+    fname = "caltech-256-{}-{}-data.pickle".format(img_rows, img_cols)
+    pickle_fpath = os.path.join(path, fname)
 
     if not os.path.isfile(pickle_fpath):
         classes = sorted(glob.glob("{}/*".format(path)),
