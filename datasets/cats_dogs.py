@@ -7,6 +7,7 @@ Utility file for the Microsoft/Assira/ Kaggle Cats and Dogs dataset.
 See also
 --------
 https://www.microsoft.com/en-us/download/details.aspx?id=54765
+https://www.kaggle.com/c/dogs-vs-cats/leaderboard
 """
 
 import numpy as np
@@ -23,22 +24,14 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     stream=sys.stdout)
 
 n_classes = 2
-img_rows = 66  # height
-img_cols = 88  # width
+img_rows = 128  # height
+img_cols = 128  # width
 img_channels = 3
 
 labels = ['cat', 'dog']
 
 
 _mean_filename = "cats-dogs-mean.npy"
-
-# image shape
-HEIGHT = 128
-WIDTH = 128
-DEPTH = 3
-
-# size of a single image in bytes
-SIZE = HEIGHT * WIDTH * DEPTH
 
 
 def prepreprocess(img_path, res_width, res_height):
