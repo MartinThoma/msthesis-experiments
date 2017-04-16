@@ -1,5 +1,7 @@
 dataset:
   script_path: ../datasets/cifar100_keras.py
+model:
+  script_path: ../models/baseline_maxmeanpool.py
 models:
 - "../artifacts/cifar100_baseline_maxmeanpool/cifar100_baseline_20170416-1038-49.h5"
 - "../artifacts/cifar100_baseline_maxmeanpool/cifar100_baseline_20170416-1039-56.h5"
