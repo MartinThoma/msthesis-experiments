@@ -28,11 +28,34 @@ img_channels = 3
 labels = None
 
 # Design decision
-img_rows = 128
-img_cols = 128
+img_rows = 224
+img_cols = 224
 
 
 _mean_filename = "caltech-256-{}-{}-mean.npy".format(img_rows, img_cols)
+
+
+def serialize(filename, data):
+    x_train_fname = "{}-x-train.npy".format(filename)
+    x_test_fname = "{}-x-test.npy".format(filename)
+    x_train = data['x_train']
+    x_test = data['x_test']
+    np.save(x_train_fname, data['x_train'])
+    np.save(x_test_fname, data['x_test'])
+    data['x_train'] = x_train_fname
+    data['x_test'] = x_test_fname
+    with open(filename, 'wb') as f:
+        pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+    data['x_train'] = x_train
+    data['x_test'] = x_test
+
+
+def deserialize(filename):
+    with open(filename, 'rb') as f:
+        data = pickle.load(f)
+    data['x_train'] = np.load(data['x_train'])
+    data['x_test'] = np.load(data['x_test'])
+    return data
 
 
 def prepreprocess(img_path, res_width, res_height):
@@ -101,6 +124,7 @@ def load_data():
         classes = sorted(glob.glob("{}/*".format(path)),
                          key=lambda n: n.lower())
         classes = [el for el in classes if "257" not in el]
+        classes = [el for el in classes if os.path.isdir(el)]
         globals()["labels"] = [os.path.basename(el) for el in classes]
         globals()["labels"] = [el.split(".")[1] for el in globals()["labels"]]
         x = []
@@ -123,12 +147,9 @@ def load_data():
         data = {'x_train': x_train, 'y_train': y_train,
                 'x_test': x_test, 'y_test': y_test,
                 'labels': globals()["labels"]}
-
-        with open(pickle_fpath, 'wb') as f:
-            pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+        serialize(pickle_fpath, data)
     else:
-        with open(pickle_fpath, 'rb') as f:
-            data = pickle.load(f)
+        data = deserialize(pickle_fpath)
         globals()["labels"] = data['labels']
     return data
 
@@ -150,6 +171,7 @@ def preprocess(x, subtact_mean=False):
 
 if __name__ == '__main__':
     data = load_data()
+    print(data)
     mean_image = np.mean(data['x_train'], axis=0)
     np.save(_mean_filename, mean_image)
     scipy.misc.imshow(mean_image)
