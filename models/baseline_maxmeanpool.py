@@ -22,6 +22,8 @@ def max_avg_pool2d(x):
 def max_avg_pool2d_output_shape(input_shape):
     shape = list(input_shape)
     # shape[1] *= 2
+    shape[1] /= 2
+    shape[2] /= 2
     return tuple(shape)
 
 
