@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/cifar100_keras.py
+models:
+- "../artifacts/cifar100_baseline_pool_kernel/cifar100_baseline_pool_kernel_20170415-1417-17.h5"
+- "../artifacts/cifar100_baseline_pool_kernel/cifar100_baseline_pool_kernel_20170415-1424-14.h5"
+- "../artifacts/cifar100_baseline_pool_kernel/cifar100_baseline_pool_kernel_20170415-1428-08.h5"
+- "../artifacts/cifar100_baseline_pool_kernel/cifar100_baseline_pool_kernel_20170415-1510-12.h5"
+- "../artifacts/cifar100_baseline_pool_kernel/cifar100_baseline_pool_kernel_20170415-1536-13.h5"
+- "../artifacts/cifar100_baseline_pool_kernel/cifar100_baseline_pool_kernel_20170415-1537-42.h5"
+- "../artifacts/cifar100_baseline_pool_kernel/cifar100_baseline_pool_kernel_20170415-1624-26.h5"
+- "../artifacts/cifar100_baseline_pool_kernel/cifar100_baseline_pool_kernel_20170415-1658-30.h5"
+- "../artifacts/cifar100_baseline_pool_kernel/cifar100_baseline_pool_kernel_20170415-1704-00.h5"
+- "../artifacts/cifar100_baseline_pool_kernel/cifar100_baseline_pool_kernel_20170415-1710-43.h5"
+evaluate:
+  batch_size: 5000
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
