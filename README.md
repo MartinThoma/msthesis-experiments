@@ -25,6 +25,10 @@ train_path: train/train.py
 * Keras 2.0 (adjusted [preprocessing/image.py](https://github.com/fchollet/keras/pull/6003), see misc directory)
 * seaborn
 
+If you get `TypeError: __init__() got an unexpected keyword argument
+'hsv_augmentation'` you didn't adjust the `image.py`. Just copy the one in
+the misc folder to `python -c "import keras.preprocessing.image as k;print(k.__file__)"`.
+
 ## Run timining experiments
 
 Measuring inference time needs about 2 minutes:
