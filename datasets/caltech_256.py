@@ -28,8 +28,8 @@ img_channels = 3
 labels = None
 
 # Design decision
-img_rows = 64
-img_cols = 64
+img_rows = 128
+img_cols = 128
 
 
 _mean_filename = "caltech-256-{}-{}-mean.npy".format(img_rows, img_cols)
