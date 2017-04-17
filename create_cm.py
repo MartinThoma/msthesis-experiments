@@ -19,6 +19,7 @@ import os
 import time
 import glob
 import pickle
+from operator import __mul__
 train_keras = imp.load_source('train_keras', "train/train_keras.py")
 from train_keras import get_level, handle_hierarchies, get_old_cli2new_cli
 # from msthesis_utils import make_mosaic
@@ -88,8 +89,11 @@ def run_model_prediction(model, config, X_train, X, n_classes):
         if len(X) < 1000:
             logging.info("Override. Set batch_size to {}.".format(len(X)))
             samples = len(X)
-        batch_arr = np.zeros([a_factor * samples] +
-                             list(X[0].shape))
+        batch_arr_size = [a_factor * samples] + list(X[0].shape)
+        print("batch_arr_size={} (allocate {:0.2f} MB)"
+              .format(batch_arr_size,
+                      reduce(__mul__, batch_arr_size) * 4. / 10**6))
+        batch_arr = np.zeros(batch_arr_size)
         if len(X) % samples != 0:
             logging.warning(("len(X) % config['evaluate']['batch_size'] != 0 "
                              "(len(X)={})").format(len(X)))
