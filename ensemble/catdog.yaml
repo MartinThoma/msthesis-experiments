@@ -1,7 +1,7 @@
 dataset:
   script_path: ../datasets/cats_dogs.py
 models:
-- "../artifacts/catdog_baseline/cifar10_baseline_20170416-1043-32.h5"
+- "../artifacts/catdog_baseline/cifar10_baseline_20170417-0533-01.h5"
 - "../artifacts/catdog_baseline/cifar10_baseline_20170417-0100-53.h5"
 - "../artifacts/catdog_baseline/cifar10_baseline_20170417-0102-37.h5"
 - "../artifacts/catdog_baseline/cifar10_baseline_20170417-0104-10.h5"
@@ -12,7 +12,7 @@ models:
 - "../artifacts/catdog_baseline/cifar10_baseline_20170417-0435-25.h5"
 - "../artifacts/catdog_baseline/cifar10_baseline_20170417-0524-29.h5"
 evaluate:
-  batch_size: 5000
+  batch_size: 603
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False
