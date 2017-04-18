@@ -17,6 +17,7 @@ import tarfile
 import shutil
 import csv
 from six.moves import cPickle as pickle
+from sklearn.model_selection import train_test_split
 
 
 n_classes = 369
@@ -204,11 +205,20 @@ def load_data(mode='fold-1'):
         s_train = [s_compl[id_] for id_ in train_ids]
         s_test = [s_compl[id_] for id_ in test_ids]
 
+        splitd = train_test_split(x_train, y_train, s_train,
+                                  test_size=0.10,
+                                  random_state=42,
+                                  stratify=y_train)
+        x_train, x_val, y_train, y_val, s_train, s_val = splitd
+
         data = {'x_train': x_train,
                 'y_train': y_train,
                 'x_test': x_test,
                 'y_test': y_test,
+                'x_val': x_val,
+                'y_val': y_val,
                 's_train': s_train,
+                's_val': s_val,
                 's_test': s_test,
                 'labels': labels
                 }

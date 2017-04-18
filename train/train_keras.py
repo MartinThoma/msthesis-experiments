@@ -12,8 +12,8 @@ import numpy as np
 np.random.seed(0)
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
-from keras.callbacks import ModelCheckpoint, EarlyStopping
-# from keras.callbacks import RemoteMonitor, ReduceLROnPlateau
+from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
+from keras.callbacks import RemoteMonitor, ReduceLROnPlateau
 from keras.utils import np_utils
 # from sklearn.model_selection import train_test_split
 import csv
@@ -219,6 +219,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
     X_train = data_module.preprocess(X_train)
     if 'use_val' in config['train']:
         use_val = config['train']['use_val']
+    use_val = True
     if use_val:
         X_test, y_test = data['x_val'], data['y_val']
     else:
@@ -242,16 +243,10 @@ def main(data_module, model_module, optimizer_module, filename, config,
     img_channels = data_module.img_channels
     da = config['train']['data_augmentation']
 
-    # X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
-    #                                                   test_size=0.10,
-    #                                                   random_state=42)
-
     # Convert class vectors to binary class matrices.
     Y_train = np_utils.to_categorical(y_train, nb_classes)
-    # Y_train = Y_train.reshape((-1, 1, 1, nb_classes))  # For fcn
-
-    # Y_val = np_utils.to_categorical(y_val, nb_classes)
     Y_test = np_utils.to_categorical(y_test, nb_classes)
+    # Y_train = Y_train.reshape((-1, 1, 1, nb_classes))  # For fcn
     # Y_test = Y_test.reshape((-1, 1, 1, nb_classes))
 
     # Input shape depends on the backend
@@ -293,25 +288,36 @@ def main(data_module, model_module, optimizer_module, filename, config,
     print("Building model...")
 
     checkpoint_fname = os.path.basename(config['train']['artifacts_path'])
-    checkpoint_fname = "{}_{}_chk.h5".format(checkpoint_fname, datestring)
+    if 'saveall' in config['train'] and config['train']['saveall']:
+        checkpoint_fname = "{}_{}.chk.{{epoch:02d}}.h5".format(checkpoint_fname, datestring)
+    else:
+        checkpoint_fname = "{}_{}.chk.h5".format(checkpoint_fname, datestring)
     model_chk_path = os.path.join(config['train']['artifacts_path'],
                                   checkpoint_fname)
     model_chk_path = get_nonexistant_path(model_chk_path)
     checkpoint = ModelCheckpoint(model_chk_path,
                                  monitor="val_acc",
-                                 save_best_only=True,
+                                 save_best_only=False,
                                  save_weights_only=False)
     es = EarlyStopping(monitor='val_acc',
                        min_delta=0,
                        patience=10, verbose=1, mode='auto')
-    # remote = RemoteMonitor(root='http://localhost:9000')
-    # lr_reducer = ReduceLROnPlateau(monitor='val_acc',
-    #                                factor=0.3,
-    #                                cooldown=0,
-    #                                patience=3,
-    #                                min_lr=0.5e-6,
-    #                                verbose=1)
     callbacks = [checkpoint, es]  # remote,
+    if 'tensorboard' in config['train'] and config['train']['tensorboard']:
+        tensorboard = TensorBoard(log_dir='./logs', histogram_freq=0,
+                                  write_graph=True, write_images=True)
+        callbacks.append(tensorboard)
+    if 'remote' in config['train'] and config['train']['remote']:
+        remote = RemoteMonitor(root='http://localhost:9000')
+        callbacks.append(remote)
+    if 'lr_reducer' in config['train'] and config['train']['lr_reducer']:
+        lr_reducer = ReduceLROnPlateau(monitor='val_acc',
+                                       factor=0.3,
+                                       cooldown=0,
+                                       patience=3,
+                                       min_lr=0.5e-6,
+                                       verbose=1)
+        callbacks.append(lr_reducer)
 
     if not da:
         print('Not using data augmentation.')

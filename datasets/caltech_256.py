@@ -142,9 +142,15 @@ def load_data():
 
         x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                             test_size=0.33,
-                                                            random_state=42)
+                                                            random_state=42,
+                                                            stratify=y)
+        x_train, x_val, y_train, y_val = train_test_split(x_train, y_train,
+                                                          test_size=0.10,
+                                                          random_state=42,
+                                                          stratify=y_train)
 
         data = {'x_train': x_train, 'y_train': y_train,
+                'x_val': x_val, 'y_val': y_val,
                 'x_test': x_test, 'y_test': y_test,
                 'labels': globals()["labels"]}
         serialize(pickle_fpath, data)

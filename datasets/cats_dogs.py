@@ -122,7 +122,12 @@ def load_data():
 
         x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                             test_size=0.33,
-                                                            random_state=42)
+                                                            random_state=42,
+                                                            stratify=y_train)
+        x_train, x_val, y_train, y_val = train_test_split(x_train, y_train,
+                                                          test_size=0.10,
+                                                          random_state=42,
+                                                          stratify=y_train)
 
         # both = cats_fnames + dogs_fnames
         # from random import shuffle
@@ -131,6 +136,7 @@ def load_data():
         #     prepreprocess(el, img_cols, img_rows)
 
         data = {'x_train': x_train, 'y_train': y_train,
+                'x_val': x_val, 'y_val': y_val,
                 'x_test': x_test, 'y_test': y_test}
 
         with open(pickle_fpath, 'wb') as f:

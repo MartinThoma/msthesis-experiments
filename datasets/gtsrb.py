@@ -23,6 +23,7 @@ import sys
 import random
 random.seed(0)
 from six.moves import cPickle as pickle
+from sklearn.model_selection import train_test_split
 
 _mean_filename = "gtsrb-mean.npy"
 
@@ -269,6 +270,16 @@ def load_data():
     if K.image_dim_ordering() == 'th':
         data['x_train'] = data['x_train'].transpose(0, 2, 3, 1)
         data['x_test'] = data['x_test'].transpose(0, 2, 3, 1)
+
+    x_train, x_val, y_train, y_val = train_test_split(data['x_train'],
+                                                      data['y_train'],
+                                                      test_size=0.10,
+                                                      random_state=42,
+                                                      stratify=data['y_train'])
+
+    return {'x_train': x_train, 'y_train': y_train,
+            'x_val': x_val, 'y_val': y_val,
+            'x_test': data['x_test'], 'y_test': data['y_test']}
 
     return data
 

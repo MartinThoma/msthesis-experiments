@@ -14,6 +14,7 @@ from keras import backend as K
 import scipy.io
 import os
 import numpy as np
+from sklearn.model_selection import train_test_split
 
 
 labels = [str(i) for i in range(10)]
@@ -93,6 +94,16 @@ def load_data():
     if K.image_dim_ordering() == 'th':
         data['x_train'] = data['x_train'].transpose(0, 2, 3, 1)
         data['x_test'] = data['x_test'].transpose(0, 2, 3, 1)
+
+    x_train, x_val, y_train, y_val = train_test_split(data['x_train'],
+                                                      data['y_train'],
+                                                      test_size=0.10,
+                                                      random_state=42,
+                                                      stratify=data['y_train'])
+    data['x_train'] = x_train
+    data['y_train'] = y_train
+    data['x_val'] = x_val
+    data['y_val'] = y_val
 
     return data
 

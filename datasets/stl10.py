@@ -15,6 +15,7 @@ https://cs.stanford.edu/~acoates/stl10/
 import numpy as np
 from keras.utils.data_utils import get_file
 import os
+from sklearn.model_selection import train_test_split
 
 n_classes = 10
 img_rows = 96  # height
@@ -58,7 +59,13 @@ def load_data():
     x_test = read_all_images(data_path)
     y_test = read_labels(label_path)
 
+    x_train, x_val, y_train, y_val = train_test_split(x_train, y_train,
+                                                      test_size=0.10,
+                                                      random_state=42,
+                                                      stratify=y_train)
+
     return {'x_train': x_train, 'y_train': y_train,
+            'x_val': x_val, 'y_val': y_val,
             'x_test': x_test, 'y_test': y_test}
 
 

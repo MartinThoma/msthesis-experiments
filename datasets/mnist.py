@@ -7,6 +7,7 @@ from keras.utils.data_utils import get_file
 import numpy as np
 import os
 import scipy.misc
+from sklearn.model_selection import train_test_split
 
 n_classes = 10
 labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -38,13 +39,15 @@ def load_data(path='mnist.npz'):
     x_test = f['x_test']
     y_test = f['y_test']
     f.close()
-    data = {'x_train': x_train,
-            'y_train': y_train,
-            'x_test': x_test,
-            'y_test': y_test,
-            'labels': labels
-            }
-    return data
+
+    x_train, x_val, y_train, y_val = train_test_split(x_train, y_train,
+                                                      test_size=0.10,
+                                                      random_state=42,
+                                                      stratify=y_train)
+
+    return {'x_train': x_train, 'y_train': y_train,
+            'x_val': x_val, 'y_val': y_val,
+            'x_test': x_test, 'y_test': y_test}
 
 
 def preprocess(x, subtact_mean=False):

@@ -1,9 +1,12 @@
+#!/usr/bin/env python
+
 from __future__ import absolute_import
 from keras.datasets.cifar import load_batch
 from keras.utils.data_utils import get_file
 from keras import backend as K
 import numpy as np
 import os
+from sklearn.model_selection import train_test_split
 
 n_classes = 100
 img_rows = 32
@@ -49,7 +52,13 @@ def load_data(label_mode='fine'):
         x_train = x_train.transpose(0, 2, 3, 1)
         x_test = x_test.transpose(0, 2, 3, 1)
 
+    x_train, x_val, y_train, y_val = train_test_split(x_train, y_train,
+                                                      test_size=0.10,
+                                                      random_state=42,
+                                                      stratify=y_train)
+
     return {'x_train': x_train, 'y_train': y_train,
+            'x_val': x_val, 'y_val': y_val,
             'x_test': x_test, 'y_test': y_test}
 
 
