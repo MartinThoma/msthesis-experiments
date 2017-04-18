@@ -8,6 +8,7 @@ optimizer:
 train:
   script_path: ../train/train_keras.py
   artifacts_path: ../artifacts/cifar100_baseline/
+  saveall: True
   batch_size: 64
   epochs: 1000
   data_augmentation:
