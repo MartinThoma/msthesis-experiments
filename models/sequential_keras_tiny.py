@@ -8,7 +8,7 @@ from keras.layers import Dropout, Flatten, Activation, Dense
 from keras.layers import Convolution2D, MaxPooling2D
 
 
-def create_model(nb_classes, input_shape):
+def create_model(nb_classes, input_shape, config=None):
     """Create a VGG-16 like model."""
     model = Sequential()
     model.add(Convolution2D(4, (3, 3), padding='same', activation='relu',
