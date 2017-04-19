@@ -212,7 +212,7 @@ def create_cm(data_module, config, smooth, model_path, index_file,
     model.summary()
 
     # The data, shuffled and split between train and test sets:
-    data = data_module.load_data()
+    data = data_module.load_data(config)
     print("Data loaded.")
 
     X_train, y_train = data['x_train'], data['y_train']
