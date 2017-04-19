@@ -1,8 +1,8 @@
 dataset:
   script_path: ../datasets/caltech_101.py
   just_resize: False
-  img_rows: 32
-  img_cols: 32
+  img_rows: 180
+  img_cols: 240
 model:
   script_path: ../models/baseline.py
 optimizer:
@@ -27,7 +27,7 @@ train:
     featurewise_center: False
     zca_whitening: False
 evaluate:
-  batch_size: 1000
+  batch_size: 716
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False

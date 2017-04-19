@@ -167,8 +167,8 @@ def preprocess(x, subtact_mean=False):
 
 if __name__ == '__main__':
     config = {'dataset': {'just_resize': False,
-                          'img_cols': 32,
-                          'img_rows': 32}}
+                          'img_cols': 240,
+                          'img_rows': 180}}
     data = load_data(config)
     mean_image = np.mean(data['x_train'], axis=0)
     np.save(_mean_filename, mean_image)
