@@ -289,7 +289,8 @@ def main(data_module, model_module, optimizer_module, filename, config,
 
     checkpoint_fname = os.path.basename(config['train']['artifacts_path'])
     if 'saveall' in config['train'] and config['train']['saveall']:
-        checkpoint_fname = "{}_{}.chk.{{epoch:02d}}.h5".format(checkpoint_fname, datestring)
+        checkpoint_fname = ("{}_{}.chk.{{epoch:02d}}.h5"
+                            .format(checkpoint_fname, datestring))
     else:
         checkpoint_fname = "{}_{}.chk.h5".format(checkpoint_fname, datestring)
     model_chk_path = os.path.join(config['train']['artifacts_path'],
@@ -386,12 +387,14 @@ def main(data_module, model_module, optimizer_module, filename, config,
         t1 = time.time()
         # Train one epoch without augmentation to make sure data distribution
         # is fit well
-        model.fit(X_train, Y_train,
+        loss_history = history_cb.history["loss"]
+        model.fit(X_test, Y_test,
                   batch_size=batch_size,
-                  epochs=nb_epoch,
-                  validation_data=(X_test, Y_test),
+                  epochs=int(len(loss_history) * 0.1),
+                  # validation_data=(X_test, Y_test),
                   shuffle=True,
-                  callbacks=callbacks)
+                  # callbacks=callbacks
+                  )
         t2 = time.time()
     loss_history = history_cb.history["loss"]
     acc_history = history_cb.history["acc"]
@@ -413,7 +416,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
         writer.writerows([("loss", "acc", "val_acc")])
         writer.writerows(history_data)
     training_time = t1 - t0
-    readjustment_time = t2- t1
+    readjustment_time = t2 - t1
     print("wall-clock training time: {}s".format(training_time))
     model_fn = os.path.basename(config['train']['artifacts_path'])
     model_fn = "{}_{}.h5".format(model_fn, datestring)
