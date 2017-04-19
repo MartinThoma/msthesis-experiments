@@ -1,5 +1,8 @@
 dataset:
   script_path: ../datasets/caltech_101.py
+  just_resize: False
+  img_rows: 32
+  img_cols: 32
 model:
   script_path: ../models/baseline.py
 optimizer:
@@ -13,12 +16,12 @@ train:
   data_augmentation:
     samplewise_center: False
     samplewise_std_normalization: False
-    rotation_range: 0
-    width_shift_range: 0.1
-    height_shift_range: 0.1
+    rotation_range: 20
+    width_shift_range: 0.2
+    height_shift_range: 0.2
     horizontal_flip: True
     vertical_flip: False
-    zoom_range: 0
+    zoom_range: 0.2
     shear_range: 0
     channel_shift_range: 0
     featurewise_center: False

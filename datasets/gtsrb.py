@@ -185,7 +185,7 @@ def _maybe_extract(fpath, dirname, descend=True):
         return untar_fpath
 
 
-def load_data():
+def load_data(config):
     """
     Load GTSDB dataset.
 
@@ -300,11 +300,12 @@ def preprocess(x, subtact_mean=False):
 
 
 if __name__ == '__main__':
-    data = load_data()
+    config = {'dataset': {}}
+    data = load_data(config)
     mean_image = np.mean(data['x_train'], axis=0)
     np.save(_mean_filename, mean_image)
     import scipy.misc
-    scipy.misc.imshow(mean_image.squeeze())
-    print(data['x_train'].shape)
-    print(data['y_train'].shape)
-    print(data['x_test'].shape)
+    scipy.misc.imshow(mean_image)
+    for img, label in zip(data['x_train'], data['y_train']):
+        print(globals()['labels'][label])
+        scipy.misc.imshow(img)

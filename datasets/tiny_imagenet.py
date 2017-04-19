@@ -129,7 +129,7 @@ def _get_val_data(train_dir, global_name):
     return x_train, y_train
 
 
-def load_data():
+def load_data(config):
     """
     Load Tiny Imagenet dataset.
 
@@ -212,7 +212,8 @@ def preprocess(x, subtact_mean=False):
 
 
 if __name__ == '__main__':
-    data = load_data()
+    config = {'dataset': {}}
+    data = load_data(config)
     n = 10
     for x, y in zip(data['x_train'][:n], data['y_train'][:n]):
         print(globals()['wnid2word'][labels[y]])

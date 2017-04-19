@@ -102,3 +102,4 @@ logs/
 *.png
 *.npy
 *.bundle
+*.npy

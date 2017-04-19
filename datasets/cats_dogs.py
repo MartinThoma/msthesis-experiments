@@ -80,7 +80,7 @@ def prepreprocess(img_path, res_width, res_height):
     return im
 
 
-def load_data():
+def load_data(config):
     """
     Load Cat Dog dataset.
 
@@ -123,7 +123,7 @@ def load_data():
         x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                             test_size=0.33,
                                                             random_state=42,
-                                                            stratify=y_train)
+                                                            stratify=y)
         x_train, x_val, y_train, y_val = train_test_split(x_train, y_train,
                                                           test_size=0.10,
                                                           random_state=42,
@@ -164,7 +164,10 @@ def preprocess(x, subtact_mean=False):
 
 
 if __name__ == "__main__":
-    data = load_data()
+    config = {'dataset': {'just_resize': False,
+                          'img_cols': 32,
+                          'img_rows': 32}}
+    data = load_data(config)
     mean_image = np.mean(data['x_train'], axis=0)
     print("data['x_train'].shape={}".format(data['x_train'].shape))
     print("data['x_test'].shape={}".format(data['x_test'].shape))

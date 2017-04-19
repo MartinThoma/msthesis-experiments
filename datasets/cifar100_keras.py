@@ -13,10 +13,110 @@ img_rows = 32
 img_cols = 32
 img_channels = 3
 
+labels = ["apple", "aquarium_fish",
+          "baby",
+          "bear",
+          "beaver",
+          "bed",
+          "bee",
+          "beetle",
+          "bicycle",
+          "bottle",
+          "bowl",
+          "boy",
+          "bridge",
+          "bus",
+          "butterfly",
+          "camel",
+          "can",
+          "castle",
+          "caterpillar",
+          "cattle",
+          "chair",
+          "chimpanzee",
+          "clock",
+          "cloud",
+          "cockroach",
+          "couch",
+          "crab",
+          "crocodile",
+          "cup",
+          "dinosaur",
+          "dolphin",
+          "elephant",
+          "flatfish",
+          "forest",
+          "fox",
+          "girl",
+          "hamster",
+          "house",
+          "kangaroo",
+          "keyboard",
+          "lamp",
+          "lawn_mower",
+          "leopard",
+          "lion",
+          "lizard",
+          "lobster",
+          "man",
+          "maple_tree",
+          "motorcycle",
+          "mountain",
+          "mouse",
+          "mushroom",
+          "oak_tree",
+          "orange",
+          "orchid",
+          "otter",
+          "palm_tree",
+          "pear",
+          "pickup_truck",
+          "pine_tree",
+          "plain",
+          "plate",
+          "poppy",
+          "porcupine",
+          "possum",
+          "rabbit",
+          "raccoon",
+          "ray",
+          "road",
+          "rocket",
+          "rose",
+          "sea",
+          "seal",
+          "shark",
+          "shrew",
+          "skunk",
+          "skyscraper",
+          "snail",
+          "snake",
+          "spider",
+          "squirrel",
+          "streetcar",
+          "sunflower",
+          "sweet_pepper",
+          "table",
+          "tank",
+          "telephone",
+          "television",
+          "tiger",
+          "tractor",
+          "train",
+          "trout",
+          "tulip",
+          "turtle",
+          "wardrobe",
+          "whale",
+          "willow_tree",
+          "wolf",
+          "woman",
+          "worm"]
+
 _mean_filename = "cifar-100-mean.npy"
 
 
-def load_data(label_mode='fine'):
+def load_data(config):
     """
     Load CIFAR100 dataset.
 
@@ -32,6 +132,7 @@ def load_data(label_mode='fine'):
     ------
     ValueError: in case of invalid `label_mode`.
     """
+    label_mode = 'fine'
     if label_mode not in ['fine', 'coarse']:
         raise ValueError('label_mode must be one of "fine" "coarse".')
 
@@ -78,8 +179,13 @@ def preprocess(x, subtact_mean=False):
 
 
 if __name__ == '__main__':
-    data = load_data()
+    config = {'dataset': {}}
+    data = load_data(config)
     mean_image = np.mean(data['x_train'], axis=0)
     np.save(_mean_filename, mean_image)
     import scipy.misc
     scipy.misc.imshow(mean_image)
+    for img, label in zip(data['x_train'], data['y_train']):
+        label = label[0]
+        print(globals()['labels'][label])
+        scipy.misc.imshow(img)

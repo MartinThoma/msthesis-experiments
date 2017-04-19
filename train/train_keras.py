@@ -212,7 +212,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
     datestring = today.strftime('%Y%m%d-%H%M-%S')
 
     # The data, shuffled and split between train and test sets:
-    data = data_module.load_data()
+    data = data_module.load_data(config)
     print("Data loaded.")
 
     X_train, y_train = data['x_train'], data['y_train']

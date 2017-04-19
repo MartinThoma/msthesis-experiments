@@ -21,6 +21,8 @@ n_classes = 10
 img_rows = 96  # height
 img_cols = 96  # width
 img_channels = 3
+labels = ["airplane", "bird", "car", "cat", "deer", "dog", "horse", "monkey",
+          "ship", "truck"]
 
 
 _mean_filename = "stl10-mean.npy"
@@ -34,7 +36,7 @@ DEPTH = 3
 SIZE = HEIGHT * WIDTH * DEPTH
 
 
-def load_data():
+def load_data(config):
     """
     Load STL10 dataset.
 
@@ -138,11 +140,13 @@ def preprocess(x, subtact_mean=False):
     return x
 
 
-if __name__ == "__main__":
-    data = load_data()
+if __name__ == '__main__':
+    config = {'dataset': {}}
+    data = load_data(config)
     mean_image = np.mean(data['x_train'], axis=0)
-    print("data['x_train'].shape={}".format(data['x_train'].shape))
-    print("data['x_test'].shape={}".format(data['x_test'].shape))
     np.save(_mean_filename, mean_image)
     import scipy.misc
-    scipy.misc.imshow(mean_image.squeeze())
+    scipy.misc.imshow(mean_image)
+    for img, label in zip(data['x_train'], data['y_train']):
+        print(globals()['labels'][label])
+        scipy.misc.imshow(img)

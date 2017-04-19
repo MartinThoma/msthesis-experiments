@@ -13,15 +13,19 @@ img_rows = 32
 img_cols = 32
 img_channels = 3
 
+labels = ["airplane", "automobile", "bird", "cat", "deer", "dog", "frog",
+          "horse", "ship", "truck"]
+
 _mean_filename = "cifar-10-mean.npy"
 
 
-def load_data():
+def load_data(config):
     """
     Load CIFAR10 dataset.
 
-    # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    Returns
+    -------
+    Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
     """
     dirname = 'cifar-10-batches-py'
     origin = 'http://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
@@ -74,8 +78,13 @@ def preprocess(x, subtact_mean=False):
 
 
 if __name__ == '__main__':
-    data = load_data()
+    config = {'dataset': {}}
+    data = load_data(config)
     mean_image = np.mean(data['x_train'], axis=0)
     np.save(_mean_filename, mean_image)
     import scipy.misc
-    scipy.misc.imshow(mean_image.squeeze())
+    scipy.misc.imshow(mean_image)
+    for img, label in zip(data['x_train'], data['y_train']):
+        label = label[0]
+        print(globals()['labels'][label])
+        scipy.misc.imshow(img)

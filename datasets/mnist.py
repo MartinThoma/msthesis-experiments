@@ -20,7 +20,7 @@ img_channels = 1
 _mean_filename = "mnist-mean.npy"
 
 
-def load_data(path='mnist.npz'):
+def load_data(config):
     """
     Load the MNIST dataset.
 
@@ -31,6 +31,7 @@ def load_data(path='mnist.npz'):
     # Returns
         Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
     """
+    path = 'mnist.npz'
     path = get_file(path,
                     origin='https://s3.amazonaws.com/img-datasets/mnist.npz')
     f = np.load(path)
@@ -71,8 +72,12 @@ def preprocess(x, subtact_mean=False):
 
 
 if __name__ == '__main__':
-    data = load_data()
+    config = {'dataset': {}}
+    data = load_data(config)
     mean_image = np.mean(data['x_train'], axis=0)
     np.save(_mean_filename, mean_image)
-    scipy.misc.imshow(mean_image.squeeze())
-    x = preprocess(data['x_train'])
+    import scipy.misc
+    scipy.misc.imshow(mean_image)
+    for img, label in zip(data['x_train'], data['y_train']):
+        print(globals()['labels'][label])
+        scipy.misc.imshow(img)

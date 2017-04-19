@@ -87,7 +87,7 @@ def _generate_index(csv_filepath):
     return symbol_id2index, labels
 
 
-def load_data(mode='fold-1'):
+def load_data(config):
     """
     Load HASYv2 dataset.
 
@@ -106,6 +106,8 @@ def load_data(mode='fold-1'):
     dict
         See "mode" parameter for details
     """
+    mode = 'fold-1'
+
     # Download if not already done
     fname = 'HASYv2.tar.bz2'
     origin = 'https://zenodo.org/record/259444/files/HASYv2.tar.bz2'
@@ -243,8 +245,13 @@ def preprocess(x, subtact_mean=False):
 
 
 if __name__ == '__main__':
-    data = load_data()
+    config = {'dataset': {}}
+    data = load_data(config)
     mean_image = np.mean(data['x_train'], axis=0)
     np.save(_mean_filename, mean_image)
     import scipy.misc
     scipy.misc.imshow(mean_image.squeeze())
+    for img, label in zip(data['x_train'], data['y_train']):
+        label = label[0]
+        print(globals()['labels'][label])
+        scipy.misc.imshow(img.squeeze())

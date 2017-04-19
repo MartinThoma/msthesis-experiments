@@ -1,5 +1,8 @@
 dataset:
   script_path: ../datasets/caltech_256.py
+  just_resize: True
+  img_rows: 32
+  img_cols: 32
 model:
   script_path: ../models/baseline.py
 optimizer:

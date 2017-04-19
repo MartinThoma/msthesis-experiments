@@ -24,16 +24,16 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     stream=sys.stdout)
 
 n_classes = 101
-img_rows = 32
-img_cols = 32
 img_channels = 3
-
 labels = None
 
-_mean_filename = "caltech-101-mean.npy"
+# Design decision
+img_rows = None
+img_cols = None
+_mean_filename = None
 
 
-def prepreprocess(img_path, res_width, res_height):
+def prepreprocess(img_path, res_width, res_height, just_resize=False):
     """
     Make image to size width x height.
 
@@ -42,6 +42,7 @@ def prepreprocess(img_path, res_width, res_height):
     img_path : string
     res_width : int
     res_height : int
+    just_resize : bool
 
     Returns
     -------
@@ -52,34 +53,36 @@ def prepreprocess(img_path, res_width, res_height):
     except:
         logging.error("Failed to load {}.".format(img_path))
         return np.zeros((res_height, res_width, 3), dtype=np.uint8)
-    channels = 3
-    im_height, im_width, _ = im.shape
 
-    # Put on bigger canvas
-    new_height = max(res_height, im_height)
-    new_width = max(res_width, im_width)
-    im_new = np.zeros((new_height, new_width, channels), dtype=np.uint8)
-    pad_top = (new_height - im_height) / 2
-    pad_left = (new_width - im_width) / 2
-    for channel in range(channels):
-        im_new[pad_top:im_height + pad_top,
-               pad_left:im_width + pad_left, channel] = im[:, :, channel]
+    if not just_resize:
+        channels = 3
+        im_height, im_width, _ = im.shape
 
-    # Crop to correct aspect ratio
-    factor = min(new_width / res_width, new_height / res_height)
-    cut_height = factor * res_height
-    cut_width = factor * res_width
-    pad_top = (new_height - cut_height) / 2
-    pad_left = (new_width - cut_width) / 2
-    im = im[pad_top:pad_top + cut_height,
-            pad_left:pad_left + cut_width, :]
+        # Put on bigger canvas
+        new_height = max(res_height, im_height)
+        new_width = max(res_width, im_width)
+        im_new = np.zeros((new_height, new_width, channels), dtype=np.uint8)
+        pad_top = (new_height - im_height) / 2
+        pad_left = (new_width - im_width) / 2
+        for channel in range(channels):
+            im_new[pad_top:im_height + pad_top,
+                   pad_left:im_width + pad_left, channel] = im[:, :, channel]
+
+        # Crop to correct aspect ratio
+        factor = min(new_width / res_width, new_height / res_height)
+        cut_height = factor * res_height
+        cut_width = factor * res_width
+        pad_top = (new_height - cut_height) / 2
+        pad_left = (new_width - cut_width) / 2
+        im = im[pad_top:pad_top + cut_height,
+                pad_left:pad_left + cut_width, :]
 
     # scale
     im = scipy.misc.imresize(im, (res_height, res_width), interp='bilinear')
     return im
 
 
-def load_data():
+def load_data(config):
     """
     Load the Caltech-101 dataset.
 
@@ -87,18 +90,29 @@ def load_data():
     -------
     Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
     """
+    just_resize = config['dataset']['just_resize']
+    globals()["img_rows"] = config['dataset']['img_rows']
+    globals()["img_cols"] = config['dataset']['img_cols']
+    globals()["_mean_filename"] = ("caltech-256-{}-{}-mean.npy"
+                                   .format(img_rows, img_cols))
+
     dirname = '101_ObjectCategories'
     origin = ('http://www.vision.caltech.edu/Image_Datasets/Caltech101/'
               '101_ObjectCategories.tar.gz')
     path = get_file(dirname, origin=origin, untar=True)
 
-    pickle_fpath = os.path.join(path, "caltech-101-data.pickle")
+    fname = ("caltech-101-{}-{}-{}-data.pickle"
+             .format(img_rows, img_cols, just_resize))
+    pickle_fpath = os.path.join(path, fname)
 
     if not os.path.isfile(pickle_fpath):
         classes = sorted(glob.glob("{}/*".format(path)),
                          key=lambda n: n.lower())
         classes = [el for el in classes if "BACKGROUND" not in el]
+        classes = [el for el in classes if os.path.isdir(el)]
+        assert len(classes) == globals()["n_classes"]
         globals()["labels"] = [os.path.basename(el) for el in classes]
+        assert len(globals()["labels"]) == globals()["n_classes"]
         x = []
         y = []
         for i, class_path in enumerate(classes):
@@ -107,7 +121,8 @@ def load_data():
             print("{} in {}".format(len(class_fnames), class_path_glob))
             print("Start reading {}".format(globals()["labels"][i]))
             for class_fname in class_fnames:
-                x.append(prepreprocess(class_fname, img_cols, img_rows))
+                x.append(prepreprocess(class_fname, img_cols, img_rows,
+                                       just_resize))
                 y.append(i)
         x = np.array(x, dtype=np.uint8)
         y = np.array(y, dtype=np.int64)
@@ -151,7 +166,10 @@ def preprocess(x, subtact_mean=False):
 
 
 if __name__ == '__main__':
-    data = load_data()
+    config = {'dataset': {'just_resize': False,
+                          'img_cols': 32,
+                          'img_rows': 32}}
+    data = load_data(config)
     mean_image = np.mean(data['x_train'], axis=0)
     np.save(_mean_filename, mean_image)
     scipy.misc.imshow(mean_image)
