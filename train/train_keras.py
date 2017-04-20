@@ -396,12 +396,12 @@ def main(data_module, model_module, optimizer_module, filename, config,
         # Train one epoch without augmentation to make sure data distribution
         # is fit well
         loss_history = history_cb.history["loss"]
-        model.fit(X_test, Y_test,
+        model.fit(X_train, Y_train,
                   batch_size=batch_size,
-                  epochs=int(len(loss_history) * 0.1),
-                  # validation_data=(X_test, Y_test),
+                  epochs=nb_epoch,
+                  validation_data=(X_test, Y_test),
                   shuffle=True,
-                  # callbacks=callbacks
+                  callbacks=callbacks
                   )
         t2 = time.time()
     loss_history = history_cb.history["loss"]
