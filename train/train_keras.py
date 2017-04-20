@@ -28,6 +28,7 @@ import time
 import platform
 import datetime
 import pickle
+from clr_callback import CyclicLR
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -319,6 +320,11 @@ def main(data_module, model_module, optimizer_module, filename, config,
                                        min_lr=0.5e-6,
                                        verbose=1)
         callbacks.append(lr_reducer)
+    if 'clr' in config['train']:
+        clr = CyclicLR(base_lr=config['train']['clr']['base_lr'],
+                       max_lr=config['train']['clr']['max_lr'],
+                       step_size=config['train']['clr']['step_size'])
+        callbacks.append(clr)
 
     if not da:
         print('Not using data augmentation.')
