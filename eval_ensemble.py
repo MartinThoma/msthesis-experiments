@@ -85,7 +85,7 @@ def main(ensemble_fname, evaluate_training_data):
     data_module = imp.load_source('data', config['dataset']['script_path'])
 
     # Load data
-    data = data_module.load_data()
+    data = data_module.load_data(config)
     X_train = data['x_train']
     X_test = data['x_test']
     y_train = data['y_train']
