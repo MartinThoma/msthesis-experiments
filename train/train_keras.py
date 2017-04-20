@@ -323,7 +323,9 @@ def main(data_module, model_module, optimizer_module, filename, config,
     if 'clr' in config['train']:
         clr = CyclicLR(base_lr=config['train']['clr']['base_lr'],
                        max_lr=config['train']['clr']['max_lr'],
-                       step_size=config['train']['clr']['step_size'])
+                       step_size=(config['train']['clr']['step_size'] *
+                                  (X_train.shape[0] // batch_size)),
+                       mode=config['train']['clr']['mode'])
         callbacks.append(clr)
 
     if not da:
