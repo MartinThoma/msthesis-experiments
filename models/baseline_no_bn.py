@@ -24,15 +24,6 @@ def create_model(nb_classes, input_shape, config=None):
               "a size of 32 x 32. Currently, it has {}".format(input_shape))
     nb_filter = 32
 
-    if 'c1' in config['model']:
-        c1_nb_filter = config['model']['c1']['nb_filter']
-    else:
-        c1_nb_filter = nb_filter
-    if 'c8' in config['model']:
-        c8_nb_filter = config['model']['c8']['nb_filter']
-    else:
-        c8_nb_filter = 512
-
     # Network definition
     # input_shape = (None, None, 3)  # for fcn
     input_ = Input(shape=input_shape)
@@ -48,10 +39,11 @@ def create_model(nb_classes, input_shape, config=None):
                                   kernel_regularizer=l2(0.0001))(x)
                 x = Activation('elu')(x)
             x = MaxPooling2D(pool_size=(2, 2))(x)
-            # nb_filter *= 2
+            nb_filter *= 2
             tmp /= 2
 
-    x = Convolution2D(c1_nb_filter, (3, 3), padding='same',
+    # 32x32
+    x = Convolution2D(nb_filter, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = Activation('elu')(x)
@@ -59,8 +51,9 @@ def create_model(nb_classes, input_shape, config=None):
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = Activation('elu')(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
 
+    # 16x16
+    x = MaxPooling2D(pool_size=(2, 2))(x)
     x = Convolution2D(2 * nb_filter, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
@@ -69,21 +62,25 @@ def create_model(nb_classes, input_shape, config=None):
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = Activation('elu')(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
 
+    # 8x8
+    x = MaxPooling2D(pool_size=(2, 2))(x)
     x = Convolution2D(2 * nb_filter, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = Activation('elu')(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
 
+    # 4x4
+    x = MaxPooling2D(pool_size=(2, 2))(x)
     x = Convolution2D(512, (4, 4),
                       padding='valid',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = Activation('elu')(x)
     x = Dropout(0.5)(x)
-    x = Convolution2D(c8_nb_filter, (1, 1), padding='same',
+
+    # 1x1
+    x = Convolution2D(512, (1, 1), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = Activation('elu')(x)
