@@ -146,6 +146,7 @@ def main(ensemble_fname, evaluate_training_data):
         y_preds.append(pred)
 
     accuracies = []
+    artifacts['single_accuracies'] = {}
 
     for model_index, y_val_pred in enumerate(y_preds):
         cm = calculate_cm(y_eval, y_val_pred, n_classes)
@@ -153,6 +154,7 @@ def main(ensemble_fname, evaluate_training_data):
         accuracies.append(acc)
         print("Cl #{:>2} ({}): accuracy: {:0.2f}%"
               .format(model_index + 1, model_names[model_index], acc))
+        artifacts['single_accuracies'][model_index] = acc
 
     accuracies = np.array(accuracies)
     artifacts['single_acc'] = {'mean': np.mean(accuracies),
