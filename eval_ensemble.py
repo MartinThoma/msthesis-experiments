@@ -77,7 +77,8 @@ def get_bin(x, n=0):
 def main(ensemble_fname, evaluate_training_data):
     # Read YAML file
     artifacts_fname = "{}.json".format(os.path.splitext(ensemble_fname)[0])
-    artifacts = {}
+    artifacts = {'single_accuracies': {},
+                 'ensemble': {}}
     with open(ensemble_fname) as data_file:
         config = yaml.load(data_file)
         config = make_paths_absolute(os.path.dirname(ensemble_fname),
@@ -146,7 +147,6 @@ def main(ensemble_fname, evaluate_training_data):
         y_preds.append(pred)
 
     accuracies = []
-    artifacts['single_accuracies'] = {}
 
     for model_index, y_val_pred in enumerate(y_preds):
         cm = calculate_cm(y_eval, y_val_pred, n_classes)
@@ -173,12 +173,12 @@ def main(ensemble_fname, evaluate_training_data):
             print("Ensemble Accuracy: {:0.2f}% ({})".format(acc * 100,
                                                             bitstring))
             max_acc = acc
-            artifacts['max_acc'] = acc * 100
-            artifacts['best_ensemble'] = bitstring
+            artifacts['ensemble']['best_ensemble_acc'] = acc * 100
+            artifacts['ensemble']['best_ensemble'] = bitstring
         if x == (2**len(y_preds) - 1):
             print("Ensemble Accuracy: {:0.2f}% ({})".format(acc * 100,
                                                             bitstring))
-            artifacts['complete_ensemble_acc'] = acc * 100
+            artifacts['ensemble']['complete_ensemble_acc'] = acc * 100
 
     Y_eval = np_utils.to_categorical(y_eval, n_classes)
     smoothed_lables = (y_val_pred + Y_eval) / 2
