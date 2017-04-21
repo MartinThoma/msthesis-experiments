@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/cifar10_keras.py
+models:
+- "../artifacts/cifar10_baseline/cifar10_baseline_20170420-1822-17.h5"
+- "../artifacts/cifar10_baseline/cifar10_baseline_20170420-1747-24.h5"
+- "../artifacts/cifar10_baseline/cifar10_baseline_20170420-1711-53.h5"
+- "../artifacts/cifar10_baseline/cifar10_baseline_20170420-1636-23.h5"
+- "../artifacts/cifar10_baseline/cifar10_baseline_20170420-1600-59.h5"
+- "../artifacts/cifar10_baseline/cifar10_baseline_20170420-1514-57.h5"
+- "../artifacts/cifar10_baseline/cifar10_baseline_20170420-1411-25.h5"
+- "../artifacts/cifar10_baseline/cifar10_baseline_20170420-1336-19.h5"
+- "../artifacts/cifar10_baseline/cifar10_baseline_20170420-1300-59.h5"
+- "../artifacts/cifar10_baseline/cifar10_baseline_20170420-1226-14.h5"
+evaluate:
+  batch_size: 5000
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
