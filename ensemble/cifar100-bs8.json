@@ -1,0 +1,44 @@
+{
+    "best_ensemble": "1111",
+    "complete_ensemble_acc": 66.609999999999999,
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/cifar100_keras.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 32,
+            "batch_size": 5000,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": true,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170418-1338-11.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170418-0838-35.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170418-0114-20.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170417-1917-43.h5"
+        ]
+    },
+    "max_acc": 66.609999999999999,
+    "single_acc": {
+        "mean": 63.29249999999999,
+        "std": 0.53876595103996539
+    },
+    "single_accuracies": {
+        "0": 63.849999999999994,
+        "1": 63.639999999999993,
+        "2": 62.439999999999998,
+        "3": 63.239999999999995
+    }
+}
