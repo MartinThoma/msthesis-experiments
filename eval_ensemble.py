@@ -76,10 +76,13 @@ def get_bin(x, n=0):
 
 def main(ensemble_fname, evaluate_training_data):
     # Read YAML file
+    artifacts_fname = "{}.json".format(os.path.splitext(ensemble_fname)[0])
+    artifacts = {}
     with open(ensemble_fname) as data_file:
         config = yaml.load(data_file)
         config = make_paths_absolute(os.path.dirname(ensemble_fname),
                                      config)
+        artifacts['config'] = config
 
     sys.path.insert(1, os.path.dirname(config['dataset']['script_path']))
     data_module = imp.load_source('data', config['dataset']['script_path'])
@@ -152,6 +155,8 @@ def main(ensemble_fname, evaluate_training_data):
               .format(model_index + 1, model_names[model_index], acc))
 
     accuracies = np.array(accuracies)
+    artifacts['single_acc'] = {'mean': np.mean(accuracies),
+                               'std': np.std(accuracies)}
     print("Mean single acc={:0.2f}% (std={:0.2f})".format(np.mean(accuracies),
                                                           np.std(accuracies)))
 
@@ -162,14 +167,25 @@ def main(ensemble_fname, evaluate_training_data):
         y_val_pred = sum(y_preds_take) / bitstring.count("1")
         cm = calculate_cm(y_eval, y_val_pred, n_classes)
         acc = sum([cm[i][i] for i in range(n_classes)]) / float(cm.sum())
-        if acc > max_acc or x == (2**len(y_preds) - 1):
+        if acc > max_acc:
             print("Ensemble Accuracy: {:0.2f}% ({})".format(acc * 100,
                                                             bitstring))
             max_acc = acc
+            artifacts['max_acc'] = acc * 100
+            artifacts['best_ensemble'] = bitstring
+        if x == (2**len(y_preds) - 1):
+            print("Ensemble Accuracy: {:0.2f}% ({})".format(acc * 100,
+                                                            bitstring))
+            artifacts['complete_ensemble_acc'] = acc * 100
 
     Y_eval = np_utils.to_categorical(y_eval, n_classes)
     smoothed_lables = (y_val_pred + Y_eval) / 2
     np.save("smoothed_lables", smoothed_lables)
+    with open(artifacts_fname, 'w') as outfile:
+        str_ = json.dumps(artifacts,
+                          indent=4, sort_keys=True,
+                          separators=(',', ': '), ensure_ascii=False)
+        outfile.write(str_)
 
 
 def get_parser():
