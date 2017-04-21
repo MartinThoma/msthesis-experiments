@@ -23,7 +23,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
                     stream=sys.stdout)
 
-n_classes = 101
+n_classes = 102
 img_channels = 3
 labels = None
 
@@ -93,7 +93,7 @@ def load_data(config):
     just_resize = config['dataset']['just_resize']
     globals()["img_rows"] = config['dataset']['img_rows']
     globals()["img_cols"] = config['dataset']['img_cols']
-    globals()["_mean_filename"] = ("caltech-256-{}-{}-mean.npy"
+    globals()["_mean_filename"] = ("caltech-101-{}-{}-mean.npy"
                                    .format(img_rows, img_cols))
 
     dirname = '101_ObjectCategories'
@@ -101,14 +101,16 @@ def load_data(config):
               '101_ObjectCategories.tar.gz')
     path = get_file(dirname, origin=origin, untar=True)
 
-    fname = ("caltech-101-{}-{}-{}-data.pickle"
+    fname = ("caltech-101-{}-{}-{}-102-data.pickle"
              .format(img_rows, img_cols, just_resize))
     pickle_fpath = os.path.join(path, fname)
 
     if not os.path.isfile(pickle_fpath):
         classes = sorted(glob.glob("{}/*".format(path)),
                          key=lambda n: n.lower())
-        classes = [el for el in classes if "BACKGROUND" not in el]
+        if (("background" in config['dataset'] and
+             not config['dataset']["background"])):
+            classes = [el for el in classes if "BACKGROUND" not in el]
         classes = [el for el in classes if os.path.isdir(el)]
         assert len(classes) == globals()["n_classes"]
         globals()["labels"] = [os.path.basename(el) for el in classes]
