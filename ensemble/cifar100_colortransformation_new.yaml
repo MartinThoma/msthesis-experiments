@@ -1,16 +1,16 @@
 dataset:
   script_path: ../datasets/cifar100_keras.py
 models:
-- "../artifacts/cifar100_baseline/cifar100_colortransformation_20170420-2240-01.h5"
-- "../artifacts/cifar100_baseline/cifar100_colortransformation_20170420-2358-29.h5"
-- "../artifacts/cifar100_baseline/cifar100_colortransformation_20170421-0145-59.h5"
-- "../artifacts/cifar100_baseline/cifar100_colortransformation_20170421-0337-13.h5"
-- "../artifacts/cifar100_baseline/cifar100_colortransformation_20170421-0520-38.h5"
-- "../artifacts/cifar100_baseline/cifar100_colortransformation_20170421-0720-16.h5"
-- "../artifacts/cifar100_baseline/cifar100_colortransformation_20170421-0921-08.h5"
-- "../artifacts/cifar100_baseline/cifar100_colortransformation_20170421-1045-52.h5"
-- "../artifacts/cifar100_baseline/cifar100_colortransformation_20170421-1207-02.h5"
-- "../artifacts/cifar100_baseline/cifar100_colortransformation_20170421-1435-09.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170420-2240-01.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170420-2358-29.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170421-0145-59.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170421-0337-13.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170421-0520-38.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170421-0720-16.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170421-0921-08.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170421-1045-52.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170421-1207-02.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170421-1435-09.h5"
 evaluate:
   batch_size: 5000
   augmentation_factor: 32
