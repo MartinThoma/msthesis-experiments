@@ -9,6 +9,8 @@ import keras.layers.normalization
 from keras import backend as K
 from keras.models import load_model
 import seaborn as sns
+sns.set_style("whitegrid")
+sns.plotting_context("notebook", font_scale=3)
 import matplotlib.pyplot as plt
 import operator
 from functools import reduce
@@ -65,8 +67,10 @@ def show_conv_act_distrib(model, X, show_feature_maps=False):
               .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
 
     f, ax1 = plt.subplots(1, 1)
-    sns.violinplot(data=activations_by_layer, orient="v", palette="colorblind",
-                   ax=ax1)
+    p = sns.violinplot(data=activations_by_layer, orient="v",
+                       palette=sns.color_palette(palette="RdBu", n_colors=1),
+                       ax=ax1)
+    p.tick_params(labelsize=16)
     ax1.set_xticklabels(labels)
     ax1.set_title('Convolution activations by layer')
     sns.plt.show()
@@ -77,6 +81,7 @@ def show_conv_weight_dist(model, small_thres=10**-6):
     layer_index = 0
     filter_weights = []
     bias_weights = []
+    filter_weight_ranges = []
     labels = []
     for layer in model.layers:
         if not isinstance(layer, keras.layers.convolutional.Conv2D):
@@ -89,6 +94,19 @@ def show_conv_weight_dist(model, small_thres=10**-6):
               .format(weights[0].shape,
                       reduce(operator.mul, weights[0].shape, 1),
                       layer_index))
+
+        # Measure distribution (replacement by 1x1 filters)
+        ranges = []
+        w, h, range_i, range_j = weights[0].shape
+        if w > 1 or h > 1:
+            for i in range(range_i):  # one filter, but different channel
+                for j in range(range_j):  # different filters
+                    elements = weights[0][:, :, i, j].flatten()
+                    ranges.append(elements.max() - elements.min())
+            ranges = np.array(ranges)
+            filter_weight_ranges.append(ranges)
+
+        # measure distribution
         data = weights[0].flatten()
         labels.append(layer_index)
         filter_weights.append(data)
@@ -106,7 +124,19 @@ def show_conv_weight_dist(model, small_thres=10**-6):
         print("< {}: {}".format(small_thres, len(data_small)))
         layer_index += 1
 
-    # labels = [1, 3, 5, 7, 9, 11, 13, 15]
+    labels = [1, 3, 5, 7, 9, 11, 13, 15]  # baseline
+
+    # Filter weight ranges
+    f, ax1 = plt.subplots(1, 1)
+    p = sns.violinplot(data=filter_weight_ranges, orient="v",
+                       palette=sns.color_palette(palette="RdBu", n_colors=1),
+                       ax=ax1)
+    p.tick_params(labelsize=16)
+    p.set_xlabel('Layer', fontsize=20)
+    p.set_ylabel('Weight range', fontsize=20)
+    ax1.set_xticklabels(labels)
+    ax1.set_title('Filter weight ranges by layer')
+    sns.plt.show()
 
     # Filter weights
     for label, fw in enumerate(filter_weights):
@@ -114,8 +144,11 @@ def show_conv_weight_dist(model, small_thres=10**-6):
               .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
 
     f, ax1 = plt.subplots(1, 1)
-    sns.violinplot(data=filter_weights, orient="v", palette="colorblind",
-                   ax=ax1)
+    p = sns.violinplot(data=filter_weights, orient="v",
+                       palette=sns.color_palette(palette="RdBu", n_colors=1),
+                       ax=ax1)
+    p.tick_params(labelsize=16)
+    p.set_xlabel('Layer', fontsize=20)
     ax1.set_xticklabels(labels)
     ax1.set_title('Filter weight distribution by layer')
     sns.plt.show()
@@ -126,8 +159,11 @@ def show_conv_weight_dist(model, small_thres=10**-6):
               .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
 
     f, ax1 = plt.subplots(1, 1)
-    sns.violinplot(data=bias_weights[:], orient="v", palette="colorblind",
-                   ax=ax1)
+    p = sns.violinplot(data=bias_weights[:], orient="v",
+                       palette=sns.color_palette(palette="RdBu", n_colors=1),
+                       ax=ax1)
+    p.tick_params(labelsize=16)
+    p.set_xlabel('Layer', fontsize=20)
     ax1.set_xticklabels(labels[:])
     ax1.set_title('Bias weight distribution by layer')
     sns.plt.show()
@@ -150,7 +186,7 @@ def show_batchnorm_weight_dist(model):
             beta_weights.append(data)
         layer_index += 1
 
-    # labels = [2, 4, 6, 8, 10, 12, 14, 16]
+    labels = [2, 4, 6, 8, 10, 12, 14, 16]  # baseline
 
     # Gamma weights
     if len(gamma_weights) > 0:
@@ -159,8 +195,11 @@ def show_batchnorm_weight_dist(model):
                   .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
 
         f, ax1 = plt.subplots(1, 1)
-        sns.violinplot(data=gamma_weights, orient="v", palette="colorblind",
-                       ax=ax1)
+        p = sns.violinplot(data=gamma_weights, orient="v",
+                           palette=sns.color_palette(palette="RdBu", n_colors=1),
+                           ax=ax1)
+        p.tick_params(labelsize=16)
+        p.set_xlabel('Layer', fontsize=20)
         ax1.set_xticklabels(labels)
         ax1.set_title('Gamma distribution by layer')
         sns.plt.show()
@@ -172,8 +211,11 @@ def show_batchnorm_weight_dist(model):
                   .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
 
         f, ax1 = plt.subplots(1, 1)
-        sns.violinplot(data=beta_weights, orient="v", palette="colorblind",
-                       ax=ax1)
+        p = sns.violinplot(data=beta_weights, orient="v",
+                           palette=sns.color_palette(palette="RdBu", n_colors=1),
+                           ax=ax1)
+        p.tick_params(labelsize=16)
+        p.set_xlabel('Layer', fontsize=20)
         ax1.set_xticklabels(labels)
         ax1.set_title('Beta distribution by layer')
         sns.plt.show()
