@@ -1,18 +1,18 @@
 dataset:
   script_path: ../datasets/cifar100_keras.py
 models:
-- "../artifacts/cifar100_baseline/cifar100_no_bn_20170421-1103-00.h5"
-- "../artifacts/cifar100_baseline/cifar100_no_bn_20170421-1136-11.h5"
-- "../artifacts/cifar100_baseline/cifar100_no_bn_20170421-1209-20.h5"
-- "../artifacts/cifar100_baseline/cifar100_no_bn_20170421-1238-21.h5"
-- "../artifacts/cifar100_baseline/cifar100_no_bn_20170421-1304-59.h5"
-- "../artifacts/cifar100_baseline/cifar100_no_bn_20170421-1345-46.h5"
-- "../artifacts/cifar100_baseline/cifar100_no_bn_20170421-1420-10.h5"
-- "../artifacts/cifar100_baseline/cifar100_no_bn_20170421-1454-41.h5"
-- "../artifacts/cifar100_baseline/cifar100_no_bn_20170421-1523-43.h5"
-- "../artifacts/cifar100_baseline/cifar100_no_bn_20170421-1559-18.h5"
+- "../artifacts/cifar100_no_bn/cifar100_no_bn_20170421-1103-00.h5"
+- "../artifacts/cifar100_no_bn/cifar100_no_bn_20170421-1136-11.h5"
+- "../artifacts/cifar100_no_bn/cifar100_no_bn_20170421-1209-20.h5"
+- "../artifacts/cifar100_no_bn/cifar100_no_bn_20170421-1238-21.h5"
+- "../artifacts/cifar100_no_bn/cifar100_no_bn_20170421-1304-59.h5"
+- "../artifacts/cifar100_no_bn/cifar100_no_bn_20170421-1345-46.h5"
+- "../artifacts/cifar100_no_bn/cifar100_no_bn_20170421-1420-10.h5"
+- "../artifacts/cifar100_no_bn/cifar100_no_bn_20170421-1454-41.h5"
+- "../artifacts/cifar100_no_bn/cifar100_no_bn_20170421-1523-43.h5"
+- "../artifacts/cifar100_no_bn/cifar100_no_bn_20170421-1559-18.h5"
 evaluate:
-  batch_size: 5000
+  batch_size: 500
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False
