@@ -153,31 +153,33 @@ def show_batchnorm_weight_dist(model):
     # labels = [2, 4, 6, 8, 10, 12, 14, 16]
 
     # Gamma weights
-    for label, fw in zip(labels, gamma_weights):
-        print("99% gamma interval of layer {}: [{:.2f}, {:.2f}]"
-              .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
+    if len(gamma_weights) > 0:
+        for label, fw in zip(labels, gamma_weights):
+            print("99% gamma interval of layer {}: [{:.2f}, {:.2f}]"
+                  .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
 
-    f, ax1 = plt.subplots(1, 1)
-    sns.violinplot(data=gamma_weights, orient="v", palette="colorblind",
-                   ax=ax1)
-    ax1.set_xticklabels(labels)
-    ax1.set_title('Gamma distribution by layer')
-    sns.plt.show()
+        f, ax1 = plt.subplots(1, 1)
+        sns.violinplot(data=gamma_weights, orient="v", palette="colorblind",
+                       ax=ax1)
+        ax1.set_xticklabels(labels)
+        ax1.set_title('Gamma distribution by layer')
+        sns.plt.show()
 
     # beta weights
-    for label, fw in zip(labels, beta_weights):
-        print("99% beta interval of layer {}: [{:.2f}, {:.2f}]"
-              .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
+    if len(beta_weights) > 0:
+        for label, fw in zip(labels, beta_weights):
+            print("99% beta interval of layer {}: [{:.2f}, {:.2f}]"
+                  .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
 
-    f, ax1 = plt.subplots(1, 1)
-    sns.violinplot(data=beta_weights, orient="v", palette="colorblind",
-                   ax=ax1)
-    ax1.set_xticklabels(labels)
-    ax1.set_title('Beta distribution by layer')
-    sns.plt.show()
+        f, ax1 = plt.subplots(1, 1)
+        sns.violinplot(data=beta_weights, orient="v", palette="colorblind",
+                       ax=ax1)
+        ax1.set_xticklabels(labels)
+        ax1.set_title('Beta distribution by layer')
+        sns.plt.show()
 
 
-def main(data_module, model_path, image_fname):
+def main(config, data_module, model_path, image_fname):
     """Run analysis."""
     model = load_model(model_path)
 
@@ -185,7 +187,7 @@ def main(data_module, model_path, image_fname):
     if image_fname is not None:
         image = scipy.misc.imread(image_fname)
     else:
-        data = data_module.load_data()
+        data = data_module.load_data(config)
         X_train = data['x_train']
         X_test = data['x_test']
         # y_train = data['y_train']
@@ -252,4 +254,4 @@ if __name__ == "__main__":
         model_paths = [m for m in model_paths if "_chk.h5" not in m]
         model_path = model_paths[0]
     logging.info("Take {}".format(model_path))
-    main(data, model_path, args.image_fname)
+    main(config, data, model_path, args.image_fname)
