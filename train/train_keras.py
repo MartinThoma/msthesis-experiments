@@ -410,10 +410,12 @@ def main(data_module, model_module, optimizer_module, filename, config,
     np_loss_history = np.array(loss_history)
     np_acc_history = np.array(acc_history)
     np_val_acc_history = np.array(val_acc_history)
-    history_data = zip(np_loss_history, np_acc_history, np_val_acc_history)
-    history_data = [("%0.4f" % el[0],
+    history_data = zip(list(range(1, len(np_loss_history) + 1)),
+                       np_loss_history, np_acc_history, np_val_acc_history)
+    history_data = [(el[0],
                      "%0.4f" % el[1],
-                    "%0.4f" % el[2]) for el in history_data]
+                     "%0.4f" % el[2],
+                     "%0.4f" % el[3]) for el in history_data]
     history_fname = os.path.basename(config['train']['artifacts_path'])
     history_fname = "{}_{}_history.csv".format(history_fname, datestring)
     csv_path = os.path.join(config['train']['artifacts_path'],
@@ -421,7 +423,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
     csv_path = get_nonexistant_path(csv_path)
     with open(csv_path, 'w') as fp:
         writer = csv.writer(fp, delimiter=',')
-        writer.writerows([("loss", "acc", "val_acc")])
+        writer.writerows([("epoch", "loss", "acc", "val_acc")])
         writer.writerows(history_data)
     training_time = t1 - t0
     readjustment_time = t2 - t1
