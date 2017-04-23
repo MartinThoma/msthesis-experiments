@@ -1,10 +1,16 @@
 dataset:
   script_path: ../datasets/cifar100_keras.py
 models:
-- "../artifacts/cifar100_bs8/cifar100_bs8_20170418-1338-11.h5"
-- "../artifacts/cifar100_bs8/cifar100_bs8_20170418-0838-35.h5"
-- "../artifacts/cifar100_bs8/cifar100_bs8_20170418-0114-20.h5"
-- "../artifacts/cifar100_bs8/cifar100_bs8_20170417-1917-43.h5"
+- "../artifacts/cifar100_bs8/cifar100_bs8_20170421-1721-27.h5"
+- "../artifacts/cifar100_bs8/cifar100_bs8_20170421-2238-10.h5"
+- "../artifacts/cifar100_bs8/cifar100_bs8_20170422-0415-25.h5"
+- "../artifacts/cifar100_bs8/cifar100_bs8_20170422-0724-26.h5"
+- "../artifacts/cifar100_bs8/cifar100_bs8_20170422-1204-39.h5"
+- "../artifacts/cifar100_bs8/cifar100_bs8_20170422-1547-31.h5"
+- "../artifacts/cifar100_bs8/cifar100_bs8_20170422-2050-52.h5"
+- "../artifacts/cifar100_bs8/cifar100_bs8_20170423-0119-41.h5"
+- "../artifacts/cifar100_bs8/cifar100_bs8_20170423-0457-36.h5"
+- "../artifacts/cifar100_bs8/cifar100_bs8_20170423-1002-45.h5"
 evaluate:
   batch_size: 5000
   augmentation_factor: 32

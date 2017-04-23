@@ -1,6 +1,4 @@
 {
-    "best_ensemble": "1111",
-    "complete_ensemble_acc": 66.609999999999999,
     "config": {
         "dataset": {
             "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/cifar100_keras.py"
@@ -24,21 +22,37 @@
             }
         },
         "models": [
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170418-1338-11.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170418-0838-35.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170418-0114-20.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170417-1917-43.h5"
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170421-1721-27.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170421-2238-10.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170422-0415-25.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170422-0724-26.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170422-1204-39.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170422-1547-31.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170422-2050-52.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170423-0119-41.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170423-0457-36.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs8/cifar100_bs8_20170423-1002-45.h5"
         ]
     },
-    "max_acc": 66.609999999999999,
+    "ensemble": {
+        "best_ensemble": "1100001011",
+        "best_ensemble_acc": 66.010000000000005,
+        "complete_ensemble_acc": 65.680000000000007
+    },
     "single_acc": {
-        "mean": 63.29249999999999,
-        "std": 0.53876595103996539
+        "mean": 61.930999999999997,
+        "std": 1.0314693403102175
     },
     "single_accuracies": {
-        "0": 63.849999999999994,
-        "1": 63.639999999999993,
-        "2": 62.439999999999998,
-        "3": 63.239999999999995
+        "0": 62.370000000000005,
+        "1": 63.399999999999999,
+        "2": 59.650000000000006,
+        "3": 62.100000000000001,
+        "4": 61.009999999999998,
+        "5": 63.019999999999996,
+        "6": 62.18,
+        "7": 61.140000000000008,
+        "8": 62.509999999999998,
+        "9": 61.929999999999993
     }
 }
