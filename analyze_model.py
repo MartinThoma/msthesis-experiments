@@ -10,7 +10,6 @@ from keras import backend as K
 from keras.models import load_model
 import seaborn as sns
 sns.set_style("whitegrid")
-sns.plotting_context("notebook", font_scale=3)
 import matplotlib.pyplot as plt
 import operator
 from functools import reduce
