@@ -33,7 +33,7 @@ TH_WEIGHTS_PATH_NO_TOP = URL_BASE + 'th_kernels_th_dim_ordering_no_top.h5'
 TF_WEIGHTS_PATH_NO_TOP = URL_BASE + 'tf_kernels_tf_dim_ordering_no_top.h5'
 
 
-def create_model(classes=10, input_shape=None,
+def create_model(classes=10, input_shape=None, config=None,
                  depth=28, width=8, dropout_rate=0.0,
                  include_top=True, weights=None,
                  input_tensor=None):
