@@ -6,7 +6,7 @@ import numpy as np
 
 
 def main(directory):
-    files_glob = "{}/*.json".format(directory)
+    files_glob = "{}/*_*.json".format(directory)
     files = glob.glob(files_glob)
     train_metas = []
     for fname in files:
@@ -16,16 +16,21 @@ def main(directory):
 
     training_times = []
     training_epochs = []
+    time_per_epoch = []
     for meta in train_metas:
         print(meta['HOST'])
         training_times.append(meta['training_time'])
         training_epochs.append(meta['epochs'])
+        time_per_epoch.append(float(meta['training_time']) / meta['epochs'])
     training_times = np.array(training_times)
     training_epochs = np.array(training_epochs)
-    print("Epochs (mean={}, std={})".format(training_epochs.mean(),
-                                            training_epochs.std()))
+    time_per_epoch = np.array(time_per_epoch)
+    print("Epochs (mean={}, std={}, min={}, max={})"
+          .format(training_epochs.mean(), training_epochs.std(),
+                  training_epochs.min(), training_epochs.max()))
     print("Training time (mean={}, std={})".format(training_times.mean(),
                                                    training_times.std()))
+    print("time per epoch: {}".format(time_per_epoch.mean()))
 
 
 def get_parser():
