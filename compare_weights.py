@@ -17,7 +17,7 @@ sns.set_palette(sns.color_palette("Greens_d", 8))
 
 def main(directory):
     """Orchestrate."""
-    h5_fnames = glob.glob("{}/*chk*.h5".format(directory))
+    h5_fnames = glob.glob("{}/*.chk.*.h5".format(directory))
     h5_fnames = natsort.natsorted(h5_fnames)
     print("{} models to be loaded.".format(len(h5_fnames)))
 
@@ -64,8 +64,9 @@ def main(directory):
             changes = pickle.load(handle)
         recorded_epochs = len(changes.items()[0][1])
         print("Recorded epochs={}".format(recorded_epochs))
-    print("Done. plot stuff ({})".format(len(changes.items())))
+    print("Done. plot stuff ({} lines)".format(len(changes.items())))
     f, ax1 = plt.subplots(1, 1)
+    # ax1.set_xticklabels()
     # p = sns.violinplot(data=changes, orient="v",
     #                    palette=sns.color_palette(palette="RdBu", n_colors=1),
     #                    ax=ax1)
@@ -73,10 +74,18 @@ def main(directory):
     # p.set_xlabel('Epoch', fontsize=20)
     # p.set_ylabel('absolute weight update', fontsize=20)
     for layer_index, layer_changes in sorted(changes.items()):
-        ax1.plot([np.array(epoch).max() for epoch in layer_changes],
-                 label=layer_index)
+        y = [np.array(epoch).mean() for epoch in layer_changes]  # quick fix
+        # print(y[19])
+        # y[19] = y[18]
+        x = list(range(2, 2 + recorded_epochs))
+        p = ax1.plot(x, y, label=layer_index)  # quick-fix
+        color = p[0].get_color()
+        for x in [40, 80, 100]:
+            y2 = y[x]
+            sns.plt.plot(x, y2, 'o', color='white', markersize=9)
+            sns.plt.plot(x, y2, 'k', marker="$%s$" % layer_index, color=color,
+                         markersize=7)
     plt.legend()
-    ax1.set_xticklabels(list(range(2, 2 + recorded_epochs)))
     ax1.set_xlabel('Epoch', fontsize=20)
     sns.plt.show()
 
