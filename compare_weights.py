@@ -20,6 +20,7 @@ def main(directory, layer_index):
     # Start analysing weights
     last_weights = None
     for i, h5_fname in enumerate(h5_fnames):
+        print("Load {}".format(h5_fname))
         model = load_model(h5_fname)
         weights = model.layers[layer_index].get_weights()[0].flatten()
         if last_weights is None:
@@ -31,16 +32,16 @@ def main(directory, layer_index):
                 change_epoch.append(abs(w1 - w2))
             changes.append(change_epoch)
             last_weights = weights
-        if i > 10:
+        if i > 20:
             break
     f, ax1 = plt.subplots(1, 1)
     p = sns.violinplot(data=changes, orient="v",
                        palette=sns.color_palette(palette="RdBu", n_colors=1),
                        ax=ax1)
     p.tick_params(labelsize=16)
-    p.set_xlabel('Layer', fontsize=20)
-    p.set_ylabel('Weight range', fontsize=20)
-    ax1.set_title('Filter weight ranges by layer')
+    p.set_xlabel('Epoch', fontsize=20)
+    p.set_ylabel('absolute weight update', fontsize=20)
+    ax1.set_xticklabels(list(range(2, 2 + len(changes))))
     sns.plt.show()
 
 
