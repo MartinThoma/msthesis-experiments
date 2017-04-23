@@ -1,6 +1,4 @@
 {
-    "best_ensemble": "1010111",
-    "complete_ensemble_acc": 68.049999999999997,
     "config": {
         "dataset": {
             "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/cifar100_keras.py"
@@ -24,27 +22,37 @@
             }
         },
         "models": [
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170417-1924-10.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170417-2233-41.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170418-0123-57.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170418-0450-38.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170418-0728-59.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170418-1043-25.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170418-1409-30.h5"
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170421-2230-30.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170422-0115-31.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170422-0354-29.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170422-0714-19.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170422-0917-46.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170422-1202-18.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170422-1414-08.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170422-1617-17.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170422-1932-29.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_bs16/cifar100_bs16_20170422-2213-10.h5"
         ]
     },
-    "max_acc": 68.300000000000011,
+    "ensemble": {
+        "best_ensemble": "0010100110",
+        "best_ensemble_acc": 67.5,
+        "complete_ensemble_acc": 66.97999999999999
+    },
     "single_acc": {
-        "mean": 65.40428571428572,
-        "std": 0.61488343013375846
+        "mean": 64.159000000000006,
+        "std": 0.81467109927872028
     },
     "single_accuracies": {
-        "0": 65.340000000000003,
-        "1": 64.990000000000009,
-        "2": 65.299999999999997,
-        "3": 64.340000000000003,
-        "4": 65.459999999999994,
-        "5": 66.030000000000001,
-        "6": 66.36999999999999
+        "0": 64.409999999999997,
+        "1": 64.239999999999995,
+        "2": 65.5,
+        "3": 62.970000000000006,
+        "4": 64.649999999999991,
+        "5": 63.449999999999996,
+        "6": 63.210000000000001,
+        "7": 65.340000000000003,
+        "8": 64.219999999999999,
+        "9": 63.600000000000001
     }
 }

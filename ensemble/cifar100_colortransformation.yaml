@@ -1,16 +1,16 @@
 dataset:
   script_path: ../datasets/cifar100_keras.py
 models:
-- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170415-1913-16.h5"
-- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170415-1953-05.h5"
-- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170415-2018-54.h5"
-- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170415-2045-49.h5"
-- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170415-2140-55.h5"
-- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170415-2225-32.h5"
-- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170415-2247-42.h5"
-- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170415-2351-13.h5"
-- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170416-0029-24.h5"
-- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170416-0051-00.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1140-07.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1251-14.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1407-09.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1507-23.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1625-42.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1745-37.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1926-40.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-2025-34.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-2221-28.h5"
+- "../artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-2338-07.h5"
 evaluate:
   batch_size: 5000
   augmentation_factor: 32
