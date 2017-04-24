@@ -1,0 +1,58 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/cifar100_keras.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 32,
+            "batch_size": 5000,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": true,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_large11s/cifar100_large11s_20170423-0923-17.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_large11s/cifar100_large11s_20170423-1052-59.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_large11s/cifar100_large11s_20170423-1243-40.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_large11s/cifar100_large11s_20170423-1428-13.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_large11s/cifar100_large11s_20170423-1612-48.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_large11s/cifar100_large11s_20170423-1747-34.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_large11s/cifar100_large11s_20170423-1943-10.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_large11s/cifar100_large11s_20170423-2138-59.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_large11s/cifar100_large11s_20170423-2304-57.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_large11s/cifar100_large11s_20170424-0017-10.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "0111101001",
+        "best_ensemble_acc": 67.700000000000003,
+        "complete_ensemble_acc": 67.379999999999995
+    },
+    "single_acc": {
+        "mean": 65.731999999999999,
+        "std": 0.76930878065962305
+    },
+    "single_accuracies": {
+        "0": 64.990000000000009,
+        "1": 66.080000000000013,
+        "2": 65.689999999999998,
+        "3": 65.86999999999999,
+        "4": 65.259999999999991,
+        "5": 66.36999999999999,
+        "6": 66.649999999999991,
+        "7": 65.390000000000001,
+        "8": 64.180000000000007,
+        "9": 66.840000000000003
+    }
+}
