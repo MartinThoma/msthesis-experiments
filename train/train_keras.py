@@ -13,7 +13,7 @@ np.random.seed(0)
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
 from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
-from keras.callbacks import RemoteMonitor, ReduceLROnPlateau
+from keras.callbacks import RemoteMonitor, ReduceLROnPlateau, Callback
 from keras.utils import np_utils
 # from sklearn.model_selection import train_test_split
 import csv
@@ -33,6 +33,27 @@ from clr_callback import CyclicLR
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
                     stream=sys.stdout)
+
+
+class History(Callback):
+    """
+    Callback that records events into a `History` object.
+
+    This callback is automatically applied to
+    every Keras model. The `History` object
+    gets returned by the `fit` method of models.
+    """
+
+    def on_train_begin(self, logs=None):
+        if not hasattr(self, 'epoch'):
+            self.epoch = []
+            self.history = {}
+
+    def on_epoch_end(self, epoch, logs=None):
+        logs = logs or {}
+        self.epoch.append(epoch)
+        for k, v in logs.items():
+            self.history.setdefault(k, []).append(v)
 
 
 def flatten_completely(iterable):
@@ -304,7 +325,8 @@ def main(data_module, model_module, optimizer_module, filename, config,
     es = EarlyStopping(monitor='val_acc',
                        min_delta=0,
                        patience=10, verbose=1, mode='auto')
-    callbacks = [checkpoint, es]  # remote,
+    history_cb = History()
+    callbacks = [checkpoint, es, history_cb]  # remote,
     if 'tensorboard' in config['train'] and config['train']['tensorboard']:
         tensorboard = TensorBoard(log_dir='./logs', histogram_freq=0,
                                   write_graph=True, write_images=True)
@@ -333,12 +355,12 @@ def main(data_module, model_module, optimizer_module, filename, config,
         model.save(model.save(model_chk_path.format(epoch=0)
                               .replace('.00.', '.start.00.')))
         t0 = time.time()
-        history_cb = model.fit(X_train, Y_train,
-                               batch_size=batch_size,
-                               epochs=nb_epoch,
-                               validation_data=(X_test, Y_test),
-                               shuffle=True,
-                               callbacks=callbacks)
+        model.fit(X_train, Y_train,
+                  batch_size=batch_size,
+                  epochs=nb_epoch,
+                  validation_data=(X_test, Y_test),
+                  shuffle=True,
+                  callbacks=callbacks)
         t1 = time.time()
         t2 = t1
     else:
@@ -390,12 +412,12 @@ def main(data_module, model_module, optimizer_module, filename, config,
         model.save(model_chk_path.format(epoch=0).replace('.00.',
                                                           '.start.00.'))
         t0 = time.time()
-        history_cb = model.fit_generator(datagen.flow(X_train, Y_train,
-                                         batch_size=batch_size),
-                                         steps_per_epoch=steps_per_epoch,
-                                         epochs=nb_epoch,
-                                         validation_data=(X_test, Y_test),
-                                         callbacks=callbacks)
+        model.fit_generator(datagen.flow(X_train, Y_train,
+                            batch_size=batch_size),
+                            steps_per_epoch=steps_per_epoch,
+                            epochs=nb_epoch,
+                            validation_data=(X_test, Y_test),
+                            callbacks=callbacks)
         t1 = time.time()
         # Train one epoch without augmentation to make sure data distribution
         # is fit well
@@ -405,8 +427,8 @@ def main(data_module, model_module, optimizer_module, filename, config,
                   epochs=nb_epoch,
                   validation_data=(X_test, Y_test),
                   shuffle=True,
-                  callbacks=callbacks
-                  )
+                  callbacks=callbacks,
+                  initial_epoch=len(loss_history))
         t2 = time.time()
     loss_history = history_cb.history["loss"]
     acc_history = history_cb.history["acc"]

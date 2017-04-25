@@ -8,6 +8,7 @@ optimizer:
 train:
   script_path: ../train/train_keras.py
   artifacts_path: ../artifacts/fast/
+  saveall: True
   batch_size: 32
   epochs: 10
   data_augmentation:
