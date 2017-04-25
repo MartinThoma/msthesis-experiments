@@ -62,8 +62,8 @@ def main(directory):
     else:
         with open(pickle_fname, 'rb') as handle:
             changes = pickle.load(handle)
-        recorded_epochs = len(changes.items()[0][1])
-        print("Recorded epochs={}".format(recorded_epochs))
+    recorded_epochs = len(changes.items()[0][1])
+    print("Recorded epochs={}".format(recorded_epochs))
     print("Done. plot stuff ({} lines)".format(len(changes.items())))
     f, ax1 = plt.subplots(1, 1)
     # ax1.set_xticklabels()
@@ -85,13 +85,13 @@ def main(directory):
             sns.plt.plot(x, y2, 'o', color='white', markersize=9)
             sns.plt.plot(x, y2, 'k', marker="$%s$" % layer_index, color=color,
                          markersize=7)
-    plt.legend()
+    sns.plt.legend()
     ax1.set_xlabel('Epoch', fontsize=20)
     sns.plt.show()
 
 
 def get_parser():
-    """Get parser object for script compare_weights.py."""
+    """Get parser object for compare_weights.py."""
     from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
     parser = ArgumentParser(description=__doc__,
                             formatter_class=ArgumentDefaultsHelpFormatter)
@@ -100,12 +100,6 @@ def get_parser():
                         help="artifacts directory with .chk.h5 files",
                         metavar="DIR",
                         required=True)
-    # parser.add_argument("-i",
-    #                     dest="layer_i",
-    #                     default=2,
-    #                     type=int,
-    #                     help="layer for which the weights are compared",
-    #                     required=True)
     return parser
 
 
