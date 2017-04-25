@@ -10,11 +10,11 @@ import random
 import numpy as np
 import time
 from keras.models import load_model
-train_keras = imp.load_source('train_keras', "train/train_keras.py")
-from run_training import make_paths_absolute
 import logging
 import datetime
 import glob
+train_keras = imp.load_source('train_keras', "train/train_keras.py")
+from run_training import make_paths_absolute
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -22,6 +22,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
 
 
 def inference_timing(data_module, config, model_path, batch_sizes):
+    """Time how long inference takes."""
     json_data = {'runs': []}
     artifacts_path = config['train']['artifacts_path']
 
@@ -48,7 +49,7 @@ def inference_timing(data_module, config, model_path, batch_sizes):
     model = load_model(model_path)
 
     # The data, shuffled and split between train and test sets:
-    data = data_module.load_data()
+    data = data_module.load_data(config)
     print("Data loaded.")
 
     for run_i, batch_size in enumerate(batch_sizes):
