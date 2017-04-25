@@ -54,8 +54,8 @@ def main(directory):
                         change_epoch.append(abs(w1 - w2))
                     changes[layer_index].append(change_epoch)
                     last_weights[layer_index] = weights
-            # if recorded_epochs > 10:  # TODO: dev
-                # break
+            if recorded_epochs > 30:  # TODO: dev
+                break
         # serialize
         with open(pickle_fname, 'wb') as handle:
             pickle.dump(changes, handle, protocol=pickle.HIGHEST_PROTOCOL)
@@ -77,14 +77,16 @@ def main(directory):
         y = [np.array(epoch).mean() for epoch in layer_changes]  # quick fix
         # print(y[19])
         # y[19] = y[18]
-        x = list(range(2, 2 + recorded_epochs))
+        x = list(range(1, 1 + recorded_epochs))
         p = ax1.plot(x, y, label=layer_index)  # quick-fix
         color = p[0].get_color()
-        for x in [40, 80, 100]:
-            y2 = y[x]
-            sns.plt.plot(x, y2, 'o', color='white', markersize=9)
-            sns.plt.plot(x, y2, 'k', marker="$%s$" % layer_index, color=color,
-                         markersize=7)
+        if len(y) > 100:
+            for x in [40, 80, 100]:
+                y2 = y[x]
+                sns.plt.plot(x, y2, 'o', color='white', markersize=9)
+                sns.plt.plot(x, y2, 'k', marker="$%s$" % layer_index,
+                             color=color,
+                             markersize=7)
     sns.plt.legend()
     ax1.set_xlabel('Epoch', fontsize=20)
     sns.plt.show()
