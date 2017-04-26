@@ -15,7 +15,7 @@ sns.set_style("whitegrid")
 sns.set_palette(sns.color_palette("Greens_d", 8))
 
 
-def main(directory):
+def main(directory, ignore_first, max_epochs):
     """Orchestrate."""
     h5_fnames = glob.glob("{}/*.chk.*.h5".format(directory))
     h5_fnames = natsort.natsorted(h5_fnames)
@@ -54,7 +54,7 @@ def main(directory):
                         change_epoch.append(abs(w1 - w2))
                     changes[layer_index].append(change_epoch)
                     last_weights[layer_index] = weights
-            if recorded_epochs > 30:  # TODO: dev
+            if recorded_epochs > max_epochs:
                 break
         # serialize
         with open(pickle_fname, 'wb') as handle:
@@ -75,7 +75,9 @@ def main(directory):
     # p.set_ylabel('absolute weight update', fontsize=20)
     for layer_index, layer_changes in sorted(changes.items()):
         y = [np.array(epoch).mean() for epoch in layer_changes]  # quick fix
-        # y[0] = y[1]
+
+        if ignore_first:
+            y[0] = y[1]
         x = list(range(recorded_epochs))
         p = ax1.plot(x, y, label=layer_index)  # quick-fix
         color = p[0].get_color()
@@ -101,9 +103,19 @@ def get_parser():
                         help="artifacts directory with .chk.h5 files",
                         metavar="DIR",
                         required=True)
+    parser.add_argument("-i",
+                        action="store_true",
+                        dest="ignore_first",
+                        default=False,
+                        help="ignore first")
+    parser.add_argument("--max",
+                        dest="max_epochs",
+                        default=1000,
+                        type=int,
+                        help="maximum number of epochs to be handled")
     return parser
 
 
 if __name__ == "__main__":
     args = get_parser().parse_args()
-    main(args.directory)
+    main(args.directory, args.ignore_first, args.max_epochs)
