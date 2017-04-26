@@ -64,13 +64,16 @@ def main(directory, ignore_first, max_epochs):
     print("Recorded epochs={}".format(recorded_epochs))
     print("Done. plot stuff ({} lines)".format(len(changes.items())))
     f, ax1 = plt.subplots(1, 1)
+    labels = [1, 3, 5, 7, 9, 11, 13, 15]  # Adjust
+    i = 0
     for layer_index, layer_changes in sorted(changes.items()):
-        y = [np.array(epoch).mean() for epoch in layer_changes]  # quick fix
+        y = [np.array(epoch).mean() for epoch in layer_changes]  # Adjust
 
         if ignore_first:
             y[0] = y[1]
         x = list(range(recorded_epochs))
-        p = ax1.plot(x, y, label=layer_index)  # quick-fix
+        p = ax1.plot(x, y, label="Layer {}".format(labels[i]))  # layer_index
+        i += 1
         color = p[0].get_color()
         if len(y) > 100:
             for x in [40, 80, 100]:
@@ -81,7 +84,7 @@ def main(directory, ignore_first, max_epochs):
                              markersize=7)
     sns.plt.legend()
     ax1.set_xlabel('Epoch', fontsize=20)
-    ax1.set_ylabel('Absolute weight change', fontsize=20,
+    ax1.set_ylabel('Absolute weight change (mean)', fontsize=20,  # Adjust
                    rotation=90, labelpad=20)
     sns.plt.show()
 
