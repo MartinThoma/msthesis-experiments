@@ -17,20 +17,27 @@ def main(directory):
     training_times = []
     training_epochs = []
     time_per_epoch = []
+    time_per_epoch_added = []
     for meta in train_metas:
         print(meta['HOST'])
         training_times.append(meta['training_time'])
         training_epochs.append(meta['epochs'])
         time_per_epoch.append(float(meta['training_time']) / meta['epochs'])
+        time_per_epoch_added.append((float(meta['training_time']) +
+                                     meta['readjustment_time']) /
+                                    meta['epochs'])
     training_times = np.array(training_times)
     training_epochs = np.array(training_epochs)
     time_per_epoch = np.array(time_per_epoch)
+    time_per_epoch_added = np.array(time_per_epoch_added)
     print("Epochs (mean={}, std={}, min={}, max={})"
           .format(training_epochs.mean(), training_epochs.std(),
                   training_epochs.min(), training_epochs.max()))
     print("Training time (mean={}, std={})".format(training_times.mean(),
                                                    training_times.std()))
     print("time per epoch: {}".format(time_per_epoch.mean()))
+    print("time per epoch (added - new): {}"
+          .format(time_per_epoch_added.mean()))
 
 
 def get_parser():
