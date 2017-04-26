@@ -353,7 +353,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
     if not da:
         print('Not using data augmentation.')
         model.save(model.save(model_chk_path.format(epoch=0)
-                              .replace('.00.', '.start.00.')))
+                              .replace('.00.', '.00.a.')))
         t0 = time.time()
         model.fit(X_train, Y_train,
                   batch_size=batch_size,
