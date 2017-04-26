@@ -35,8 +35,6 @@ def main(directory, ignore_first, max_epochs):
         last_weights = {}
         recorded_epochs = 0
         for epoch, h5_fname in enumerate(h5_fnames):
-            # if i < 80:
-            #     continue
             print("Load {}".format(h5_fname))
             model = load_model(h5_fname)
             recorded_epochs += 1
@@ -66,13 +64,6 @@ def main(directory, ignore_first, max_epochs):
     print("Recorded epochs={}".format(recorded_epochs))
     print("Done. plot stuff ({} lines)".format(len(changes.items())))
     f, ax1 = plt.subplots(1, 1)
-    # ax1.set_xticklabels()
-    # p = sns.violinplot(data=changes, orient="v",
-    #                    palette=sns.color_palette(palette="RdBu", n_colors=1),
-    #                    ax=ax1)
-    # p.tick_params(labelsize=16)
-    # p.set_xlabel('Epoch', fontsize=20)
-    # p.set_ylabel('absolute weight update', fontsize=20)
     for layer_index, layer_changes in sorted(changes.items()):
         y = [np.array(epoch).mean() for epoch in layer_changes]  # quick fix
 
@@ -90,6 +81,8 @@ def main(directory, ignore_first, max_epochs):
                              markersize=7)
     sns.plt.legend()
     ax1.set_xlabel('Epoch', fontsize=20)
+    ax1.set_ylabel('Absolute weight change', fontsize=20,
+                   rotation=90, labelpad=20)
     sns.plt.show()
 
 
