@@ -1,7 +1,7 @@
 dataset:
   script_path: ../datasets/cifar100_keras.py
 models:
-- "../artifacts/cifar100_softplus/cifar100_softplus_20170426-0859-40"
+- "../artifacts/cifar100_softplus/cifar100_softplus_20170426-0859-40.h5"
 - "../artifacts/cifar100_softplus/cifar100_softplus_20170426-0950-52.h5"
 - "../artifacts/cifar100_softplus/cifar100_softplus_20170426-1041-00.h5"
 - "../artifacts/cifar100_softplus/cifar100_softplus_20170426-1128-58.h5"
