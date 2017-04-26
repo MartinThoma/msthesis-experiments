@@ -75,9 +75,8 @@ def main(directory):
     # p.set_ylabel('absolute weight update', fontsize=20)
     for layer_index, layer_changes in sorted(changes.items()):
         y = [np.array(epoch).mean() for epoch in layer_changes]  # quick fix
-        # print(y[19])
-        # y[19] = y[18]
-        x = list(range(1, 1 + recorded_epochs))
+        # y[0] = y[1]
+        x = list(range(recorded_epochs))
         p = ax1.plot(x, y, label=layer_index)  # quick-fix
         color = p[0].get_color()
         if len(y) > 100:
