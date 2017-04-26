@@ -8,14 +8,6 @@ Takes about 100 minutes.
 """
 
 from __future__ import print_function
-import numpy as np
-np.random.seed(0)
-from keras.preprocessing.image import ImageDataGenerator
-from keras import backend as K
-from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
-from keras.callbacks import RemoteMonitor, ReduceLROnPlateau, Callback
-from keras.utils import np_utils
-# from sklearn.model_selection import train_test_split
 import csv
 import json
 import logging
@@ -23,11 +15,18 @@ import os
 import sys
 import collections
 from copy import deepcopy
-from keras.models import load_model
 import time
 import platform
 import datetime
 import pickle
+import numpy as np
+np.random.seed(0)
+from keras.preprocessing.image import ImageDataGenerator
+from keras import backend as K
+from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
+from keras.callbacks import RemoteMonitor, ReduceLROnPlateau, Callback
+from keras.utils import np_utils
+from keras.models import load_model
 from clr_callback import CyclicLR
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
@@ -363,6 +362,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
                   callbacks=callbacks)
         t1 = time.time()
         t2 = t1
+        epochs_augmented_training = 0
     else:
         print('Using real-time data augmentation.')
 
@@ -422,6 +422,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
         # Train one epoch without augmentation to make sure data distribution
         # is fit well
         loss_history = history_cb.history["loss"]
+        epochs_augmented_training = len(loss_history)
         model.fit(X_train, Y_train,
                   batch_size=batch_size,
                   epochs=nb_epoch,
@@ -464,6 +465,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
             'readjustment_time': readjustment_time,
             'HOST': platform.node(),
             'epochs': len(history_data),
+            'epochs_augmented_training': epochs_augmented_training,
             'config': config}
     meta_train_fname = os.path.join(config['train']['artifacts_path'],
                                     "train-meta_{}.json".format(datestring))
