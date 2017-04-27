@@ -12,7 +12,7 @@ models:
 - "../artifacts/cifar100_eos/cifar100_baseline_20170426-2238-19.h5"
 - "../artifacts/cifar100_eos/cifar100_baseline_20170426-2134-51.h5"
 evaluate:
-  batch_size: 5000
+  batch_size: 4500
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False
