@@ -1,7 +1,7 @@
 dataset:
   script_path: ../datasets/cifar100_keras.py
-  # smooth_train: ../datasets/cifar100_smooth_train.npy
-  smooth_test_path: ../datasets/cifar100_smooth_test.npy
+  smooth_train_path: ../datasets/cifar100_smooth_train.npy
+  # smooth_test_path: ../datasets/cifar100_smooth_test.npy
   smoothing_factor: 0.5
 model:
   script_path: ../models/baseline.py
