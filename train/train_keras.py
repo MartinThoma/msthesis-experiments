@@ -270,6 +270,12 @@ def main(data_module, model_module, optimizer_module, filename, config,
     # Y_train = Y_train.reshape((-1, 1, 1, nb_classes))  # For fcn
     # Y_test = Y_test.reshape((-1, 1, 1, nb_classes))
 
+    if 'smooth_train' in config['dataset']:
+        Y_train = np.load(config['dataset']['smooth_train'])
+
+    if 'smooth_test_path' in config['dataset']:
+        Y_test = np.load(config['dataset']['smooth_test_path'])
+
     # Input shape depends on the backend
     if K.image_dim_ordering() == "th":
         input_shape = (img_channels, img_rows, img_cols)
