@@ -113,14 +113,17 @@ def show_conv_weight_dist(model, small_thres=10**-6):
         print("< {}: {}".format(small_thres, len(data_small)))
 
         # Bias
-        print("{}: {} bias weights in {}th layer"
-              .format(weights[1].shape,
-                      reduce(operator.mul, weights[1].shape, 1),
-                      layer_index))
-        data = weights[1].flatten()
-        bias_weights.append(data)
-        data_small = np.array([el for el in data if abs(el) < small_thres])
-        print("< {}: {}".format(small_thres, len(data_small)))
+        if len(weights) > 1:
+            print("{}: {} bias weights in {}th layer"
+                  .format(weights[1].shape,
+                          reduce(operator.mul, weights[1].shape, 1),
+                          layer_index))
+            data = weights[1].flatten()
+            bias_weights.append(data)
+            data_small = np.array([el for el in data if abs(el) < small_thres])
+            print("< {}: {}".format(small_thres, len(data_small)))
+        else:
+            print("No bias in layer {}".format(layer_index))
         layer_index += 1
 
     labels = [1, 3, 5, 7, 9, 11, 13, 15]  # baseline
@@ -191,11 +194,14 @@ def show_batchnorm_weight_dist(model):
     if len(gamma_weights) > 0:
         for label, fw in zip(labels, gamma_weights):
             print("99% gamma interval of layer {}: [{:.2f}, {:.2f}]"
-                  .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
+                  .format(label,
+                          np.percentile(fw, 0.5),
+                          np.percentile(fw, 99.5)))
 
         f, ax1 = plt.subplots(1, 1)
         p = sns.violinplot(data=gamma_weights, orient="v",
-                           palette=sns.color_palette(palette="RdBu", n_colors=1),
+                           palette=sns.color_palette(palette="RdBu",
+                                                     n_colors=1),
                            ax=ax1)
         p.tick_params(labelsize=16)
         p.set_xlabel('Layer', fontsize=20)
@@ -207,11 +213,14 @@ def show_batchnorm_weight_dist(model):
     if len(beta_weights) > 0:
         for label, fw in zip(labels, beta_weights):
             print("99% beta interval of layer {}: [{:.2f}, {:.2f}]"
-                  .format(label, np.percentile(fw, 0.5), np.percentile(fw, 99.5)))
+                  .format(label,
+                          np.percentile(fw, 0.5),
+                          np.percentile(fw, 99.5)))
 
         f, ax1 = plt.subplots(1, 1)
         p = sns.violinplot(data=beta_weights, orient="v",
-                           palette=sns.color_palette(palette="RdBu", n_colors=1),
+                           palette=sns.color_palette(palette="RdBu",
+                                                     n_colors=1),
                            ax=ax1)
         p.tick_params(labelsize=16)
         p.set_xlabel('Layer', fontsize=20)
