@@ -89,5 +89,5 @@ def get_all(min_params, max_params, n0, min_width=1):
         print("{}: {} ({} params)".format(i, el, get_params(el)))
     return len(possible)
 
-
-print(get_all(800, max_params=896, n0=3, min_width=3))
+if __name__ == '__main__':
+    print(get_all(800, max_params=896, n0=3, min_width=3))
