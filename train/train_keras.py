@@ -318,14 +318,16 @@ def main(data_module, model_module, optimizer_module, filename, config,
     if 'saveall' in config['train'] and config['train']['saveall']:
         checkpoint_fname = ("{}_{}.chk.{{epoch:02d}}.h5"
                             .format(checkpoint_fname, datestring))
+        save_best_only = False
     else:
         checkpoint_fname = "{}_{}.chk.h5".format(checkpoint_fname, datestring)
+        save_best_only = True
     model_chk_path = os.path.join(config['train']['artifacts_path'],
                                   checkpoint_fname)
     model_chk_path = get_nonexistant_path(model_chk_path)
     checkpoint = ModelCheckpoint(model_chk_path,
                                  monitor="val_acc",
-                                 save_best_only=False,
+                                 save_best_only=save_best_only,
                                  save_weights_only=False)
     es = EarlyStopping(monitor='val_acc',
                        min_delta=0,
