@@ -81,11 +81,6 @@ def create_model(nb_classes, input_shape, config=None):
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
     x = Activation('elu')(x)
-    x = Convolution2D(2 * nb_filter, (3, 3), padding='same',
-                      kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
-    x = BatchNormalization()(x)
-    x = Activation('elu')(x)
 
     # 8x8
     x = MaxPooling2D(pool_size=(2, 2))(x)
@@ -94,20 +89,10 @@ def create_model(nb_classes, input_shape, config=None):
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
     x = Activation('elu')(x)
-    x = Convolution2D(2 * nb_filter, (3, 3), padding='same',
-                      kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
-    x = BatchNormalization()(x)
-    x = Activation('elu')(x)
-    x = Convolution2D(2 * nb_filter, (3, 3), padding='same',
-                      kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
-    x = BatchNormalization()(x)
-    x = Activation('elu')(x)
 
     # 4x4
     x = MaxPooling2D(pool_size=(2, 2))(x)
-    x = Convolution2D(481, (4, 4),
+    x = Convolution2D(505, (4, 4),
                       padding='valid',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
@@ -116,7 +101,7 @@ def create_model(nb_classes, input_shape, config=None):
     x = Dropout(0.5)(x)
 
     # 1x1
-    x = Convolution2D(481, (1, 1), padding='same',
+    x = Convolution2D(512, (1, 1), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
