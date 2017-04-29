@@ -1,0 +1,58 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/cifar100_keras.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 32,
+            "batch_size": 5000,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": true,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_lesslayermorefilter/cifar100_lesslayermorefilter_20170427-1546-38.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_lesslayermorefilter/cifar100_lesslayermorefilter_20170427-1635-31.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_lesslayermorefilter/cifar100_lesslayermorefilter_20170427-1716-30.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_lesslayermorefilter/cifar100_lesslayermorefilter_20170427-1746-35.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_lesslayermorefilter/cifar100_lesslayermorefilter_20170427-1834-12.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_lesslayermorefilter/cifar100_lesslayermorefilter_20170427-1929-53.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_lesslayermorefilter/cifar100_lesslayermorefilter_20170427-2010-46.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_lesslayermorefilter/cifar100_lesslayermorefilter_20170427-2051-51.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_lesslayermorefilter/cifar100_lesslayermorefilter_20170427-2140-21.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_lesslayermorefilter/cifar100_lesslayermorefilter_20170427-2228-27.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "0001100010",
+        "best_ensemble_acc": 64.010000000000005,
+        "complete_ensemble_acc": 63.18
+    },
+    "single_acc": {
+        "mean": 61.644999999999996,
+        "std": 1.1216349673579196
+    },
+    "single_accuracies": {
+        "0": 62.250000000000007,
+        "1": 61.060000000000002,
+        "2": 59.009999999999998,
+        "3": 62.310000000000002,
+        "4": 63.439999999999998,
+        "5": 60.909999999999997,
+        "6": 61.240000000000009,
+        "7": 62.060000000000002,
+        "8": 62.060000000000002,
+        "9": 62.109999999999999
+    }
+}
