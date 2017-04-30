@@ -22,37 +22,37 @@
             }
         },
         "models": [
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1140-07.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1251-14.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1407-09.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1507-23.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1625-42.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1745-37.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-1926-40.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-2025-34.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-2221-28.h5",
-            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170422-2338-07.h5"
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170428-2209-03.chk.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170428-2341-11.chk.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170429-0128-00.chk.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170429-0302-25.chk.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170429-0424-17.chk.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170429-0643-19.chk.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170429-0808-22.chk.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170429-0916-16.chk.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170429-1015-28.chk.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_colortransformation/cifar100_colortransformation_20170429-1155-37.chk.h5"
         ]
     },
     "ensemble": {
-        "best_ensemble": "0000110110",
-        "best_ensemble_acc": 67.600000000000009,
-        "complete_ensemble_acc": 67.019999999999996
+        "best_ensemble": "0100100000",
+        "best_ensemble_acc": 65.959999999999994,
+        "complete_ensemble_acc": 64.77000000000001
     },
     "single_acc": {
-        "mean": 64.269999999999996,
-        "std": 0.90870237151665756
+        "mean": 63.307999999999993,
+        "std": 1.3691515620996804
     },
     "single_accuracies": {
-        "0": 63.749999999999993,
-        "1": 63.749999999999993,
-        "2": 63.060000000000002,
-        "3": 64.329999999999998,
-        "4": 64.689999999999998,
-        "5": 65.579999999999998,
-        "6": 62.890000000000001,
-        "7": 65.649999999999991,
-        "8": 64.030000000000001,
-        "9": 64.969999999999999
+        "0": 63.970000000000006,
+        "1": 64.739999999999995,
+        "2": 63.690000000000005,
+        "3": 63.039999999999999,
+        "4": 65.620000000000005,
+        "5": 63.019999999999996,
+        "6": 61.850000000000009,
+        "7": 60.640000000000008,
+        "8": 64.079999999999998,
+        "9": 62.43
     }
 }
