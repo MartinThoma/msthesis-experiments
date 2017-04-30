@@ -8,6 +8,7 @@ from keras.layers.normalization import BatchNormalization
 from keras.layers.pooling import GlobalAveragePooling2D
 from keras.regularizers import l2
 from keras.models import Model
+from keras.layers.advanced_activations import LeakyReLU
 
 
 def create_model(nb_classes, input_shape, config=None):
@@ -45,31 +46,16 @@ def create_model(nb_classes, input_shape, config=None):
             tmp /= 2
 
     # 32x32
-    # Color transformation
-    x = Convolution2D(10, (3, 3), padding='same',
-                      kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
-    x = Activation('elu')(x)
-    x = Convolution2D(3, (3, 3), padding='same',
-                      kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
-    x = Activation('elu')(x)
-    # Normal network
     x = Convolution2D(nb_filter, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
-    x = Activation('elu')(x)
+    x = LeakyReLU(alpha=0.3)(x)
     x = Convolution2D(nb_filter, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
-    x = Activation('elu')(x)
-    x = Convolution2D(nb_filter, (3, 3), padding='same',
-                      kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
-    x = BatchNormalization()(x)
-    x = Activation('elu')(x)
+    x = LeakyReLU(alpha=0.3)(x)
 
     # 16x16
     x = MaxPooling2D(pool_size=(2, 2))(x)
@@ -77,12 +63,12 @@ def create_model(nb_classes, input_shape, config=None):
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
-    x = Activation('elu')(x)
+    x = LeakyReLU(alpha=0.3)(x)
     x = Convolution2D(2 * nb_filter, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
-    x = Activation('elu')(x)
+    x = LeakyReLU(alpha=0.3)(x)
 
     # 8x8
     x = MaxPooling2D(pool_size=(2, 2))(x)
@@ -90,16 +76,16 @@ def create_model(nb_classes, input_shape, config=None):
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
-    x = Activation('elu')(x)
+    x = LeakyReLU(alpha=0.3)(x)
 
     # 4x4
     x = MaxPooling2D(pool_size=(2, 2))(x)
-    x = Convolution2D(505, (4, 4),
+    x = Convolution2D(512, (4, 4),
                       padding='valid',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
-    x = Activation('elu')(x)
+    x = LeakyReLU(alpha=0.3)(x)
     x = Dropout(0.5)(x)
 
     # 1x1
@@ -107,7 +93,7 @@ def create_model(nb_classes, input_shape, config=None):
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
-    x = Activation('elu')(x)
+    x = LeakyReLU(alpha=0.3)(x)
     x = Dropout(0.5)(x)
     x = Convolution2D(nb_classes, (1, 1), padding='same',
                       kernel_initializer='he_uniform',
