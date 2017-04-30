@@ -1,0 +1,58 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/cifar100_keras.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 32,
+            "batch_size": 5000,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": true,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_more_middle/cifar100_more_middle_20170430-0418-23.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_more_middle/cifar100_more_middle_20170430-0318-55.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_more_middle/cifar100_more_middle_20170430-0224-51.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_more_middle/cifar100_more_middle_20170430-0116-13.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_more_middle/cifar100_more_middle_20170430-0019-26.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_more_middle/cifar100_more_middle_20170429-2323-39.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_more_middle/cifar100_more_middle_20170429-2228-32.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_more_middle/cifar100_more_middle_20170429-2131-00.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_more_middle/cifar100_more_middle_20170429-2017-56.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_more_middle/cifar100_more_middle_20170429-1907-13.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "1100001101",
+        "best_ensemble_acc": 64.959999999999994,
+        "complete_ensemble_acc": 64.390000000000001
+    },
+    "single_acc": {
+        "mean": 63.085000000000001,
+        "std": 0.70081737992147186
+    },
+    "single_accuracies": {
+        "0": 63.749999999999993,
+        "1": 64.239999999999995,
+        "2": 62.529999999999994,
+        "3": 62.580000000000005,
+        "4": 62.360000000000007,
+        "5": 62.210000000000001,
+        "6": 63.049999999999997,
+        "7": 62.68,
+        "8": 63.339999999999996,
+        "9": 64.109999999999999
+    }
+}

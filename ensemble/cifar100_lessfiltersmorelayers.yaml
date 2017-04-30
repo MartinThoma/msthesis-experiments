@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/cifar100_keras.py
+models:
+- "../artifacts/cifar100_lessfiltersmorelayers/cifar100_lessfiltersmorelayers_20170429-1525-06.chk.h5"
+- "../artifacts/cifar100_lessfiltersmorelayers/cifar100_lessfiltersmorelayers_20170429-1629-58.chk.h5"
+- "../artifacts/cifar100_lessfiltersmorelayers/cifar100_lessfiltersmorelayers_20170429-1718-20.chk.h5"
+- "../artifacts/cifar100_lessfiltersmorelayers/cifar100_lessfiltersmorelayers_20170429-1845-26.chk.h5"
+- "../artifacts/cifar100_lessfiltersmorelayers/cifar100_lessfiltersmorelayers_20170429-1948-03.chk.h5"
+- "../artifacts/cifar100_lessfiltersmorelayers/cifar100_lessfiltersmorelayers_20170429-2100-00.chk.h5"
+- "../artifacts/cifar100_lessfiltersmorelayers/cifar100_lessfiltersmorelayers_20170429-2201-26.chk.h5"
+- "../artifacts/cifar100_lessfiltersmorelayers/cifar100_lessfiltersmorelayers_20170429-2249-21.chk.h5"
+- "../artifacts/cifar100_lessfiltersmorelayers/cifar100_lessfiltersmorelayers_20170429-2337-39.chk.h5"
+- "../artifacts/cifar100_lessfiltersmorelayers/cifar100_lessfiltersmorelayers_20170430-0040-58.chk.h5"
+evaluate:
+  batch_size: 5000
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
