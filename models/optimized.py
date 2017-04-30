@@ -30,16 +30,6 @@ def create_model(nb_classes, input_shape, config=None):
     input_ = Input(shape=input_shape)
     x = input_
 
-    # Color transformation
-    x = Convolution2D(10, (3, 3), padding='same',
-                      kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
-    x = Activation('elu')(x)
-    x = Convolution2D(3, (3, 3), padding='same',
-                      kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
-    x = Activation('elu')(x)
-
     # Scale feature maps down to [63, 32] x [63, 32]
     tmp = min_feature_map_dimension / 32.
     if tmp >= 2:
@@ -55,12 +45,12 @@ def create_model(nb_classes, input_shape, config=None):
             tmp /= 2
 
     # 32x32
-    x = Convolution2D(nb_filter, (3, 3), padding='same',
+    x = Convolution2D(nb_filter + 1, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
     x = Activation('elu')(x)
-    x = Convolution2D(nb_filter, (3, 3), padding='same',
+    x = Convolution2D(nb_filter + 1, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
