@@ -1,0 +1,25 @@
+dataset:
+  script_path: ../datasets/cifar100_keras.py
+models:
+- "../artifacts/cifar100_less16more32/cifar100_less16more32_20170430-1251-11.h5"
+- "../artifacts/cifar100_less16more32/cifar100_less16more32_20170430-1403-21.h5"
+- "../artifacts/cifar100_less16more32/cifar100_less16more32_20170430-1501-16.h5"
+- "../artifacts/cifar100_less16more32/cifar100_less16more32_20170430-1619-43.h5"
+- "../artifacts/cifar100_less16more32/cifar100_less16more32_20170430-1738-23.h5"
+- "../artifacts/cifar100_less16more32/cifar100_less16more32_20170430-1850-15.h5"
+evaluate:
+  batch_size: 5000
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
