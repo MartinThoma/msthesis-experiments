@@ -45,12 +45,12 @@ def create_model(nb_classes, input_shape, config=None):
             tmp /= 2
 
     # 32x32
-    x = Convolution2D(nb_filter + 1, (3, 3), padding='same',
+    x = Convolution2D(nb_filter + 37, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
     x = Activation('elu')(x)
-    x = Convolution2D(nb_filter + 1, (3, 3), padding='same',
+    x = Convolution2D(nb_filter + 37, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
                       kernel_regularizer=l2(0.0001))(x)
     x = BatchNormalization()(x)
