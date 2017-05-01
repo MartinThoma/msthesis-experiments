@@ -15,15 +15,22 @@ sns.set_style("whitegrid")
 sns.set_palette(sns.color_palette("Greens_d", 8))
 
 
-def main(directory, ignore_first, max_epochs):
+def main(directory, ignore_first, max_epochs, agg_func):
     """Orchestrate."""
     h5_fnames = glob.glob("{}/*.chk.*.h5".format(directory))
     h5_fnames = natsort.natsorted(h5_fnames)
-    print("{} models to be loaded.".format(len(h5_fnames)))
+    print("{} models could be loaded.".format(len(h5_fnames)))
 
-    changes = {}
+    aggregation_functions = [('mean', np.mean),
+                             ('max', np.max),
+                             ('min', np.min),
+                             ('sum', np.sum)]
+    changes_small = {}
+    for name, _ in aggregation_functions:
+        changes_small[name] = {}
 
-    pickle_fname = "{}/weight-updates.pickle".format(directory)
+    pickle_fname = "{}/weight-updates-{}-epochs.pickle".format(directory,
+                                                               max_epochs)
 
     if not os.path.isfile(pickle_fname):
         # Print first models layers
@@ -44,29 +51,33 @@ def main(directory, ignore_first, max_epochs):
                 weights = model.layers[layer_index].get_weights()[0].flatten()
                 if layer_index not in last_weights:
                     last_weights[layer_index] = weights
-                    changes[layer_index] = []
+                    for name, _ in aggregation_functions:
+                        changes_small[name][layer_index] = []
                     continue
                 else:
                     change_epoch = []
                     for w1, w2 in zip(last_weights[layer_index], weights):
                         change_epoch.append(abs(w1 - w2))
-                    changes[layer_index].append(change_epoch)
+                    for name, func in aggregation_functions:
+                        tmp = func(change_epoch)
+                        changes_small[name][layer_index].append(tmp)
                     last_weights[layer_index] = weights
             if recorded_epochs > max_epochs:
                 break
         # serialize
         with open(pickle_fname, 'wb') as handle:
-            pickle.dump(changes, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(changes_small, handle,
+                        protocol=pickle.HIGHEST_PROTOCOL)
     else:
         with open(pickle_fname, 'rb') as handle:
-            changes = pickle.load(handle)
-    recorded_epochs = len(changes.items()[0][1])
+            changes_small = pickle.load(handle)
+    recorded_epochs = len(changes_small['mean'].items()[0][1])
     print("Recorded epochs={}".format(recorded_epochs))
-    print("Done. plot stuff ({} lines)".format(len(changes.items())))
+    print("Done. plot stuff ({} lines)".format(len(changes_small[agg_func])))
     f, ax1 = plt.subplots(1, 1)
     labels = [1, 3, 5, 7, 9, 11, 13, 15]  # Adjust
     i = 0
-    for layer_index, layer_changes in sorted(changes.items()):
+    for layer_index, layer_changes in sorted(changes_small[agg_func].items()):
         y = [np.array(epoch).mean() for epoch in layer_changes]  # Adjust
 
         if ignore_first:
@@ -84,7 +95,8 @@ def main(directory, ignore_first, max_epochs):
                              markersize=7)
     sns.plt.legend()
     ax1.set_xlabel('Epoch', fontsize=20)
-    ax1.set_ylabel('Absolute weight change (mean)', fontsize=20,  # Adjust
+    ax1.set_ylabel('Absolute weight change ({})'.format(agg_func),
+                   fontsize=20,  # Adjust
                    rotation=90, labelpad=20)
     sns.plt.show()
 
@@ -109,9 +121,15 @@ def get_parser():
                         default=1000,
                         type=int,
                         help="maximum number of epochs to be handled")
+    parser.add_argument("--agg",
+                        dest="aggregation_function",
+                        help="Aggregation function to apply",
+                        choices=['mean', 'max', 'min', 'sum'],
+                        default='mean')
     return parser
 
 
 if __name__ == "__main__":
     args = get_parser().parse_args()
-    main(args.directory, args.ignore_first, args.max_epochs)
+    main(args.directory, args.ignore_first, args.max_epochs,
+         args.aggregation_function)
