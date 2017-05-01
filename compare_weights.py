@@ -84,15 +84,15 @@ def main(directory, ignore_first, max_epochs, agg_func):
             y[0] = y[1]
         x = list(range(recorded_epochs))
         p = ax1.plot(x, y, label="Layer {}".format(labels[i]))  # layer_index
-        i += 1
         color = p[0].get_color()
         if len(y) > 100:
             for x in [40, 80, 100]:
                 y2 = y[x]
                 sns.plt.plot(x, y2, 'o', color='white', markersize=9)
-                sns.plt.plot(x, y2, 'k', marker="$%s$" % layer_index,
+                sns.plt.plot(x, y2, 'k', marker="${}$".format(labels[i]),
                              color=color,
                              markersize=7)
+        i += 1
     sns.plt.legend()
     ax1.set_xlabel('Epoch', fontsize=20)
     ax1.set_ylabel('Absolute weight change ({})'.format(agg_func),
