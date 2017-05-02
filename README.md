@@ -27,11 +27,7 @@ train_path: train/train.py
 
 If you get `TypeError: __init__() got an unexpected keyword argument
 'hsv_augmentation'` you didn't adjust the `image.py`. Just copy the one in
-the misc folder to `python -c "import keras.preprocessing.image as k;print(k.__file__)"`:
-
-```
-cp misc/image.py `python -c "import keras.preprocessing.image as k;print(k.__file__)"`
-```
+the misc folder to `python -c "import keras.preprocessing.image as k;print(k.__file__)"`
 
 ## Run timining experiments
 
