@@ -1,7 +1,7 @@
 dataset:
   script_path: ../datasets/mnist.py
 model:
-  script_path: ../models/baseline_softsign.py
+  script_path: ../models/softsign.py
 optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
