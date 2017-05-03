@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/mnist.py
+models:
+- "../artifacts/mnist_softsign/mnist_softsign_20170503-0426-19.h5"
+- "../artifacts/mnist_softsign/mnist_softsign_20170503-0355-01.h5"
+- "../artifacts/mnist_softsign/mnist_softsign_20170503-0322-23.h5"
+- "../artifacts/mnist_softsign/mnist_softsign_20170503-0249-30.h5"
+- "../artifacts/mnist_softsign/mnist_softsign_20170503-0207-44.h5"
+- "../artifacts/mnist_softsign/mnist_softsign_20170503-0128-10.h5"
+- "../artifacts/mnist_softsign/mnist_softsign_20170503-0054-47.h5"
+- "../artifacts/mnist_softsign/mnist_softsign_20170503-0016-15.h5"
+- "../artifacts/mnist_softsign/mnist_softsign_20170502-2344-00.h5"
+- "../artifacts/mnist_softsign/mnist_softsign_20170502-2259-34.h5"
+evaluate:
+  batch_size: 10000
+  augmentation_factor: 1
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False

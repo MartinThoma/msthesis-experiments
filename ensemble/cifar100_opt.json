@@ -1,0 +1,60 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/cifar100_keras.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 32,
+            "batch_size": 5000,
+            "batch_size_train": 4500,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": true,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "evaluate_training_data": true,
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_opt/cifar100_opt_20170501-2148-59.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_opt/cifar100_opt_20170501-2022-51.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_opt/cifar100_opt_20170501-1916-51.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_opt/cifar100_opt_20170501-1810-33.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_opt/cifar100_opt_20170501-1644-53.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_opt/cifar100_opt_20170501-1538-28.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_opt/cifar100_opt_20170501-1400-32.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_opt/cifar100_opt_20170501-1219-51.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_opt/cifar100_opt_20170501-1115-07.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_opt/cifar100_opt_20170501-0939-30.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "1011000010",
+        "best_ensemble_acc": 83.229629629629628,
+        "complete_ensemble_acc": 81.439506172839501
+    },
+    "single_acc": {
+        "mean": 77.963950617283942,
+        "std": 2.1837808698138028
+    },
+    "single_accuracies": {
+        "0": 80.879012345679016,
+        "1": 75.128395061728398,
+        "2": 80.770370370370372,
+        "3": 80.471604938271597,
+        "4": 75.859259259259261,
+        "5": 79.039506172839509,
+        "6": 76.167901234567907,
+        "7": 76.10123456790123,
+        "8": 79.103703703703701,
+        "9": 76.118518518518513
+    }
+}

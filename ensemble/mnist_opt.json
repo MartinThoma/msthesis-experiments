@@ -1,0 +1,59 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/mnist.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 1,
+            "batch_size": 10000,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": false,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "evaluate_training_data": true,
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_opt/mnist_opt_20170501-0942-40.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_opt/mnist_opt_20170501-1008-44.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_opt/mnist_opt_20170501-1059-05.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_opt/mnist_opt_20170501-1136-47.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_opt/mnist_opt_20170501-1225-38.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_opt/mnist_opt_20170501-1308-22.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_opt/mnist_opt_20170501-1341-36.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_opt/mnist_opt_20170501-1423-34.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_opt/mnist_opt_20170501-1458-52.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_opt/mnist_opt_20170501-1534-43.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "0001110000",
+        "best_ensemble_acc": 99.993827160493836,
+        "complete_ensemble_acc": 99.985596707818928
+    },
+    "single_acc": {
+        "mean": 99.877572016460903,
+        "std": 0.10457959358919526
+    },
+    "single_accuracies": {
+        "0": 99.790123456790127,
+        "1": 99.919753086419746,
+        "2": 99.919753086419746,
+        "3": 99.936213991769549,
+        "4": 99.855967078189295,
+        "5": 99.907407407407405,
+        "6": 99.960905349794231,
+        "7": 99.598765432098773,
+        "8": 99.946502057613174,
+        "9": 99.940329218106996
+    }
+}

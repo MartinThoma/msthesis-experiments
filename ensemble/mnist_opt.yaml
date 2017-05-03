@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/mnist.py
+models:
+- "../artifacts/mnist_opt/mnist_opt_20170501-0942-40.h5"
+- "../artifacts/mnist_opt/mnist_opt_20170501-1008-44.h5"
+- "../artifacts/mnist_opt/mnist_opt_20170501-1059-05.h5"
+- "../artifacts/mnist_opt/mnist_opt_20170501-1136-47.h5"
+- "../artifacts/mnist_opt/mnist_opt_20170501-1225-38.h5"
+- "../artifacts/mnist_opt/mnist_opt_20170501-1308-22.h5"
+- "../artifacts/mnist_opt/mnist_opt_20170501-1341-36.h5"
+- "../artifacts/mnist_opt/mnist_opt_20170501-1423-34.h5"
+- "../artifacts/mnist_opt/mnist_opt_20170501-1458-52.h5"
+- "../artifacts/mnist_opt/mnist_opt_20170501-1534-43.h5"
+evaluate:
+  batch_size: 10000
+  augmentation_factor: 1
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False

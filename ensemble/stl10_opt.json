@@ -1,0 +1,60 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/stl10.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 32,
+            "batch_size": 500,
+            "batch_size_train": 4050,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": true,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "evaluate_training_data": true,
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_opt/stl10_opt_20170501-1224-03.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_opt/stl10_opt_20170501-1212-56.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_opt/stl10_opt_20170501-1212-56.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_opt/stl10_opt_20170501-1148-06.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_opt/stl10_opt_20170501-1129-31.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_opt/stl10_opt_20170501-1109-57.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_opt/stl10_opt_20170501-1058-50.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_opt/stl10_opt_20170501-1041-16.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_opt/stl10_opt_20170501-1020-57.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_opt/stl10_opt_20170501-0943-20.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "0000001001",
+        "best_ensemble_acc": 99.506172839506164,
+        "complete_ensemble_acc": 98.543209876543216
+    },
+    "single_acc": {
+        "mean": 95.427160493827159,
+        "std": 3.574159149502389
+    },
+    "single_accuracies": {
+        "0": 98.049382716049379,
+        "1": 97.679012345679013,
+        "2": 96.641975308641975,
+        "3": 89.679012345679013,
+        "4": 97.580246913580254,
+        "5": 97.358024691358025,
+        "6": 99.061728395061735,
+        "7": 90.222222222222229,
+        "8": 90.222222222222229,
+        "9": 97.777777777777771
+    }
+}

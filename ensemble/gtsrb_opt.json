@@ -1,0 +1,59 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/gtsrb.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 1,
+            "batch_size": 842,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": false,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "evaluate_training_data": true,
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/gtsrb_opt/gtsrb_opt_20170502-1336-22.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/gtsrb_opt/gtsrb_opt_20170502-1401-32.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/gtsrb_opt/gtsrb_opt_20170502-1429-31.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/gtsrb_opt/gtsrb_opt_20170502-1505-34.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/gtsrb_opt/gtsrb_opt_20170502-1539-09.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/gtsrb_opt/gtsrb_opt_20170502-1604-42.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/gtsrb_opt/gtsrb_opt_20170502-1634-12.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/gtsrb_opt/gtsrb_opt_20170502-1658-59.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/gtsrb_opt/gtsrb_opt_20170502-1723-43.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/gtsrb_opt/gtsrb_opt_20170502-1747-47.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "0000000001",
+        "best_ensemble_acc": 100.0,
+        "complete_ensemble_acc": 100.0
+    },
+    "single_acc": {
+        "mean": 100.0,
+        "std": 0.0
+    },
+    "single_accuracies": {
+        "0": 100.0,
+        "1": 100.0,
+        "2": 100.0,
+        "3": 100.0,
+        "4": 100.0,
+        "5": 100.0,
+        "6": 100.0,
+        "7": 100.0,
+        "8": 100.0,
+        "9": 100.0
+    }
+}
