@@ -86,6 +86,10 @@ def run_model_prediction(model, config, X_train, X, n_classes):
 
         a_factor = config['evaluate']['augmentation_factor']
         samples = config['evaluate']['batch_size']
+        if 'evaluate_training_data' in config and \
+           config['evaluate_training_data']:
+            if 'batch_size_train' in config['evaluate']:
+                samples = config['evaluate']['batch_size_train']
         if len(X) < 1000:
             logging.info("Override. Set batch_size to {}.".format(len(X)))
             samples = len(X)

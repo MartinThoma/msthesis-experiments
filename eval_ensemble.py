@@ -126,6 +126,7 @@ def main(ensemble_fname, evaluate_training_data):
     if evaluate_training_data:
         X_eval = X_train
         y_eval = y_train
+        config['evaluate_training_data'] = True
     else:
         X_eval = X_test
         y_eval = y_test
