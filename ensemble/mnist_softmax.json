@@ -1,0 +1,58 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/mnist.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 1,
+            "batch_size": 10000,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": false,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_softmax/mnist_softmax_20170503-0934-04.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_softmax/mnist_softmax_20170503-1019-54.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_softmax/mnist_softmax_20170503-1048-30.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_softmax/mnist_softmax_20170503-1117-36.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_softmax/mnist_softmax_20170503-1201-56.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_softmax/mnist_softmax_20170503-1230-52.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_softmax/mnist_softmax_20170503-1259-52.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_softmax/mnist_softmax_20170503-1346-48.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_softmax/mnist_softmax_20170503-1433-30.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_softmax/mnist_softmax_20170503-1502-04.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "0001100110",
+        "best_ensemble_acc": 99.680000000000007,
+        "complete_ensemble_acc": 99.629999999999995
+    },
+    "single_acc": {
+        "mean": 99.597000000000008,
+        "std": 0.028653097563784521
+    },
+    "single_accuracies": {
+        "0": 99.629999999999995,
+        "1": 99.629999999999995,
+        "2": 99.640000000000001,
+        "3": 99.550000000000011,
+        "4": 99.599999999999994,
+        "5": 99.570000000000007,
+        "6": 99.579999999999998,
+        "7": 99.570000000000007,
+        "8": 99.590000000000003,
+        "9": 99.609999999999999
+    }
+}

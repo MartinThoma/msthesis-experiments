@@ -1,0 +1,59 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/hasy.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 1,
+            "batch_size": 2124,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": false,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "evaluate_training_data": true,
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_opt/hasy_opt_20170503-1503-12.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_opt/hasy_opt_20170503-1209-03.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_opt/hasy_opt_20170503-0912-50.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_opt/hasy_opt_20170503-0715-31.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_opt/hasy_opt_20170503-0319-14.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_opt/hasy_opt_20170503-0013-48.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_opt/hasy_opt_20170502-2050-19.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_opt/hasy_opt_20170502-1747-05.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_opt/hasy_opt_20170502-1444-57.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_opt/hasy_opt_20170502-1242-05.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "0100110001",
+        "best_ensemble_acc": 89.675439169333245,
+        "complete_ensemble_acc": 89.362796316854968
+    },
+    "single_acc": {
+        "mean": 88.792121073597599,
+        "std": 0.44761369567262999
+    },
+    "single_accuracies": {
+        "0": 88.103245608306665,
+        "1": 89.133416051720758,
+        "2": 88.821589499118389,
+        "3": 88.963625677528896,
+        "4": 89.025664468098995,
+        "5": 89.522791092535755,
+        "6": 87.996310324560838,
+        "7": 88.869751191797818,
+        "8": 88.468947952719915,
+        "9": 89.015868869587933
+    }
+}

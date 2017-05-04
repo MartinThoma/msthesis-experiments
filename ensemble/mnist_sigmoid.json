@@ -1,0 +1,58 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/mnist.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 1,
+            "batch_size": 10000,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": false,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_sigmoid/mnist_sigmoid_20170503-1638-03.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_sigmoid/mnist_sigmoid_20170503-1702-58.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_sigmoid/mnist_sigmoid_20170503-1736-02.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_sigmoid/mnist_sigmoid_20170503-1752-18.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_sigmoid/mnist_sigmoid_20170503-1816-05.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_sigmoid/mnist_sigmoid_20170503-1839-53.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_sigmoid/mnist_sigmoid_20170503-1858-21.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_sigmoid/mnist_sigmoid_20170503-1923-26.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_sigmoid/mnist_sigmoid_20170503-1952-51.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/mnist_sigmoid/mnist_sigmoid_20170503-2021-16.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "0100111100",
+        "best_ensemble_acc": 99.539999999999992,
+        "complete_ensemble_acc": 99.480000000000004
+    },
+    "single_acc": {
+        "mean": 97.274000000000001,
+        "std": 2.1025850755676898
+    },
+    "single_accuracies": {
+        "0": 96.679999999999993,
+        "1": 99.030000000000001,
+        "2": 98.769999999999996,
+        "3": 92.600000000000009,
+        "4": 98.61999999999999,
+        "5": 98.790000000000006,
+        "6": 97.850000000000009,
+        "7": 94.040000000000006,
+        "8": 98.450000000000003,
+        "9": 97.909999999999997
+    }
+}
