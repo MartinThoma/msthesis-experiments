@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/svhn.py
+models:
+- "../artifacts/svhn_opt/svhn_opt_20170502-2244-53.h5"
+- "../artifacts/svhn_opt/svhn_opt_20170503-0150-50.h5"
+- "../artifacts/svhn_opt/svhn_opt_20170503-0626-43.h5"
+- "../artifacts/svhn_opt/svhn_opt_20170503-1134-12.h5"
+- "../artifacts/svhn_opt/svhn_opt_20170503-1540-52.h5"
+- "../artifacts/svhn_opt/svhn_opt_20170503-1926-11.h5"
+- "../artifacts/svhn_opt/svhn_opt_20170503-2250-22.h5"
+- "../artifacts/svhn_opt/svhn_opt_20170504-0224-18.h5"
+- "../artifacts/svhn_opt/svhn_opt_20170504-0525-17.h5"
+- "../artifacts/svhn_opt/svhn_opt_20170504-1028-41.h5"
+evaluate:
+  batch_size: 1627
+  augmentation_factor: 1
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0.1
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
