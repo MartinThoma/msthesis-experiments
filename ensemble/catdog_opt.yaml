@@ -1,0 +1,30 @@
+dataset:
+  script_path: ../datasets/cats_dogs.py
+models:
+- "../artifacts/catdog_opt/catdog_opt_20170503-0731-26.h5"
+- "../artifacts/catdog_opt/catdog_opt_20170503-0915-15.h5"
+- "../artifacts/catdog_opt/catdog_opt_20170503-1110-03.h5"
+- "../artifacts/catdog_opt/catdog_opt_20170503-1301-07.h5"
+- "../artifacts/catdog_opt/catdog_opt_20170503-1459-51.h5"
+- "../artifacts/catdog_opt/catdog_opt_20170503-1712-02.h5"
+- "../artifacts/catdog_opt/catdog_opt_20170503-1934-52.h5"
+- "../artifacts/catdog_opt/catdog_opt_20170504-1154-23.h5"
+- "../artifacts/catdog_opt/catdog_opt_20170504-1502-50.h5"
+- "../artifacts/catdog_opt/catdog_opt_20170504-1705-44.h5"
+evaluate:
+  batch_size: 250
+  batch_size_train: 4522
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
