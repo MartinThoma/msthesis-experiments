@@ -6,6 +6,7 @@
         "evaluate": {
             "augmentation_factor": 32,
             "batch_size": 250,
+            "batch_size_train": 4522,
             "data_augmentation": {
                 "channel_shift_range": 0,
                 "featurewise_center": false,
@@ -19,9 +20,9 @@
                 "width_shift_range": 0.15,
                 "zca_whitening": false,
                 "zoom_range": 0
-            },
-            "train_batch_size": 603
+            }
         },
+        "evaluate_training_data": true,
         "models": [
             "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt/catdog_opt_20170503-0731-26.h5",
             "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt/catdog_opt_20170503-0915-15.h5",
@@ -37,23 +38,23 @@
     },
     "ensemble": {
         "best_ensemble": "1000001000",
-        "best_ensemble_acc": 95.418181818181807,
-        "complete_ensemble_acc": 93.090909090909093
+        "best_ensemble_acc": 99.874695953416378,
+        "complete_ensemble_acc": 98.776442839242279
     },
     "single_acc": {
-        "mean": 90.751515151515164,
-        "std": 4.7262687356535436
+        "mean": 95.834008992408059,
+        "std": 4.695033274497038
     },
     "single_accuracies": {
-        "0": 94.836363636363643,
-        "1": 84.860606060606059,
-        "2": 90.218181818181819,
-        "3": 94.606060606060609,
-        "4": 94.303030303030297,
-        "5": 93.490909090909085,
-        "6": 95.321212121212113,
-        "7": 80.121212121212125,
-        "8": 90.690909090909088,
-        "9": 89.066666666666677
+        "0": 99.609346207709876,
+        "1": 91.361391611999707,
+        "2": 96.145057860986213,
+        "3": 99.520896292474376,
+        "4": 98.887005233286658,
+        "5": 98.18677673767229,
+        "6": 99.859954300877135,
+        "7": 84.130611041497744,
+        "8": 96.719982310016945,
+        "9": 93.919068327559515
     }
 }
