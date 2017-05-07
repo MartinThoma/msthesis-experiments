@@ -24,14 +24,15 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     stream=sys.stdout)
 
 n_classes = 2
-img_rows = 128  # height
-img_cols = 128  # width
 img_channels = 3
 
 labels = ['cat', 'dog']
 
+# Design decision
+img_rows = None  # height
+img_cols = None  # width
+_mean_filename = None
 
-_mean_filename = "cats-dogs-mean.npy"
 
 
 def prepreprocess(img_path, res_width, res_height):
@@ -88,6 +89,10 @@ def load_data(config):
     -------
     dict
     """
+    globals()["img_rows"] = config['dataset']['img_rows']
+    globals()["img_cols"] = config['dataset']['img_cols']
+    globals()["_mean_filename"] = ("caltech-101-{}-{}-mean.npy"
+                                   .format(img_rows, img_cols))
     # url of the binary data
     cache_dir = os.path.expanduser(os.path.join('~', '.keras/datasets'))
     path = os.path.join(cache_dir, 'kagglecatsanddogs_3367a')
@@ -97,7 +102,10 @@ def load_data(config):
                      .format(path))
         sys.exit(-1)
     path = os.path.join(path, "PetImages")
-    pickle_fpath = os.path.join(path, "cat-dog-data.pickle")
+    pickle_fpath = os.path.join(path,
+                                "cat-dog-data-{}-{}.pickle"
+                                .format(config['dataset']['img_rows'],
+                                        config['dataset']['img_cols']))
 
     if not os.path.isfile(pickle_fpath):
         # Load data
