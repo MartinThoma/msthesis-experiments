@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Train a CNN on CIFAR 100.
-
-Takes about 100 minutes.
-"""
+"""Train a CNN."""
 
 from __future__ import print_function
 import csv
