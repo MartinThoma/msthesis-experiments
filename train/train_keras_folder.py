@@ -232,7 +232,7 @@ def main(data_module, model_module, optimizer_module, filename, config,
         train_generator = train_datagen.\
             flow_from_directory(data_module.train_data_dir, seed=0,
                                 target_size=target_size,
-                                batch_size=8)
+                                batch_size=config['train']['batch_size'])
         # val_generator = val_datagen.flow(data['x_val'], data['y_val'])
 
         # Apply normalization to test data
