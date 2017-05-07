@@ -1,5 +1,7 @@
 dataset:
   script_path: ../datasets/cats_dogs.py
+  img_rows: 128
+  img_cols: 128
 model:
   script_path: ../models/baseline.py
 optimizer:
