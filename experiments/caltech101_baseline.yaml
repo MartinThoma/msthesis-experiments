@@ -9,7 +9,7 @@ optimizer:
   script_path: ../optimizers/adam_keras.py
   initial_lr: 0.0001
 train:
-  script_path: ../train/train_keras.py
+  script_path: ../train/train_keras_folder.py
   artifacts_path: ../artifacts/caltech101_baseline/
   batch_size: 64
   epochs: 1000
