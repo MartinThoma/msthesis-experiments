@@ -1,18 +1,19 @@
 dataset:
   script_path: ../datasets/cats_dogs.py
 models:
-- "../artifacts/catdog_baseline/cifar10_baseline_20170417-0533-01.h5"
-- "../artifacts/catdog_baseline/cifar10_baseline_20170417-0100-53.h5"
-- "../artifacts/catdog_baseline/cifar10_baseline_20170417-0102-37.h5"
-- "../artifacts/catdog_baseline/cifar10_baseline_20170417-0104-10.h5"
-- "../artifacts/catdog_baseline/cifar10_baseline_20170417-0231-53.h5"
-- "../artifacts/catdog_baseline/cifar10_baseline_20170417-0250-54.h5"
-- "../artifacts/catdog_baseline/cifar10_baseline_20170417-0256-20.h5"
-- "../artifacts/catdog_baseline/cifar10_baseline_20170417-0352-24.h5"
-- "../artifacts/catdog_baseline/cifar10_baseline_20170417-0435-25.h5"
-- "../artifacts/catdog_baseline/cifar10_baseline_20170417-0524-29.h5"
+- "../artifacts/catdog_baseline/catdog_baseline_20170507-0638-11.h5"
+- "../artifacts/catdog_baseline/catdog_baseline_20170507-0527-55.h5"
+- "../artifacts/catdog_baseline/catdog_baseline_20170507-0344-04.h5"
+- "../artifacts/catdog_baseline/catdog_baseline_20170507-0231-27.h5"
+- "../artifacts/catdog_baseline/catdog_baseline_20170507-0044-55.h5"
+- "../artifacts/catdog_baseline/catdog_baseline_20170506-2312-13.h5"
+- "../artifacts/catdog_baseline/catdog_baseline_20170506-2208-09.h5"
+- "../artifacts/catdog_baseline/catdog_baseline_20170506-2051-29.h5"
+- "../artifacts/catdog_baseline/catdog_baseline_20170506-1918-54.h5"
+- "../artifacts/catdog_baseline/catdog_baseline_20170506-1751-11.h5"
 evaluate:
-  batch_size: 603
+  batch_size: 250
+  batch_size_train: 1
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False
