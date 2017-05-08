@@ -1,0 +1,59 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/hasy.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 1,
+            "batch_size": 2124,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": false,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "evaluate_training_data": true,
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_softsign/hasy_softsign_20170505-1623-27.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_softsign/hasy_softsign_20170505-1732-44.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_softsign/hasy_softsign_20170505-1906-12.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_softsign/hasy_softsign_20170505-2044-12.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_softsign/hasy_softsign_20170505-2208-36.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_softsign/hasy_softsign_20170505-2345-42.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_softsign/hasy_softsign_20170506-0132-36.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_softsign/hasy_softsign_20170506-0257-55.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_softsign/hasy_softsign_20170506-0437-39.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/hasy_softsign/hasy_softsign_20170506-0618-14.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "0101110000",
+        "best_ensemble_acc": 89.188108143407561,
+        "complete_ensemble_acc": 88.770162606935287
+    },
+    "single_acc": {
+        "mean": 87.998922484163785,
+        "std": 0.46725803507205055
+    },
+    "single_accuracies": {
+        "0": 87.301639130150861,
+        "1": 88.677104421080131,
+        "2": 87.683667472082547,
+        "3": 88.546496440932543,
+        "4": 88.435479657807093,
+        "5": 88.37344086723698,
+        "6": 87.341637824071057,
+        "7": 87.740808463397116,
+        "8": 87.90896623783712,
+        "9": 87.979984327042388
+    }
+}

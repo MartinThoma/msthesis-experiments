@@ -6,6 +6,7 @@
         "evaluate": {
             "augmentation_factor": 32,
             "batch_size": 5000,
+            "batch_size_train": 4500,
             "data_augmentation": {
                 "channel_shift_range": 0,
                 "featurewise_center": false,
@@ -21,6 +22,7 @@
                 "zoom_range": 0
             }
         },
+        "evaluate_training_data": true,
         "models": [
             "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_sigmoid/cifar100_sigmoid_20170427-1526-39.h5",
             "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_sigmoid/cifar100_sigmoid_20170427-1444-05.h5",
@@ -35,24 +37,24 @@
         ]
     },
     "ensemble": {
-        "best_ensemble": "0111000110",
-        "best_ensemble_acc": 55.259999999999998,
-        "complete_ensemble_acc": 54.579999999999998
+        "best_ensemble": "0011000010",
+        "best_ensemble_acc": 61.962962962962962,
+        "complete_ensemble_acc": 61.19259259259259
     },
     "single_acc": {
-        "mean": 46.535000000000004,
-        "std": 3.2166107939879822
+        "mean": 51.872839506172831,
+        "std": 3.6416639749749136
     },
     "single_accuracies": {
-        "0": 44.519999999999996,
-        "1": 46.450000000000003,
-        "2": 46.410000000000004,
-        "3": 50.920000000000002,
-        "4": 41.270000000000003,
-        "5": 47.68,
-        "6": 40.920000000000002,
-        "7": 48.699999999999996,
-        "8": 49.609999999999999,
-        "9": 48.870000000000005
+        "0": 49.466666666666661,
+        "1": 50.90864197530864,
+        "2": 51.753086419753089,
+        "3": 58.145679012345674,
+        "4": 46.190123456790118,
+        "5": 52.679012345679013,
+        "6": 46.158024691358023,
+        "7": 53.881481481481487,
+        "8": 54.970370370370368,
+        "9": 54.575308641975305
     }
 }

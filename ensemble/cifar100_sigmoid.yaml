@@ -13,6 +13,7 @@ models:
 - "../artifacts/cifar100_sigmoid/cifar100_sigmoid_20170427-0820-02.h5"
 evaluate:
   batch_size: 5000
+  batch_size_train: 4500
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False

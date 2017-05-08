@@ -13,6 +13,7 @@ models:
 - "../artifacts/cifar100_linear/cifar100_linear_20170427-0751-44.h5"
 evaluate:
   batch_size: 5000
+  batch_size_train: 4500
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False

@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/hasy.py
+models:
+- "../artifacts/hasy_sigmoid/hasy_sigmoid_20170504-1826-25.h5"
+- "../artifacts/hasy_sigmoid/hasy_sigmoid_20170504-2010-35.h5"
+- "../artifacts/hasy_sigmoid/hasy_sigmoid_20170504-2120-28.h5"
+- "../artifacts/hasy_sigmoid/hasy_sigmoid_20170504-2248-10.h5"
+- "../artifacts/hasy_sigmoid/hasy_sigmoid_20170505-0016-17.h5"
+- "../artifacts/hasy_sigmoid/hasy_sigmoid_20170505-0155-47.h5"
+- "../artifacts/hasy_sigmoid/hasy_sigmoid_20170505-0301-51.h5"
+- "../artifacts/hasy_sigmoid/hasy_sigmoid_20170505-0439-44.h5"
+- "../artifacts/hasy_sigmoid/hasy_sigmoid_20170505-0617-12.h5"
+- "../artifacts/hasy_sigmoid/hasy_sigmoid_20170505-0740-42.h5"
+evaluate:
+  batch_size: 2124
+  augmentation_factor: 1
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False

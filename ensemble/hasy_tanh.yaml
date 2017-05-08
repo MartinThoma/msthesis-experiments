@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/hasy.py
+models:
+- "../artifacts/hasy_tanh/hasy_tanh_20170507-0813-46.h5"
+- "../artifacts/hasy_tanh/hasy_tanh_20170507-0953-19.h5"
+- "../artifacts/hasy_tanh/hasy_tanh_20170507-1141-49.h5"
+- "../artifacts/hasy_tanh/hasy_tanh_20170507-1314-08.h5"
+- "../artifacts/hasy_tanh/hasy_tanh_20170507-1440-25.h5"
+- "../artifacts/hasy_tanh/hasy_tanh_20170507-1612-04.h5"
+- "../artifacts/hasy_tanh/hasy_tanh_20170507-1732-01.h5"
+- "../artifacts/hasy_tanh/hasy_tanh_20170507-1922-07.h5"
+- "../artifacts/hasy_tanh/hasy_tanh_20170507-2109-50.h5"
+- "../artifacts/hasy_tanh/hasy_tanh_20170507-2253-55.h5"
+evaluate:
+  batch_size: 2124
+  augmentation_factor: 1
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False

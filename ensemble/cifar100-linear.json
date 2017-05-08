@@ -6,6 +6,7 @@
         "evaluate": {
             "augmentation_factor": 32,
             "batch_size": 5000,
+            "batch_size_train": 4500,
             "data_augmentation": {
                 "channel_shift_range": 0,
                 "featurewise_center": false,
@@ -21,6 +22,7 @@
                 "zoom_range": 0
             }
         },
+        "evaluate_training_data": true,
         "models": [
             "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_linear/cifar100_linear_20170426-2130-52.h5",
             "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_linear/cifar100_linear_20170426-2228-32.h5",
@@ -35,24 +37,24 @@
         ]
     },
     "ensemble": {
-        "best_ensemble": "0101010001",
-        "best_ensemble_acc": 59.040000000000006,
-        "complete_ensemble_acc": 58.780000000000001
+        "best_ensemble": "0101100001",
+        "best_ensemble_acc": 69.266666666666666,
+        "complete_ensemble_acc": 68.76543209876543
     },
     "single_acc": {
-        "mean": 56.738,
-        "std": 0.50972149258197696
+        "mean": 66.247654320987664,
+        "std": 0.76732704506375204
     },
     "single_accuracies": {
-        "0": 55.800000000000004,
-        "1": 56.450000000000003,
-        "2": 56.879999999999995,
-        "3": 57.550000000000004,
-        "4": 57.07,
-        "5": 56.869999999999997,
-        "6": 56.969999999999999,
-        "7": 55.910000000000004,
-        "8": 56.879999999999995,
-        "9": 56.999999999999993
+        "0": 64.938271604938265,
+        "1": 66.175308641975306,
+        "2": 65.834567901234564,
+        "3": 67.483950617283952,
+        "4": 66.817283950617281,
+        "5": 66.325925925925915,
+        "6": 66.335802469135814,
+        "7": 65.046913580246908,
+        "8": 66.471604938271597,
+        "9": 67.046913580246908
     }
 }
