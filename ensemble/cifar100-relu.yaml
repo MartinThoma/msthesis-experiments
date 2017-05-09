@@ -13,6 +13,7 @@ models:
 - "../artifacts/cifar100_relu/cifar100_relu_20170426-0007-46.h5"
 evaluate:
   batch_size: 5000
+  batch_size_train: 4500
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False
