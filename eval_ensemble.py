@@ -31,18 +31,24 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     stream=sys.stdout)
 
 
+def make_paths_absolute_suffix(dir_, conf):
+    for key in conf.keys():
+        if key.endswith("_path"):
+            conf[key] = os.path.join(dir_, conf[key])
+            conf[key] = os.path.abspath(conf[key])
+            # if not os.path.isfile(conf[key]):
+            #     logging.error("%s does not exist.", conf[key])
+            #     sys.exit(-1)
+        if type(conf[key]) is dict:
+            conf[key] = make_paths_absolute_suffix(dir_, conf[key])
+    return conf
+
+
 def make_paths_absolute(dir_, conf):
     for i in range(len(conf["models"])):
         conf["models"][i] = os.path.join(dir_, conf["models"][i])
         conf["models"][i] = os.path.abspath(conf["models"][i])
-    tmp = conf["dataset"]["script_path"]
-    tmp = os.path.join(dir_, tmp)
-    conf["dataset"]["script_path"] = os.path.abspath(tmp)
-
-    if 'hierarchy_path' in conf["dataset"]:
-        tmp = conf["dataset"]["hierarchy_path"]
-        tmp = os.path.join(dir_, tmp)
-        conf["dataset"]["hierarchy_path"] = os.path.abspath(tmp)
+    conf = make_paths_absolute_suffix(dir_, conf)
     return conf
 
 
