@@ -9,10 +9,13 @@ from keras.layers.pooling import GlobalAveragePooling2D
 from keras.regularizers import l2
 from keras.models import Model
 from keras import backend as K
+from keras.utils.generic_utils import get_custom_objects
 
 
 def sigmoid_neg(x):
     return K.sigmoid(x) - 0.5
+
+get_custom_objects().update({'sigmoid_neg': Activation(sigmoid_neg)})
 
 
 def create_model(nb_classes, input_shape, config=None):
