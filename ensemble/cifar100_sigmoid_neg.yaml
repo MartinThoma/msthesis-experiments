@@ -1,5 +1,7 @@
 dataset:
   script_path: ../datasets/cifar100_keras.py
+model:
+  script_path: ../models/baseline_sigmoid_neg.py
 models:
 - "../artifacts/cifar100_sigmoid_neg/cifar100_sigmoid_neg_20170511-1450-12.h5"
 - "../artifacts/cifar100_sigmoid_neg/cifar100_sigmoid_neg_20170511-1543-34.h5"

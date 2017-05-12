@@ -132,6 +132,11 @@ def main(ensemble_fname, evaluate_training_data):
         y_eval = y_test
 
     # Load models
+    if 'model' in config:
+        imp.load_source('model_module',
+                        config['model']['script_path'])
+        from model_module import *
+
     model_names = natsorted(config["models"])
     print("Ensemble of {} models ({})".format(len(model_names), model_names))
     models = []

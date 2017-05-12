@@ -46,6 +46,9 @@ def inference_timing(data_module, config, model_path, batch_sizes):
                       .format(model_path))
         sys.exit(-1)
     logging.info("Load model {}".format(model_path))
+    imp.load_source('model_module',
+                    experiment_meta['model']['script_path'])
+    from model_module import *
     model = load_model(model_path)
 
     # The data, shuffled and split between train and test sets:
