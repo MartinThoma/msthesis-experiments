@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/stl10.py
+models:
+- "../artifacts/stl10_sigmoid/stl10_sigmoid_20170508-1148-56.h5"
+- "../artifacts/stl10_sigmoid/stl10_sigmoid_20170508-1203-59.h5"
+- "../artifacts/stl10_sigmoid/stl10_sigmoid_20170508-1219-15.h5"
+- "../artifacts/stl10_sigmoid/stl10_sigmoid_20170508-1225-45.h5"
+- "../artifacts/stl10_sigmoid/stl10_sigmoid_20170508-1242-59.h5"
+- "../artifacts/stl10_sigmoid/stl10_sigmoid_20170508-1257-56.h5"
+- "../artifacts/stl10_sigmoid/stl10_sigmoid_20170508-1326-34.h5"
+- "../artifacts/stl10_sigmoid/stl10_sigmoid_20170512-2123-48.h5"
+- "../artifacts/stl10_sigmoid/stl10_sigmoid_20170512-2141-49.h5"
+- "../artifacts/stl10_sigmoid/stl10_sigmoid_20170512-2159-39.h5"
+evaluate:
+  batch_size: 500
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
