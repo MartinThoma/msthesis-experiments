@@ -1,0 +1,59 @@
+{
+    "config": {
+        "dataset": {
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/stl10.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 32,
+            "batch_size": 500,
+            "batch_size_train": 675,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": true,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_linear/stl10_linear_20170508-0949-40.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_linear/stl10_linear_20170508-1025-47.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_linear/stl10_linear_20170508-1043-32.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_linear/stl10_linear_20170508-1058-35.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_linear/stl10_linear_20170508-1113-11.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_linear/stl10_linear_20170508-1127-42.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_linear/stl10_linear_20170508-1142-14.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_linear/stl10_linear_20170508-1156-33.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_linear/stl10_linear_20170508-1211-27.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/stl10_linear/stl10_linear_20170508-1226-24.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "0110010101",
+        "best_ensemble_acc": 72.324999999999989,
+        "complete_ensemble_acc": 71.899999999999991
+    },
+    "single_acc": {
+        "mean": 69.856250000000003,
+        "std": 1.4103994336711869
+    },
+    "single_accuracies": {
+        "0": 69.4375,
+        "1": 70.974999999999994,
+        "2": 71.287500000000009,
+        "3": 69.424999999999997,
+        "4": 66.649999999999991,
+        "5": 69.962500000000006,
+        "6": 68.3125,
+        "7": 71.237499999999997,
+        "8": 71.099999999999994,
+        "9": 70.174999999999997
+    }
+}
