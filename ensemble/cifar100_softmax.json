@@ -6,6 +6,7 @@
         "evaluate": {
             "augmentation_factor": 32,
             "batch_size": 5000,
+            "batch_size_train": 4500,
             "data_augmentation": {
                 "channel_shift_range": 0,
                 "featurewise_center": false,
@@ -21,6 +22,7 @@
                 "zoom_range": 0
             }
         },
+        "evaluate_training_data": true,
         "models": [
             "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_softmax/cifar100_softmax_20170427-1631-47.h5",
             "/home/moose/GitHub/msthesis-experiments/artifacts/cifar100_softmax/cifar100_softmax_20170427-1803-40.h5",
@@ -35,24 +37,24 @@
         ]
     },
     "ensemble": {
-        "best_ensemble": "0111000110",
-        "best_ensemble_acc": 63.480000000000004,
-        "complete_ensemble_acc": 63.060000000000002
+        "best_ensemble": "0110000000",
+        "best_ensemble_acc": 80.498765432098764,
+        "complete_ensemble_acc": 78.869135802469131
     },
     "single_acc": {
-        "mean": 59.493999999999993,
-        "std": 1.2477836350906353
+        "mean": 75.216790123456789,
+        "std": 2.4069018272533831
     },
     "single_accuracies": {
-        "0": 58.640000000000001,
-        "1": 60.429999999999993,
-        "2": 61.780000000000001,
-        "3": 60.380000000000003,
-        "4": 58.640000000000001,
-        "5": 58.909999999999997,
-        "6": 59.560000000000002,
-        "7": 59.469999999999999,
-        "8": 60.170000000000002,
-        "9": 56.960000000000001
+        "0": 73.572839506172841,
+        "1": 77.36790123456791,
+        "2": 79.995061728395072,
+        "3": 76.222222222222229,
+        "4": 73.256790123456796,
+        "5": 74.718518518518522,
+        "6": 74.809876543209867,
+        "7": 75.753086419753089,
+        "8": 75.916049382716039,
+        "9": 70.555555555555557
     }
 }
