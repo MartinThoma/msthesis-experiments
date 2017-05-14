@@ -3,16 +3,16 @@ dataset:
 model:
   script_path: ../models/baseline_s_shape.py
 models:
-- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1400-56.h5
-- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1505-57.h5
-- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1614-13.h5
-- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1741-27.h5
-- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1834-02.h5
-- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1925-33.h5
-- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-2023-11.h5
-- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-2108-08.h5
-- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-2222-40.h5
-- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-2307-58.h5
+- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1400-56.h5"
+- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1505-57.h5"
+- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1614-13.h5"
+- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1741-27.h5"
+- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1834-02.h5"
+- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-1925-33.h5"
+- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-2023-11.h5"
+- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-2108-08.h5"
+- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-2222-40.h5"
+- "../artifacts/cifar100_s_shape/cifar100_s_shape_20170512-2307-58.h5"
 evaluate:
   batch_size: 5000
   augmentation_factor: 32
