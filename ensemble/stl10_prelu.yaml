@@ -13,6 +13,7 @@ models:
 - "../artifacts/stl10_prelu/stl10_prelu_20170508-1329-42.h5"
 evaluate:
   batch_size: 500
+  batch_size_train: 675
   augmentation_factor: 32
   data_augmentation:
     samplewise_center: False
