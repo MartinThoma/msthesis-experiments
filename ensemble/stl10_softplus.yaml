@@ -1,0 +1,30 @@
+dataset:
+  script_path: ../datasets/stl10.py
+models:
+- "../artifacts/stl10_softplus/stl10_softplus_20170514-2342-13.h5"
+- "../artifacts/stl10_softplus/stl10_softplus_20170515-0002-44.h5"
+- "../artifacts/stl10_softplus/stl10_softplus_20170515-0015-36.h5"
+- "../artifacts/stl10_softplus/stl10_softplus_20170515-0030-44.h5"
+- "../artifacts/stl10_softplus/stl10_softplus_20170515-0045-51.h5"
+- "../artifacts/stl10_softplus/stl10_softplus_20170515-0101-12.h5"
+- "../artifacts/stl10_softplus/stl10_softplus_20170515-0114-03.h5"
+- "../artifacts/stl10_softplus/stl10_softplus_20170515-0132-35.h5"
+- "../artifacts/stl10_softplus/stl10_softplus_20170515-0147-48.h5"
+- "../artifacts/stl10_softplus/stl10_softplus_20170515-0200-44.h5"
+evaluate:
+  batch_size: 500
+  batch_size_train: 675
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
