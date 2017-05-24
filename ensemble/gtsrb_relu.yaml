@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/gtsrb.py
+models:
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170523-0911-18.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170523-0937-10.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170523-1002-50.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170523-1031-37.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170523-1054-34.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170523-1122-45.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170523-1146-57.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170523-1216-05.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170523-1241-28.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170523-1308-05.h5"
+evaluate:
+  batch_size: 842
+  augmentation_factor: 1
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
