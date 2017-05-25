@@ -143,6 +143,9 @@ def preprocess(x, subtact_mean=False):
 if __name__ == '__main__':
     config = {'dataset': {}}
     data = load_data(config)
+    print("Training data n={}".format(len(data['x_train'])))
+    print("Validation data n={}".format(len(data['x_val'])))
+    print("Test data n={}".format(len(data['x_test'])))
     mean_image = np.mean(data['x_train'], axis=0)
     np.save(_mean_filename, mean_image)
     import scipy.misc

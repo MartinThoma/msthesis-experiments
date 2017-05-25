@@ -176,6 +176,9 @@ if __name__ == "__main__":
                           'img_cols': 32,
                           'img_rows': 32}}
     data = load_data(config)
+    print("Training data n={}".format(len(data['x_train'])))
+    print("Validation data n={}".format(len(data['x_val'])))
+    print("Test data n={}".format(len(data['x_test'])))
     mean_image = np.mean(data['x_train'], axis=0)
     print("data['x_train'].shape={}".format(data['x_train'].shape))
     print("data['x_test'].shape={}".format(data['x_test'].shape))
