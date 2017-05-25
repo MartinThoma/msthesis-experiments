@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/gtsrb.py
+models:
+- "../artifacts/gtsrb_sigmoid/gtsrb_sigmoid_20170524-0858-18.h5"
+- "../artifacts/gtsrb_sigmoid/gtsrb_sigmoid_20170524-0925-34.h5"
+- "../artifacts/gtsrb_sigmoid/gtsrb_sigmoid_20170524-0947-43.h5"
+- "../artifacts/gtsrb_sigmoid/gtsrb_sigmoid_20170524-1014-03.h5"
+- "../artifacts/gtsrb_sigmoid/gtsrb_sigmoid_20170524-1034-04.h5"
+- "../artifacts/gtsrb_sigmoid/gtsrb_sigmoid_20170524-1057-57.h5"
+- "../artifacts/gtsrb_sigmoid/gtsrb_sigmoid_20170524-1122-23.h5"
+- "../artifacts/gtsrb_sigmoid/gtsrb_sigmoid_20170524-1141-36.h5"
+- "../artifacts/gtsrb_sigmoid/gtsrb_sigmoid_20170524-1207-29.h5"
+- "../artifacts/gtsrb_sigmoid/gtsrb_sigmoid_20170524-1234-59.h5"
+evaluate:
+  batch_size: 842
+  augmentation_factor: 1
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
