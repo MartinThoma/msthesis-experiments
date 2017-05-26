@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/gtsrb.py
+models:
+- "../artifacts/gtsrb_opt_train_es/gtsrb_opt_train_es_20170525-1359-52.h5"
+- "../artifacts/gtsrb_opt_train_es/gtsrb_opt_train_es_20170525-1557-26.h5"
+- "../artifacts/gtsrb_opt_train_es/gtsrb_opt_train_es_20170525-1801-01.h5"
+- "../artifacts/gtsrb_opt_train_es/gtsrb_opt_train_es_20170525-2051-07.h5"
+- "../artifacts/gtsrb_opt_train_es/gtsrb_opt_train_es_20170525-2305-20.h5"
+- "../artifacts/gtsrb_opt_train_es/gtsrb_opt_train_es_20170526-0129-31.h5"
+- "../artifacts/gtsrb_opt_train_es/gtsrb_opt_train_es_20170526-0346-54.h5"
+- "../artifacts/gtsrb_opt_train_es/gtsrb_opt_train_es_20170526-0541-10.h5"
+- "../artifacts/gtsrb_opt_train_es/gtsrb_opt_train_es_20170526-0740-33.h5"
+- "../artifacts/gtsrb_opt_train_es/gtsrb_opt_train_es_20170526-0957-01.h5"
+evaluate:
+  batch_size: 842
+  augmentation_factor: 1
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
