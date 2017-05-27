@@ -1,0 +1,32 @@
+dataset:
+  script_path: ../datasets/cats_dogs.py
+  img_rows: 128
+  img_cols: 128
+models:
+- "../artifacts/catdog_opt_long/catdog_opt_long_20170525-0922-06.h5"
+- "../artifacts/catdog_opt_long/catdog_opt_long_20170525-1142-24.h5"
+- "../artifacts/catdog_opt_long/catdog_opt_long_20170525-1402-52.h5"
+- "../artifacts/catdog_opt_long/catdog_opt_long_20170525-1623-18.h5"
+- "../artifacts/catdog_opt_long/catdog_opt_long_20170525-1843-46.h5"
+- "../artifacts/catdog_opt_long/catdog_opt_long_20170526-0915-59.h5"
+- "../artifacts/catdog_opt_long/catdog_opt_long_20170526-1136-00.h5"
+- "../artifacts/catdog_opt_long/catdog_opt_long_20170526-1356-25.h5"
+- "../artifacts/catdog_opt_long/catdog_opt_long_20170526-1616-46.h5"
+- "../artifacts/catdog_opt_long/catdog_opt_long_20170526-1837-12.h5"
+evaluate:
+  batch_size: 250
+  batch_size_train: 4522
+  augmentation_factor: 32
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: True
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
