@@ -25,6 +25,9 @@ def create_model(nb_classes, input_shape, config=None):
               "a size of 32 x 32. Currently, it has {}".format(input_shape))
     nb_filter = 32
 
+    if 'l2' not in config['model']:
+        config['model']['l2'] = 0.0001
+
     # Network definition
     # input_shape = (None, None, 3)  # for fcn
     input_ = Input(shape=input_shape)
@@ -37,7 +40,7 @@ def create_model(nb_classes, input_shape, config=None):
             for _ in range(2):
                 x = Convolution2D(nb_filter, (3, 3), padding='same',
                                   kernel_initializer='he_uniform',
-                                  kernel_regularizer=l2(0.0001))(x)
+                                  kernel_regularizer=l2(config['model']['l2']))(x)
                 x = BatchNormalization()(x)
                 x = Activation('elu')(x)
             x = MaxPooling2D(pool_size=(3, 3), padding='same', strides=2)(x)
@@ -47,12 +50,12 @@ def create_model(nb_classes, input_shape, config=None):
     # 32x32
     x = Convolution2D(nb_filter + 37, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
+                      kernel_regularizer=l2(config['model']['l2']))(x)
     x = BatchNormalization()(x)
     x = Activation('elu')(x)
     x = Convolution2D(nb_filter + 37, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
+                      kernel_regularizer=l2(config['model']['l2']))(x)
     x = BatchNormalization()(x)
     x = Activation('elu')(x)
 
@@ -60,12 +63,12 @@ def create_model(nb_classes, input_shape, config=None):
     x = MaxPooling2D(pool_size=(3, 3), padding='same', strides=2)(x)
     x = Convolution2D(2 * nb_filter, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
+                      kernel_regularizer=l2(config['model']['l2']))(x)
     x = BatchNormalization()(x)
     x = Activation('elu')(x)
     x = Convolution2D(2 * nb_filter, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
+                      kernel_regularizer=l2(config['model']['l2']))(x)
     x = BatchNormalization()(x)
     x = Activation('elu')(x)
 
@@ -73,7 +76,7 @@ def create_model(nb_classes, input_shape, config=None):
     x = MaxPooling2D(pool_size=(3, 3), padding='same', strides=2)(x)
     x = Convolution2D(2 * nb_filter, (3, 3), padding='same',
                       kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001))(x)
+                      kernel_regularizer=l2(config['model']['l2']))(x)
     x = BatchNormalization()(x)
     x = Activation('elu')(x)
 
@@ -82,7 +85,7 @@ def create_model(nb_classes, input_shape, config=None):
     x = Convolution2D(512, (4, 4),
                       padding='valid',
                       kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001),
+                      kernel_regularizer=l2(config['model']['l2']),
                       use_bias=False)(x)
     x = BatchNormalization()(x)
     x = Activation('elu')(x)
@@ -91,14 +94,14 @@ def create_model(nb_classes, input_shape, config=None):
     # 1x1
     x = Convolution2D(512, (1, 1), padding='same',
                       kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001),
+                      kernel_regularizer=l2(config['model']['l2']),
                       use_bias=False)(x)
     x = BatchNormalization()(x)
     x = Activation('elu')(x)
     x = Dropout(0.5)(x)
     x = Convolution2D(nb_classes, (1, 1), padding='same',
                       kernel_initializer='he_uniform',
-                      kernel_regularizer=l2(0.0001),
+                      kernel_regularizer=l2(config['model']['l2']),
                       use_bias=False)(x)
     x = GlobalAveragePooling2D()(x)  # Adjust for FCN
     x = BatchNormalization()(x)
