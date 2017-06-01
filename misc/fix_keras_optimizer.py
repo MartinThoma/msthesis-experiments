@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 
-"""Make keras 1.x models usable in keras 2.x."""
+"""
+Make keras 1.x models usable in keras 2.x.
+
+Run this when you get the following error:
+
+ValueError: Optimizer weight shape (512,) not compatible with provided weight shape (32,)
+"""
 
 import glob
 import h5py
