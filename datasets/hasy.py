@@ -48,7 +48,7 @@ def _load_csv(filepath, delimiter=',', quotechar="'"):
     """
     data = []
     csv_dir = os.path.dirname(filepath)
-    with open(filepath, 'rb') as csvfile:
+    with open(filepath, 'r') as csvfile:
         reader = csv.DictReader(csvfile,
                                 delimiter=delimiter,
                                 quotechar=quotechar)
@@ -186,7 +186,7 @@ def load_data(config):
         return {'x': x_compl, 'y': y_compl}
     elif mode.startswith('fold-'):
         fold = int(mode.split("-")[1])
-        if fold < 1 or fold > 10:
+        if not (1 <= fold <= 10):
             raise NotImplementedError
 
         # Load fold
