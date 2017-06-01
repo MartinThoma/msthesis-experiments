@@ -10,7 +10,7 @@ models:
 - "../artifacts/hasy_opt_long/hasy_opt_long_20170526-0533-51.h5"
 - "../artifacts/hasy_opt_long/hasy_opt_long_20170526-0824-28.h5"
 - "../artifacts/hasy_opt_long/hasy_opt_long_20170526-1114-48.h5"
-- "../artifacts/hasy_opt_long/mnist_opt_long_20170525-0935-39.h5"
+- "../artifacts/hasy_opt_long/hasy_opt_long_20170527-0038-05.h5"
 evaluate:
   batch_size: 2124
   augmentation_factor: 1
