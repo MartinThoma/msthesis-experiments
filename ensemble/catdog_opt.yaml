@@ -1,5 +1,7 @@
 dataset:
   script_path: ../datasets/cats_dogs.py
+  img_rows: 128
+  img_cols: 128
 models:
 - "../artifacts/catdog_opt/catdog_opt_20170503-0731-26.h5"
 - "../artifacts/catdog_opt/catdog_opt_20170503-0915-15.h5"

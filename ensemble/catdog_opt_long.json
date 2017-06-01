@@ -1,0 +1,61 @@
+{
+    "config": {
+        "dataset": {
+            "img_cols": 128,
+            "img_rows": 128,
+            "script_path": "/home/moose/GitHub/msthesis-experiments/datasets/cats_dogs.py"
+        },
+        "evaluate": {
+            "augmentation_factor": 32,
+            "batch_size": 250,
+            "batch_size_train": 4522,
+            "data_augmentation": {
+                "channel_shift_range": 0,
+                "featurewise_center": false,
+                "height_shift_range": 0.15,
+                "horizontal_flip": true,
+                "rotation_range": 0,
+                "samplewise_center": false,
+                "samplewise_std_normalization": false,
+                "shear_range": 0,
+                "vertical_flip": false,
+                "width_shift_range": 0.15,
+                "zca_whitening": false,
+                "zoom_range": 0
+            }
+        },
+        "models": [
+            "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt_long/catdog_opt_long_20170525-0922-06.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt_long/catdog_opt_long_20170525-1142-24.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt_long/catdog_opt_long_20170525-1402-52.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt_long/catdog_opt_long_20170525-1623-18.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt_long/catdog_opt_long_20170525-1843-46.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt_long/catdog_opt_long_20170526-0915-59.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt_long/catdog_opt_long_20170526-1136-00.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt_long/catdog_opt_long_20170526-1356-25.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt_long/catdog_opt_long_20170526-1616-46.h5",
+            "/home/moose/GitHub/msthesis-experiments/artifacts/catdog_opt_long/catdog_opt_long_20170526-1837-12.h5"
+        ]
+    },
+    "ensemble": {
+        "best_ensemble": "0110011000",
+        "best_ensemble_acc": 96.230303030303034,
+        "complete_ensemble_acc": 96.012121212121215
+    },
+    "single_acc": {
+        "mean": 94.527272727272731,
+        "std": 1.131867468806375
+    },
+    "single_accuracies": {
+        "0": 95.393939393939391,
+        "1": 95.757575757575751,
+        "2": 95.199999999999989,
+        "3": 94.836363636363643,
+        "4": 92.72727272727272,
+        "5": 93.527272727272731,
+        "6": 95.551515151515147,
+        "7": 94.278787878787881,
+        "8": 95.430303030303037,
+        "9": 92.569696969696963
+    }
+}
