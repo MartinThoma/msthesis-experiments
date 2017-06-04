@@ -1,6 +1,6 @@
 dataset:
   script_path: ../datasets/gtsrb.py
-models:
+models-old:
 - "../artifacts/gtsrb_opt/gtsrb_opt_20170502-1336-22.h5"
 - "../artifacts/gtsrb_opt/gtsrb_opt_20170502-1401-32.h5"
 - "../artifacts/gtsrb_opt/gtsrb_opt_20170502-1429-31.h5"
@@ -11,6 +11,17 @@ models:
 - "../artifacts/gtsrb_opt/gtsrb_opt_20170502-1658-59.h5"
 - "../artifacts/gtsrb_opt/gtsrb_opt_20170502-1723-43.h5"
 - "../artifacts/gtsrb_opt/gtsrb_opt_20170502-1747-47.h5"
+models:
+- "../artifacts/gtsrb_opt/gtsrb_opt_20170601-1506-44.h5"
+- "../artifacts/gtsrb_opt/gtsrb_opt_20170601-1534-05.h5"
+- "../artifacts/gtsrb_opt/gtsrb_opt_20170601-1603-18.h5"
+- "../artifacts/gtsrb_opt/gtsrb_opt_20170601-1638-33.h5"
+- "../artifacts/gtsrb_opt/gtsrb_opt_20170601-1714-47.h5"
+- "../artifacts/gtsrb_opt/gtsrb_opt_20170601-1741-41.h5"
+- "../artifacts/gtsrb_opt/gtsrb_opt_20170601-1804-09.h5"
+- "../artifacts/gtsrb_opt/gtsrb_opt_20170601-1830-59.h5"
+- "../artifacts/gtsrb_opt/gtsrb_opt_20170601-1859-22.h5"
+- "../artifacts/gtsrb_opt/gtsrb_opt_20170601-1927-54.h5"
 evaluate:
   batch_size: 842
   augmentation_factor: 1

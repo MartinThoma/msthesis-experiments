@@ -1,16 +1,16 @@
 dataset:
   script_path: ../datasets/cifar100_keras.py
 models:
-- "../artifacts/cifar100_opt/cifar100_opt_20170501-2148-59.h5"
-- "../artifacts/cifar100_opt/cifar100_opt_20170501-2022-51.h5"
-- "../artifacts/cifar100_opt/cifar100_opt_20170501-1916-51.h5"
-- "../artifacts/cifar100_opt/cifar100_opt_20170501-1810-33.h5"
-- "../artifacts/cifar100_opt/cifar100_opt_20170501-1644-53.h5"
-- "../artifacts/cifar100_opt/cifar100_opt_20170501-1538-28.h5"
-- "../artifacts/cifar100_opt/cifar100_opt_20170501-1400-32.h5"
-- "../artifacts/cifar100_opt/cifar100_opt_20170501-1219-51.h5"
-- "../artifacts/cifar100_opt/cifar100_opt_20170501-1115-07.h5"
-- "../artifacts/cifar100_opt/cifar100_opt_20170501-0939-30.h5"
+- "../artifacts/cifar100_opt_reg001/cifar100_opt_reg001_20170528-1147-04.h5"
+- "../artifacts/cifar100_opt_reg001/cifar100_opt_reg001_20170528-1800-34.h5"
+- "../artifacts/cifar100_opt_reg001/cifar100_opt_reg001_20170601-1128-23.h5"
+- "../artifacts/cifar100_opt_reg001/cifar100_opt_reg001_20170601-1753-35.h5"
+- "../artifacts/cifar100_opt_reg001/cifar100_opt_reg001_20170602-0034-27.h5"
+- "../artifacts/cifar100_opt_reg001/cifar100_opt_reg001_20170602-0700-50.h5"
+- "../artifacts/cifar100_opt_reg001/cifar100_opt_reg001_20170602-1438-27.h5"
+- "../artifacts/cifar100_opt_reg001/cifar100_opt_reg001_20170602-2021-04.h5"
+- "../artifacts/cifar100_opt_reg001/cifar100_opt_reg001_20170603-0203-38.h5"
+- "../artifacts/cifar100_opt_reg001/cifar100_opt_reg001_20170603-0758-37.h5"
 evaluate:
   batch_size: 5000
   batch_size_train: 4500
