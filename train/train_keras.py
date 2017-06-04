@@ -236,7 +236,8 @@ def main(data_module, model_module, optimizer_module, filename, config,
     X_train = data_module.preprocess(X_train)
     if 'use_val' in config['train']:
         use_val = config['train']['use_val']
-    use_val = True
+    else:
+        use_val = True
     if use_val:
         X_test, y_test = data['x_val'], data['y_val']
     else:
@@ -310,26 +311,29 @@ def main(data_module, model_module, optimizer_module, filename, config,
     print("Finished compiling")
     print("Building model...")
 
-    checkpoint_fname = os.path.basename(config['train']['artifacts_path'])
-    if 'saveall' in config['train'] and config['train']['saveall']:
-        checkpoint_fname = ("{}_{}.chk.{{epoch:02d}}.h5"
-                            .format(checkpoint_fname, datestring))
-        save_best_only = False
-    else:
-        checkpoint_fname = "{}_{}.chk.h5".format(checkpoint_fname, datestring)
-        save_best_only = True
-    model_chk_path = os.path.join(config['train']['artifacts_path'],
-                                  checkpoint_fname)
-    model_chk_path = get_nonexistant_path(model_chk_path)
-    checkpoint = ModelCheckpoint(model_chk_path,
-                                 monitor="val_acc",
-                                 save_best_only=save_best_only,
-                                 save_weights_only=False)
     es = EarlyStopping(monitor='val_acc',
                        min_delta=0,
                        patience=10, verbose=1, mode='auto')
     history_cb = History()
-    callbacks = [checkpoint, es, history_cb]  # remote,
+    callbacks = [es, history_cb]  # remote,
+    if 'checkpoint' in config['train'] and config['train']['checkpoint']:
+        checkpoint_fname = os.path.basename(config['train']['artifacts_path'])
+        if 'saveall' in config['train'] and config['train']['saveall']:
+            checkpoint_fname = ("{}_{}.chk.{{epoch:02d}}.h5"
+                                .format(checkpoint_fname, datestring))
+            save_best_only = False
+        else:
+            checkpoint_fname = "{}_{}.chk.h5".format(checkpoint_fname,
+                                                     datestring)
+            save_best_only = True
+        model_chk_path = os.path.join(config['train']['artifacts_path'],
+                                      checkpoint_fname)
+        model_chk_path = get_nonexistant_path(model_chk_path)
+        checkpoint = ModelCheckpoint(model_chk_path,
+                                     monitor="val_acc",
+                                     save_best_only=save_best_only,
+                                     save_weights_only=False)
+        callbacks.append(checkpoint)
     if 'tensorboard' in config['train'] and config['train']['tensorboard']:
         tensorboard = TensorBoard(log_dir='./logs', histogram_freq=0,
                                   write_graph=True, write_images=True)
