@@ -1,6 +1,17 @@
 dataset:
   script_path: ../datasets/gtsrb.py
 models:
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170602-0838-25.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170602-0917-08.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170602-0954-16.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170602-1030-50.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170602-1106-53.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170602-1148-54.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170602-1227-08.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170602-1303-55.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170602-1351-14.h5"
+- "../artifacts/gtsrb_relu/gtsrb_relu_20170602-1428-26.h5"
+old:
 - "../artifacts/gtsrb_relu/gtsrb_relu_20170523-0911-18.h5"
 - "../artifacts/gtsrb_relu/gtsrb_relu_20170523-0937-10.h5"
 - "../artifacts/gtsrb_relu/gtsrb_relu_20170523-1002-50.h5"
