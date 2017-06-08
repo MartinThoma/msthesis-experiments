@@ -1,22 +1,8 @@
 # msthesis-experiments
-Experiments for my masters thesis
+Experiments for the masters thesis of Martin Thoma
 
-Every experiment is a YAML file
+Every experiment is a YAML file. See the experiments folder for some examples.
 
-```
-dataset_path: datasets/cifar10.py
-model_path: models/mlp.py
-optimizer_path: optimizers/adamdef.py
-train_path: train/train.py
-```
-
-* **dataset** contains
-    * `inputs(eval_data, data_dir, batch_size)` and
-    * `distorted_inputs(ata_dir=DATA_DIR, batch_size=128)` and
-    * a dict `meta` which contains `n_classes`
-* **model** contains `inference(images, dataset_meta)`
-* **optimizer** contains `train(total_loss, global_step)`
-* **train** contains `train(data, model, optimizer)`
 
 ## Requirements
 
@@ -28,6 +14,16 @@ train_path: train/train.py
 If you get `TypeError: __init__() got an unexpected keyword argument
 'hsv_augmentation'` you didn't adjust the `image.py`. Just copy the one in
 the misc folder to `python -c "import keras.preprocessing.image as k;print(k.__file__)"`
+
+
+## Scripts
+
+* `./run_training.py -f experiments/cifar100_baseline.yaml`: Train a model. Downloads everything by its own
+* `./analyze_training.py -d artifacts/cifar100_baseline`: Show some training statistics
+* `./inference_timing.py -f experiments/cifar100_baseline.yaml`: Run inference on a given trained model and measure the time
+* `./eval_ensemble.py -f ensemble/cifar100_baseline.yaml`: Evaluate an ensemble
+* `./visualize.py --cm artifacts/cifar100_root/cm-test.json`: Confusion matrix optimization
+* `./create_cm.py --indices cm.indices.pickle -f experiments/cifar100_root-g5.yaml`
 
 ## Run timining experiments
 
