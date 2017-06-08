@@ -1,0 +1,29 @@
+dataset:
+  script_path: ../datasets/mnist.py
+models:
+- "../artifacts/mnist_opt_train_es/mnist_opt_train_es_20170601-1150-48.h5"
+- "../artifacts/mnist_opt_train_es/mnist_opt_train_es_20170601-1432-29.h5"
+- "../artifacts/mnist_opt_train_es/mnist_opt_train_es_20170601-2023-14.h5"
+- "../artifacts/mnist_opt_train_es/mnist_opt_train_es_20170602-0019-25.h5"
+- "../artifacts/mnist_opt_train_es/mnist_opt_train_es_20170602-0308-59.h5"
+- "../artifacts/mnist_opt_train_es/mnist_opt_train_es_20170602-0832-11.h5"
+- "../artifacts/mnist_opt_train_es/mnist_opt_train_es_20170604-1324-52.h5"
+- "../artifacts/mnist_opt_train_es/mnist_opt_train_es_20170604-1706-14.h5"
+- "../artifacts/mnist_opt_train_es/mnist_opt_train_es_20170604-1949-51.h5"
+- "../artifacts/mnist_opt_train_es/mnist_opt_train_es_20170604-2256-33.h5"
+evaluate:
+  batch_size: 10000
+  augmentation_factor: 1
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 0
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
