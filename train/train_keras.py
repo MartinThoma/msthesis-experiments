@@ -234,15 +234,20 @@ def main(data_module, model_module, optimizer_module, filename, config,
 
     X_train, y_train = data['x_train'], data['y_train']
     X_train = data_module.preprocess(X_train)
+
+    # Get use_val value
     if 'use_val' in config['train']:
         use_val = config['train']['use_val']
     else:
         use_val = True
+
+    # Get training / validation sets
     if use_val:
         X_test, y_test = data['x_val'], data['y_val']
     else:
         X_test, y_test = data['x_test'], data['y_test']
-        X_train = np.append(X_train, data['x_val'], axis=0)
+        X_val = data_module.preprocess(data['x_val'])
+        X_train = np.append(X_train, X_val, axis=0)
         y_train = np.append(y_train, data['y_val'], axis=0)
     X_test = data_module.preprocess(X_test)
 
