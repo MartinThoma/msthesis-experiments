@@ -1,0 +1,25 @@
+dataset:
+  script_path: ../datasets/hasy.py
+model:
+  script_path: ../models/optimized_relu.py
+optimizer:
+  script_path: ../optimizers/adam_keras.py
+  initial_lr: 0.0001
+train:
+  script_path: ../train/train_keras.py
+  artifacts_path: ../artifacts/hasy_opt_relu/
+  batch_size: 64
+  epochs: 200
+  data_augmentation:
+    samplewise_center: False
+    samplewise_std_normalization: False
+    rotation_range: 5
+    width_shift_range: 0.15
+    height_shift_range: 0.15
+    horizontal_flip: False
+    vertical_flip: False
+    zoom_range: 0
+    shear_range: 0
+    channel_shift_range: 0
+    featurewise_center: False
+    zca_whitening: False
