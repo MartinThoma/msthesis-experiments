@@ -13,7 +13,7 @@ olefile==0.44
 packaging==16.8
 pandas==0.19.2
 pbr==2.0.0
-Pillow==4.0.0
+Pillow==6.2.3
 protobuf==3.2.0
 pydot==1.2.3
 pyparsing==2.2.0
